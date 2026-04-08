@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Article</title>
+  <link rel="stylesheet" href="style.css">
+
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['$', '$']] }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+
+<h1>Electrode Converter</h1>
+
+<p>Equation:</p>
+<p>$E_{out} = E_{in} + E_{ref,in} - E_{ref,out}$</p>
+
+<h2>Calculator</h2>
+
+<input id="input" type="number" value="0.1">
+<select id="from">
+  <option value="0">SHE</option>
+  <option value="0.241">SCE</option>
+</select>
+
+<select id="to">
+  <option value="0">SHE</option>
+  <option value="0.241">SCE</option>
+</select>
+
+<button onclick="convert()">Convert</button>
+
+<p id="result"></p>
+
+<script src="script.js"></script>
+
+</body>
+</html>
