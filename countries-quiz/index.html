@@ -1,0 +1,107 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Countries Quiz</title>
+
+<style>
+body{font-family:Arial;background:#0b1020;color:#fff;margin:0}
+.wrap{max-width:1000px;margin:auto;padding:20px}
+h1{margin:0}
+input{width:100%;padding:12px;margin-top:10px;border-radius:8px;border:none}
+button{padding:10px;margin-top:10px}
+.panel{background:#141b33;padding:20px;border-radius:12px;margin-top:15px}
+</style>
+
+</head>
+
+<body>
+<div class="wrap">
+
+<h1>Countries Quiz</h1>
+<p>Type countries. 15 minutes.</p>
+
+<div class="panel">
+<div id="timer">15:00</div>
+<div id="score">0 / 196</div>
+
+<button onclick="start()">Start</button> <button onclick="resetGame()">Reset</button>
+
+<input id="input" placeholder="Type country..." disabled>
+
+<div id="msg"></div>
+</div>
+
+</div>
+
+<script>
+const countries = [
+"India","United States","China","Brazil","Germany","France","Japan",
+"Australia","Canada","Mexico","Russia","Italy","Spain","South Africa"
+// 👉 (trimmed for simplicity — you can expand later)
+];
+
+let guessed = new Set();
+let time = 900;
+let interval;
+let started = false;
+
+function update(){
+document.getElementById("score").innerText =
+guessed.size + " / " + countries.length;
+
+let m = String(Math.floor(time/60)).padStart(2,"0");
+let s = String(time%60).padStart(2,"0");
+document.getElementById("timer").innerText = m+":"+s;
+}
+
+function start(){
+if(started) return;
+started = true;
+document.getElementById("input").disabled = false;
+
+interval = setInterval(()=>{
+time--;
+update();
+if(time<=0) end();
+},1000);
+}
+
+function end(){
+clearInterval(interval);
+document.getElementById("input").disabled = true;
+}
+
+function resetGame(){
+clearInterval(interval);
+guessed = new Set();
+time = 900;
+started=false;
+document.getElementById("input").value="";
+document.getElementById("input").disabled = true;
+update();
+}
+
+document.getElementById("input").addEventListener("keydown", e=>{
+if(e.key==="Enter"){
+let val = e.target.value.trim();
+
+if(countries.includes(val) && !guessed.has(val)){
+guessed.add(val);
+document.getElementById("msg").innerText="✔ "+val;
+}else{
+document.getElementById("msg").innerText="❌";
+}
+
+e.target.value="";
+update();
+}
+});
+
+update();
+</script>
+
+</body>
+</html>
