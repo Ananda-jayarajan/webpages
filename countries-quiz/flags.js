@@ -114,9 +114,16 @@ function startQuiz(){
   },1000);
 }
 
+
 function checkAnswer(val){
   let ans = normalize(val);
-  if(aliases[ans]) ans = aliases[ans];
+
+  if (aliases[ans]) {
+    ans = aliases[ans];
+  } else {
+    const matched = countries.find(c => normalize(c) === ans);
+    if (matched) ans = matched;
+  }
 
   if(ans === countries[index]){
     score++;
