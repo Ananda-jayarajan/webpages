@@ -81,6 +81,7 @@ const countryCodeMap = {
 
 function countryToCode(name){
   return countryCodeMap[name] || "un";
+  flagImg.src = `https://flagcdn.com/w640/${code}.png`;
 }
 
 function startQuiz(){
