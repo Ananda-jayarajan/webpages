@@ -1,3 +1,4 @@
+const skipBtn = document.getElementById("skipBtn");
 const countries = [
   "United States","India","France","Germany","Brazil","Canada","Japan","Australia",
   // 👉 replace with full 196 list later
