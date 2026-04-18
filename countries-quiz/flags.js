@@ -135,7 +135,7 @@ function endQuiz(){
   input.disabled = true;
   status.textContent = "Quiz finished!";
 }
-
+skipBtn.onclick = skipFlag;
 input.addEventListener("keydown",(e)=>{
   if(e.key==="Enter"){
     checkAnswer(input.value);
