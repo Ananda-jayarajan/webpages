@@ -25,6 +25,17 @@ let score = 0;
 let timer;
 let time = 600; // 10 min
 
+function skipFlag(){
+  status.textContent = `Skipped: ${countries[index]}`;
+  index++;
+
+  if(index >= countries.length){
+    endQuiz();
+    return;
+  }
+
+  loadFlag();
+}
 function normalize(s){
   return s.toLowerCase().trim();
 }
