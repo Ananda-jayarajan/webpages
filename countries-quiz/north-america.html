@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Europe Countries Quiz</title>
+  <title>North America Countries Quiz</title>
   <link rel="stylesheet" href="styles.css" />
   <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
   <script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
 </head>
-<body data-continent="Europe">
+<body data-continent="North America">
   <div class="page">
     <div class="ribbon">
       <div class="ribbon-title">Other Quiz</div>
@@ -19,14 +19,14 @@
       <a href="south-america.html">South America</a>
       <a href="oceania.html">Oceania</a>
     </div>
-    <h1 id="pageTitle">Europe Countries Quiz</h1>
+    <h1 id="pageTitle">North America Countries Quiz</h1>
     <p class="subtitle">How many countries can you name? As you answer, the map will be filled in.</p>
     <div class="quiz-panel">
       <div class="quiz-top"><div class="timer" id="timer">15:00</div><div class="score"><span id="score">0</span> / <span id="total">0</span></div></div>
       <div class="controls"><input id="answerInput" type="text" placeholder="Enter country here" autocomplete="off" disabled /><button id="startBtn">Start Quiz</button><button id="giveUpBtn" disabled>Give Up?</button><button id="resetBtn">Reset</button></div>
       <div id="status" class="status"></div>
       <div class="map-panel"><div class="map-head" id="mapNote">Loading map...</div><div class="map-wrap" id="mapWrap"><div class="map-inner"><svg id="map" preserveAspectRatio="xMidYMid meet"></svg></div></div></div>
-      <div class="answers-panel"><div class="answers-header" id="continentHeading">Europe</div><div class="answers-list" id="answersList"></div></div>
+      <div class="answers-panel"><div class="answers-header" id="continentHeading">North America</div><div class="answers-list" id="answersList"></div></div>
       <div class="result" id="result"></div>
     </div>
   </div>
