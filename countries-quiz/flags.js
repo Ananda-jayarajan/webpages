@@ -89,6 +89,7 @@ function startQuiz(){
   input.disabled = false;
   startBtn.disabled = true;
   giveUpBtn.disabled = false;
+  skipBtn.disabled = false;   
   loadFlag();
 
   timer = setInterval(()=>{
