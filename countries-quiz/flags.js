@@ -133,6 +133,7 @@ function checkAnswer(val){
 function endQuiz(){
   clearInterval(timer);
   input.disabled = true;
+  skipBtn.disabled = true;   
   status.textContent = "Quiz finished!";
 }
 skipBtn.onclick = skipFlag;
