@@ -135,7 +135,7 @@
 
     .main-grid {
       display: grid;
-      grid-template-columns: 1.2fr 1fr;
+      grid-template-columns: 1fr;
       gap: 12px;
       padding: 12px 14px 14px;
     }
@@ -171,8 +171,8 @@
 
     #worldMap {
       display: block;
-      width: 100%;
-      min-height: 500px;
+      width: 150%;
+      min-height: 750px;
     }
 
     .map-loading {
@@ -197,7 +197,7 @@
     }
 
     .answers-scroll {
-      max-height: 560px;
+      max-height: none;
       overflow: auto;
     }
 
@@ -221,7 +221,18 @@
       position: sticky;
       top: 0;
       z-index: 1;
+      color: white;
+      text-align: center;
+      font-size: 16px;
+      font-weight: 700;
     }
+
+    thead th:nth-child(1) { background: #1010d8; }
+    thead th:nth-child(2) { background: #e30000; }
+    thead th:nth-child(3) { background: #a000a8; }
+    thead th:nth-child(4) { background: #f59a00; }
+    thead th:nth-child(5) { background: #0a9b00; }
+    thead th:nth-child(6) { background: #00a7a7; }
 
     .slot {
       color: #999;
@@ -255,6 +266,9 @@
 
     @media (max-width: 900px) {
       .main-grid { grid-template-columns: 1fr; }
+      #worldMap { min-height: 540px; width: 150%; }
+      .answers-scroll { max-height: none; }
+    }
       #worldMap { min-height: 360px; }
       .answers-scroll { max-height: none; }
     }
@@ -318,7 +332,7 @@
   <script>
     const countriesByContinent = {
       Europe: ['Albania','Andorra','Austria','Belarus','Belgium','Bosnia and Herzegovina','Bulgaria','Croatia','Czech Republic','Denmark','Estonia','Finland','France','Germany','Greece','Hungary','Iceland','Ireland','Italy','Kosovo','Latvia','Liechtenstein','Lithuania','Luxembourg','Malta','Moldova','Monaco','Montenegro','Netherlands','North Macedonia','Norway','Poland','Portugal','Romania','Russia','San Marino','Serbia','Slovakia','Slovenia','Spain','Sweden','Switzerland','Ukraine','United Kingdom','Vatican City'],
-      Asia: ['Afghanistan','Armenia','Azerbaijan','Bahrain','Bangladesh','Bhutan','Brunei','Cambodia','China','Cyprus','East Timor','Georgia','India','Indonesia','Iran','Iraq','Israel','Japan','Jordan','Kazakhstan','Kuwait','Kyrgyzstan','Laos','Lebanon','Malaysia','Maldives','Mongolia','Myanmar','Nepal','North Korea','Oman','Pakistan','Philippines','Qatar','Saudi Arabia','Singapore','South Korea','Sri Lanka','Syria','Taiwan','Tajikistan','Thailand','Turkey','Turkmenistan','United Arab Emirates','Uzbekistan','Vietnam','Yemen'],
+      Asia: ['Afghanistan','Armenia','Azerbaijan','Bahrain','Bangladesh','Bhutan','Brunei','Cambodia','China','Cyprus','East Timor','Georgia','India','Indonesia','Iran','Iraq','Israel','Japan','Jordan','Kazakhstan','Kuwait','Kyrgyzstan','Laos','Lebanon','Malaysia','Maldives','Mongolia','Myanmar','Nepal','North Korea','Oman','Pakistan','Philippines','Qatar','Saudi Arabia','Singapore','South Korea','Sri Lanka','Syria','Taiwan','Tajikistan','Thailand','Türkiye','Turkmenistan','United Arab Emirates','Uzbekistan','Vietnam','Yemen'],
       Africa: ['Algeria','Angola','Benin','Botswana','Burkina Faso','Burundi','Cameroon','Cape Verde','Central African Republic','Chad','Comoros','Democratic Republic of the Congo','Djibouti','Egypt','Equatorial Guinea','Eritrea','Eswatini','Ethiopia','Gabon','Gambia','Ghana','Guinea','Guinea-Bissau','Ivory Coast','Kenya','Lesotho','Liberia','Libya','Madagascar','Malawi','Mali','Mauritania','Mauritius','Morocco','Mozambique','Namibia','Niger','Nigeria','Republic of the Congo','Rwanda','São Tomé and Príncipe','Senegal','Seychelles','Sierra Leone','Somalia','South Africa','South Sudan','Sudan','Tanzania','Togo','Tunisia','Uganda','Zambia','Zimbabwe'],
       'North America': ['Antigua and Barbuda','Bahamas','Barbados','Belize','Canada','Costa Rica','Cuba','Dominica','Dominican Republic','El Salvador','Grenada','Guatemala','Haiti','Honduras','Jamaica','Mexico','Nicaragua','Panama','Saint Kitts and Nevis','Saint Lucia','Saint Vincent and the Grenadines','Trinidad and Tobago','United States'],
       'South America': ['Argentina','Bolivia','Brazil','Chile','Colombia','Ecuador','Guyana','Paraguay','Peru','Suriname','Uruguay','Venezuela'],
@@ -339,6 +353,8 @@
       'congo brazzaville': 'Republic of the Congo',
       'czechia': 'Czech Republic',
       'timor leste': 'East Timor',
+      'turkiye': 'Turkey',
+      'türkiye': 'Turkey',
       'cape verde': 'Cape Verde',
       'swaziland': 'Eswatini',
       'vatican': 'Vatican City',
@@ -417,6 +433,7 @@
     }
 
     allCountries.forEach(country => answerLookup.set(normalize(country), country));
+    answerLookup.set(normalize('Turkey'), 'Türkiye');
     Object.entries(aliases).forEach(([k, v]) => answerLookup.set(normalize(k), v));
 
     function setStatus(msg = '', type = '') {
