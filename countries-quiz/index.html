@@ -1,107 +1,617 @@
-<!doctype html>
-
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Countries Quiz</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Countries of the World Quiz</title>
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <style>
+    :root {
+      --page-bg: #f3f3f3;
+      --panel: #ffffff;
+      --border: #cfcfcf;
+      --text: #111;
+      --muted: #666;
+      --orange: #f2a000;
+      --orange-dark: #cf8400;
+      --yellow-fill: #f5c84c;
+      --missed-fill: #ee8f8f;
+      --map-default: #dadada;
+      --blue-bg: #eef5ff;
+      --ok: #1f8a3d;
+      --err: #c62828;
+    }
 
-<style>
-body{font-family:Arial;background:#0b1020;color:#fff;margin:0}
-.wrap{max-width:1000px;margin:auto;padding:20px}
-h1{margin:0}
-input{width:100%;padding:12px;margin-top:10px;border-radius:8px;border:none}
-button{padding:10px;margin-top:10px}
-.panel{background:#141b33;padding:20px;border-radius:12px;margin-top:15px}
-</style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--page-bg);
+      color: var(--text);
+    }
 
+    .page {
+      max-width: 1120px;
+      margin: 18px auto;
+      padding: 0 14px 24px;
+    }
+
+    h1 {
+      margin: 0 0 6px;
+      font-size: 34px;
+      font-weight: 700;
+      line-height: 1.12;
+    }
+
+    .subtitle {
+      margin: 0 0 14px;
+      font-size: 17px;
+      color: #333;
+    }
+
+    .quiz-panel {
+      border: 1px solid var(--border);
+      background: var(--panel);
+    }
+
+    .quiz-top {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      background: #fbfbfb;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .timer {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--orange-dark);
+      line-height: 1;
+    }
+
+    .score {
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .controls {
+      padding: 12px 14px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      border-bottom: 1px solid var(--border);
+      background: #fff;
+    }
+
+    input[type="text"] {
+      flex: 1 1 340px;
+      min-width: 240px;
+      padding: 10px 12px;
+      font-size: 20px;
+      border: 1px solid #bfbfbf;
+      outline: none;
+      border-radius: 2px;
+    }
+
+    input[type="text"]:focus {
+      border-color: #4a7bd1;
+      box-shadow: 0 0 0 2px rgba(74, 123, 209, 0.12);
+    }
+
+    button {
+      padding: 10px 14px;
+      border: 1px solid #bfbfbf;
+      border-radius: 2px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      background: #efefef;
+    }
+
+    #startBtn {
+      background: var(--orange);
+      border-color: #d29100;
+      color: white;
+    }
+
+    #giveUpBtn {
+      background: #d94c4c;
+      border-color: #b83d3d;
+      color: white;
+    }
+
+    .status {
+      min-height: 24px;
+      padding: 8px 14px 0;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .status.ok { color: var(--ok); }
+    .status.err { color: var(--err); }
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 12px;
+      padding: 12px 14px 14px;
+    }
+
+    .map-panel, .answers-panel {
+      border: 1px solid var(--border);
+      background: #fff;
+    }
+
+    .panel-head {
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--border);
+      background: #f6f6f6;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .map-wrap {
+      background: var(--blue-bg);
+      overflow: auto;
+      cursor: zoom-in;
+      user-select: none;
+    }
+
+    .map-inner {
+      transition: transform 0.2s ease;
+      transform-origin: center center;
+    }
+
+    .map-wrap.zoomed .map-inner {
+      transform: scale(1.8);
+    }
+
+    #worldMap {
+      display: block;
+      width: 100%;
+      min-height: 500px;
+    }
+
+    .map-loading {
+      padding: 18px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .country-shape {
+      fill: var(--map-default);
+      stroke: #7a7a7a;
+      stroke-width: 0.45;
+      transition: fill 0.15s ease;
+    }
+
+    .country-shape.guessed {
+      fill: var(--yellow-fill);
+    }
+
+    .country-shape.missed {
+      fill: var(--missed-fill);
+    }
+
+    .answers-scroll {
+      max-height: 560px;
+      overflow: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      font-size: 13px;
+    }
+
+    th, td {
+      border: 1px solid #e0e0e0;
+      padding: 5px 6px;
+      vertical-align: top;
+    }
+
+    th {
+      background: #fafafa;
+      font-size: 12px;
+      text-align: left;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    .slot {
+      color: #999;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .slot.guessed {
+      color: #000;
+      font-weight: 700;
+      background: #fff8dc;
+    }
+
+    .slot.missed {
+      color: #9f1d1d;
+      background: #fde6e6;
+      font-weight: 700;
+    }
+
+    .result-box {
+      margin: 0 14px 14px;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      background: #fafafa;
+      display: none;
+      font-size: 15px;
+    }
+
+    .result-box.show { display: block; }
+
+    @media (max-width: 900px) {
+      .main-grid { grid-template-columns: 1fr; }
+      #worldMap { min-height: 360px; }
+      .answers-scroll { max-height: none; }
+    }
+  </style>
 </head>
-
 <body>
-<div class="wrap">
+  <div class="page">
+    <h1>Countries of the World Quiz</h1>
+    <p class="subtitle">How many countries can you name? As you answer, the map will be filled in.</p>
 
-<h1>Countries Quiz</h1>
-<p>Type countries. 15 minutes.</p>
+    <div class="quiz-panel">
+      <div class="quiz-top">
+        <div class="timer" id="timer">15:00</div>
+        <div class="score"><span id="score">0</span> / <span id="totalCount">196</span></div>
+      </div>
 
-<div class="panel">
-<div id="timer">15:00</div>
-<div id="score">0 / 196</div>
+      <div class="controls">
+        <input id="answerInput" type="text" placeholder="Enter country here" autocomplete="off" disabled />
+        <button id="startBtn">Start Quiz</button>
+        <button id="giveUpBtn" disabled>Give Up?</button>
+        <button id="resetBtn">Reset</button>
+      </div>
 
-<button onclick="start()">Start</button> <button onclick="resetGame()">Reset</button>
+      <div id="status" class="status"></div>
 
-<input id="input" placeholder="Type country..." disabled>
+      <div class="main-grid">
+        <div class="map-panel">
+          <div class="panel-head">Map (click to zoom)</div>
+          <div class="map-wrap" id="mapWrap">
+            <div class="map-inner">
+              <svg id="worldMap" viewBox="0 0 1000 520" preserveAspectRatio="xMidYMid meet"></svg>
+            </div>
+          </div>
+          <div class="map-loading" id="mapLoading">Loading world map...</div>
+        </div>
 
-<div id="msg"></div>
-</div>
+        <div class="answers-panel">
+          <div class="panel-head">Answers</div>
+          <div class="answers-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Europe</th>
+                  <th>Asia</th>
+                  <th>Africa</th>
+                  <th>North America</th>
+                  <th>South America</th>
+                  <th>Oceania</th>
+                </tr>
+              </thead>
+              <tbody id="answersTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
 
-</div>
+      <div id="resultBox" class="result-box"></div>
+    </div>
+  </div>
 
-<script>
-const countries = [
-"India","United States","China","Brazil","Germany","France","Japan",
-"Australia","Canada","Mexico","Russia","Italy","Spain","South Africa"
-// 👉 (trimmed for simplicity — you can expand later)
-];
+  <script>
+    const countriesByContinent = {
+      Europe: ['Albania','Andorra','Austria','Belarus','Belgium','Bosnia and Herzegovina','Bulgaria','Croatia','Czech Republic','Denmark','Estonia','Finland','France','Germany','Greece','Hungary','Iceland','Ireland','Italy','Kosovo','Latvia','Liechtenstein','Lithuania','Luxembourg','Malta','Moldova','Monaco','Montenegro','Netherlands','North Macedonia','Norway','Poland','Portugal','Romania','Russia','San Marino','Serbia','Slovakia','Slovenia','Spain','Sweden','Switzerland','Ukraine','United Kingdom','Vatican City'],
+      Asia: ['Afghanistan','Armenia','Azerbaijan','Bahrain','Bangladesh','Bhutan','Brunei','Cambodia','China','Cyprus','East Timor','Georgia','India','Indonesia','Iran','Iraq','Israel','Japan','Jordan','Kazakhstan','Kuwait','Kyrgyzstan','Laos','Lebanon','Malaysia','Maldives','Mongolia','Myanmar','Nepal','North Korea','Oman','Pakistan','Philippines','Qatar','Saudi Arabia','Singapore','South Korea','Sri Lanka','Syria','Taiwan','Tajikistan','Thailand','Turkey','Turkmenistan','United Arab Emirates','Uzbekistan','Vietnam','Yemen'],
+      Africa: ['Algeria','Angola','Benin','Botswana','Burkina Faso','Burundi','Cameroon','Cape Verde','Central African Republic','Chad','Comoros','Democratic Republic of the Congo','Djibouti','Egypt','Equatorial Guinea','Eritrea','Eswatini','Ethiopia','Gabon','Gambia','Ghana','Guinea','Guinea-Bissau','Ivory Coast','Kenya','Lesotho','Liberia','Libya','Madagascar','Malawi','Mali','Mauritania','Mauritius','Morocco','Mozambique','Namibia','Niger','Nigeria','Republic of the Congo','Rwanda','São Tomé and Príncipe','Senegal','Seychelles','Sierra Leone','Somalia','South Africa','South Sudan','Sudan','Tanzania','Togo','Tunisia','Uganda','Zambia','Zimbabwe'],
+      'North America': ['Antigua and Barbuda','Bahamas','Barbados','Belize','Canada','Costa Rica','Cuba','Dominica','Dominican Republic','El Salvador','Grenada','Guatemala','Haiti','Honduras','Jamaica','Mexico','Nicaragua','Panama','Saint Kitts and Nevis','Saint Lucia','Saint Vincent and the Grenadines','Trinidad and Tobago','United States'],
+      'South America': ['Argentina','Bolivia','Brazil','Chile','Colombia','Ecuador','Guyana','Paraguay','Peru','Suriname','Uruguay','Venezuela'],
+      Oceania: ['Australia','Federated States of Micronesia','Fiji','Kiribati','Marshall Islands','Nauru','New Zealand','Palau','Papua New Guinea','Samoa','Solomon Islands','Tonga','Tuvalu','Vanuatu']
+    };
 
-let guessed = new Set();
-let time = 900;
-let interval;
-let started = false;
+    const aliases = {
+      'usa': 'United States',
+      'us': 'United States',
+      'u s a': 'United States',
+      'u s': 'United States',
+      'uk': 'United Kingdom',
+      'u k': 'United Kingdom',
+      'uae': 'United Arab Emirates',
+      'drc': 'Democratic Republic of the Congo',
+      'dr congo': 'Democratic Republic of the Congo',
+      'congo kinshasa': 'Democratic Republic of the Congo',
+      'congo brazzaville': 'Republic of the Congo',
+      'czechia': 'Czech Republic',
+      'timor leste': 'East Timor',
+      'cape verde': 'Cape Verde',
+      'swaziland': 'Eswatini',
+      'vatican': 'Vatican City',
+      'micronesia': 'Federated States of Micronesia',
+      'sao tome and principe': 'São Tomé and Príncipe',
+      'north macedonia': 'North Macedonia',
+      'south korea': 'South Korea',
+      'north korea': 'North Korea',
+      'ivory coast': 'Ivory Coast',
+      'cote divoire': 'Ivory Coast'
+    };
 
-function update(){
-document.getElementById("score").innerText =
-guessed.size + " / " + countries.length;
+    const mapNameAliases = {
+      'united states of america': 'United States',
+      'russian federation': 'Russia',
+      'czechia': 'Czech Republic',
+      'dem rep congo': 'Democratic Republic of the Congo',
+      'democratic republic of the congo': 'Democratic Republic of the Congo',
+      'republic of the congo': 'Republic of the Congo',
+      'congo': 'Republic of the Congo',
+      'eswatini': 'Eswatini',
+      'bosnia and herz.': 'Bosnia and Herzegovina',
+      'central african rep.': 'Central African Republic',
+      'dominican rep.': 'Dominican Republic',
+      'solomon is.': 'Solomon Islands',
+      'eq. guinea': 'Equatorial Guinea',
+      's. sudan': 'South Sudan',
+      'lao pdr': 'Laos',
+      'viet nam': 'Vietnam',
+      'myanmar': 'Myanmar',
+      'syrian arab republic': 'Syria',
+      'iran islamic republic of': 'Iran',
+      'tanzania united republic of': 'Tanzania',
+      'moldova republic of': 'Moldova',
+      'brunei darussalam': 'Brunei',
+      'north macedonia': 'North Macedonia'
+    };
 
-let m = String(Math.floor(time/60)).padStart(2,"0");
-let s = String(time%60).padStart(2,"0");
-document.getElementById("timer").innerText = m+":"+s;
-}
+    const mapDataUrl = 'https://cdn.jsdelivr.net/gh/holtzy/D3-graph-gallery@master/DATA/world.geojson';
+    const continents = ['Europe','Asia','Africa','North America','South America','Oceania'];
+    const allCountries = Object.values(countriesByContinent).flat();
+    const guessed = new Set();
+    const answerLookup = new Map();
+    const featureByCountry = new Map();
+    let geoFeatures = [];
+    let running = false;
+    let finished = false;
+    let remaining = 15 * 60;
+    let timer = null;
 
-function start(){
-if(started) return;
-started = true;
-document.getElementById("input").disabled = false;
+    const totalCountEl = document.getElementById('totalCount');
+    const scoreEl = document.getElementById('score');
+    const timerEl = document.getElementById('timer');
+    const answerInput = document.getElementById('answerInput');
+    const startBtn = document.getElementById('startBtn');
+    const giveUpBtn = document.getElementById('giveUpBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const statusEl = document.getElementById('status');
+    const answersTableBody = document.getElementById('answersTableBody');
+    const resultBox = document.getElementById('resultBox');
+    const mapWrap = document.getElementById('mapWrap');
+    const mapLoading = document.getElementById('mapLoading');
+    const svg = d3.select('#worldMap');
 
-interval = setInterval(()=>{
-time--;
-update();
-if(time<=0) end();
-},1000);
-}
+    totalCountEl.textContent = allCountries.length;
 
-function end(){
-clearInterval(interval);
-document.getElementById("input").disabled = true;
-}
+    function normalize(text) {
+      return text
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/&/g, ' and ')
+        .replace(/[^a-z0-9 ]/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
 
-function resetGame(){
-clearInterval(interval);
-guessed = new Set();
-time = 900;
-started=false;
-document.getElementById("input").value="";
-document.getElementById("input").disabled = true;
-update();
-}
+    allCountries.forEach(country => answerLookup.set(normalize(country), country));
+    Object.entries(aliases).forEach(([k, v]) => answerLookup.set(normalize(k), v));
 
-document.getElementById("input").addEventListener("keydown", e=>{
-if(e.key==="Enter"){
-let val = e.target.value.trim();
+    function setStatus(msg = '', type = '') {
+      statusEl.textContent = msg;
+      statusEl.className = 'status';
+      if (type) statusEl.classList.add(type);
+    }
 
-if(countries.includes(val) && !guessed.has(val)){
-guessed.add(val);
-document.getElementById("msg").innerText="✔ "+val;
-}else{
-document.getElementById("msg").innerText="❌";
-}
+    function formatTime(sec) {
+      const m = String(Math.floor(sec / 60)).padStart(2, '0');
+      const s = String(sec % 60).padStart(2, '0');
+      return `${m}:${s}`;
+    }
 
-e.target.value="";
-update();
-}
-});
+    function buildAnswerTable() {
+      answersTableBody.innerHTML = '';
+      const maxRows = Math.max(...continents.map(c => countriesByContinent[c].length));
+      for (let i = 0; i < maxRows; i++) {
+        const tr = document.createElement('tr');
+        continents.forEach(continent => {
+          const td = document.createElement('td');
+          const country = countriesByContinent[continent][i];
+          if (country) {
+            td.className = 'slot';
+            td.dataset.country = country;
+            td.textContent = '____________';
+          } else {
+            td.textContent = '';
+          }
+          tr.appendChild(td);
+        });
+        answersTableBody.appendChild(tr);
+      }
+    }
 
-update();
-</script>
+    function updateAnswerCell(country, mode) {
+      const cell = document.querySelector(`td[data-country="${CSS.escape(country)}"]`);
+      if (!cell) return;
+      cell.textContent = country;
+      cell.className = `slot ${mode}`;
+    }
 
+    function updateScore() {
+      scoreEl.textContent = guessed.size;
+    }
+
+    function canonicalMapName(raw) {
+      const norm = normalize(raw || '');
+      if (mapNameAliases[norm]) return mapNameAliases[norm];
+      if (answerLookup.has(norm)) return answerLookup.get(norm);
+      return null;
+    }
+
+    function drawMap(features) {
+      const projection = d3.geoMercator().fitSize([1000, 520], { type: 'FeatureCollection', features });
+      const path = d3.geoPath(projection);
+      svg.selectAll('*').remove();
+
+      svg.append('rect')
+        .attr('x', 0)
+        .attr('y', 0)
+        .attr('width', 1000)
+        .attr('height', 520)
+        .attr('fill', '#eef5ff');
+
+      svg.append('g')
+        .selectAll('path')
+        .data(features)
+        .join('path')
+        .attr('class', 'country-shape')
+        .attr('d', path)
+        .attr('data-name', d => d.properties.name || '')
+        .each(function(d) {
+          const canonical = canonicalMapName(d.properties.name);
+          if (canonical && !featureByCountry.has(canonical)) {
+            featureByCountry.set(canonical, []);
+          }
+          if (canonical) {
+            featureByCountry.get(canonical).push(this);
+          }
+        });
+    }
+
+    async function loadMap() {
+      try {
+        const geojson = await d3.json(mapDataUrl);
+        geoFeatures = geojson.features || [];
+        drawMap(geoFeatures);
+        mapLoading.textContent = 'Loaded. Click the map to zoom.';
+      } catch (err) {
+        mapLoading.textContent = 'Map failed to load. Check the data URL or internet access for GitHub Pages.';
+        console.error(err);
+      }
+    }
+
+    function markCountryOnMap(country, mode) {
+      const nodes = featureByCountry.get(country) || [];
+      nodes.forEach(node => {
+        node.classList.remove('guessed', 'missed');
+        node.classList.add(mode);
+      });
+    }
+
+    function finishQuiz(perfect = false) {
+      if (finished) return;
+      finished = true;
+      running = false;
+      clearInterval(timer);
+      answerInput.disabled = true;
+      giveUpBtn.disabled = true;
+      startBtn.disabled = true;
+
+      allCountries.forEach(country => {
+        if (!guessed.has(country)) {
+          updateAnswerCell(country, 'missed');
+          markCountryOnMap(country, 'missed');
+        }
+      });
+
+      const pct = ((guessed.size / allCountries.length) * 100).toFixed(1);
+      resultBox.classList.add('show');
+      resultBox.innerHTML = perfect
+        ? `<strong>Perfect!</strong> You named all ${allCountries.length} countries with ${formatTime(remaining)} left.`
+        : `<strong>Quiz finished.</strong> Score: ${guessed.size}/${allCountries.length} (${pct}%).`;
+      setStatus(perfect ? 'All countries guessed.' : 'Quiz ended.', perfect ? 'ok' : 'err');
+    }
+
+    function startQuiz() {
+      if (running || finished) return;
+      running = true;
+      startBtn.disabled = true;
+      giveUpBtn.disabled = false;
+      answerInput.disabled = false;
+      answerInput.focus();
+      setStatus('Quiz started.', 'ok');
+      timer = setInterval(() => {
+        remaining -= 1;
+        timerEl.textContent = formatTime(remaining);
+        if (remaining <= 0) finishQuiz(false);
+      }, 1000);
+    }
+
+    function resetQuiz() {
+      clearInterval(timer);
+      guessed.clear();
+      running = false;
+      finished = false;
+      remaining = 15 * 60;
+      timerEl.textContent = formatTime(remaining);
+      answerInput.value = '';
+      answerInput.disabled = true;
+      startBtn.disabled = false;
+      giveUpBtn.disabled = true;
+      resultBox.classList.remove('show');
+      resultBox.innerHTML = '';
+      setStatus('');
+      updateScore();
+      buildAnswerTable();
+      document.querySelectorAll('.country-shape').forEach(node => node.classList.remove('guessed', 'missed'));
+    }
+
+    function handleAnswer(value) {
+      if (!running || finished) return;
+      const country = answerLookup.get(normalize(value));
+      if (!country) {
+        setStatus('Not recognized.', 'err');
+        return;
+      }
+      if (guessed.has(country)) {
+        setStatus('Already guessed.', 'err');
+        return;
+      }
+      guessed.add(country);
+      updateAnswerCell(country, 'guessed');
+      markCountryOnMap(country, 'guessed');
+      updateScore();
+      setStatus(`Correct: ${country}`, 'ok');
+      if (guessed.size === allCountries.length) finishQuiz(true);
+    }
+
+    startBtn.addEventListener('click', startQuiz);
+    giveUpBtn.addEventListener('click', () => finishQuiz(false));
+    resetBtn.addEventListener('click', resetQuiz);
+    answerInput.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        handleAnswer(answerInput.value);
+        answerInput.value = '';
+      }
+    });
+    mapWrap.addEventListener('click', () => mapWrap.classList.toggle('zoomed'));
+
+    buildAnswerTable();
+    updateScore();
+    timerEl.textContent = formatTime(remaining);
+    loadMap();
+  </script>
 </body>
 </html>
