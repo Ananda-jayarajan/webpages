@@ -21,7 +21,8 @@ body{
   margin:0 auto;
   padding:0 16px 24px;
 }
-.ribbon{
+
+.topbar{
   background:#222;
   color:#fff;
   padding:12px 16px;
@@ -30,27 +31,63 @@ body{
   align-items:center;
   gap:12px;
   flex-wrap:wrap;
+  position:relative;
+  z-index:10;
 }
-.ribbon-title{
-  font-weight:700;
-  margin-right:4px;
+
+.nav-menu{
+  position:relative;
 }
-.ribbon-current{
-  background:#111;
-  border:1px solid #555;
-  color:#fff;
-  padding:8px 12px;
-  border-radius:4px;
-  font-size:14px;
-}
-.ribbon a{
-  color:#fff;
-  text-decoration:none;
+
+.nav-trigger{
+  border:none;
   background:#3a3a3a;
+  color:#fff;
   padding:8px 12px;
   border-radius:4px;
   font-size:14px;
+  font-weight:700;
+  cursor:pointer;
 }
+
+.nav-trigger:hover,
+.nav-menu:hover .nav-trigger,
+.nav-menu:focus-within .nav-trigger{
+  background:#4a4a4a;
+}
+
+.dropdown-menu{
+  display:none;
+  position:absolute;
+  top:calc(100% + 6px);
+  left:0;
+  min-width:220px;
+  background:#fff;
+  border:1px solid #cfcfcf;
+  border-radius:4px;
+  box-shadow:0 8px 20px rgba(0,0,0,.15);
+  padding:6px;
+}
+
+.nav-menu:hover .dropdown-menu,
+.nav-menu:focus-within .dropdown-menu{
+  display:block;
+}
+
+.dropdown-menu a{
+  display:block;
+  color:#111;
+  text-decoration:none;
+  padding:8px 10px;
+  border-radius:4px;
+  font-size:14px;
+}
+
+.dropdown-menu a:hover{
+  background:#f0f0f0;
+}
+
+
 h1{
   margin:6px 0 8px;
   font-size:34px;
@@ -175,6 +212,7 @@ button{
 }
 @media (max-width: 800px){
   #map{width:180%;min-height:420px}
-  .ribbon{gap:8px}
-  .ribbon a,.ribbon-current{font-size:13px;padding:7px 9px}
+  .topbar{gap:8px}
+  .nav-trigger{font-size:13px;padding:7px 9px}
+
 }
