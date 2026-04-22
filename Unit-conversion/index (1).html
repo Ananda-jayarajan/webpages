@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Milligrams to Grams Converter</title>
+  <meta name="description" content="Convert milligrams to grams instantly with a modern, GitHub Pages-ready static HTML converter." />
+  <style>
+    :root{
+      --bg:#07111f;
+      --bg2:#0d1b2f;
+      --panel:rgba(255,255,255,.08);
+      --panel-strong:rgba(255,255,255,.12);
+      --text:#eef4ff;
+      --muted:#b8c4db;
+      --accent:#6ee7ff;
+      --accent2:#8b5cf6;
+      --accent3:#22c55e;
+      --border:rgba(255,255,255,.14);
+      --shadow:0 20px 60px rgba(0,0,0,.35);
+      --radius:24px;
+      --radius-sm:16px;
+      --max:1200px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at 15% 20%, rgba(110,231,255,.18), transparent 24%),
+        radial-gradient(circle at 85% 15%, rgba(139,92,246,.22), transparent 22%),
+        radial-gradient(circle at 80% 80%, rgba(34,197,94,.10), transparent 20%),
+        linear-gradient(135deg, var(--bg), var(--bg2) 55%, #091423);
+      min-height:100vh;
+      line-height:1.6;
+    }
+
+    a{color:inherit;text-decoration:none}
+    .container{width:min(calc(100% - 32px), var(--max));margin-inline:auto}
+    .topbar{
+      position:sticky; top:0; z-index:20;
+      backdrop-filter: blur(14px);
+      background:rgba(7,17,31,.55);
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .nav{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:14px 0;
+    }
+    .brand{
+      display:flex; align-items:center; gap:12px; font-weight:800; letter-spacing:.2px;
+    }
+    .logo{
+      width:40px; height:40px; border-radius:14px;
+      background:linear-gradient(135deg, var(--accent), var(--accent2));
+      display:grid; place-items:center; color:#06111e; font-weight:900;
+      box-shadow:0 10px 30px rgba(110,231,255,.25);
+    }
+    .nav-links{
+      display:flex; gap:18px; align-items:center; flex-wrap:wrap;
+      color:var(--muted); font-size:.95rem;
+    }
+    .nav-links a:hover{color:var(--text)}
+    .hero{
+      padding:52px 0 28px;
+      display:grid; grid-template-columns:1.15fr .85fr; gap:24px; align-items:stretch;
+    }
+    .hero-card, .panel{
+      background:var(--panel);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+    .hero-card{
+      padding:34px;
+      position:relative; overflow:hidden;
+    }
+    .hero-card::after{
+      content:"";
+      position:absolute; inset:auto -10% -35% auto; width:260px; height:260px; border-radius:50%;
+      background:radial-gradient(circle, rgba(110,231,255,.22), transparent 62%);
+      pointer-events:none;
+    }
+    .eyebrow{
+      display:inline-flex; gap:8px; align-items:center;
+      padding:8px 12px; border-radius:999px;
+      background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.12);
+      color:var(--accent); font-size:.9rem; font-weight:700;
+      margin-bottom:16px;
+    }
+    h1{
+      margin:0 0 12px;
+      font-size:clamp(2rem, 5vw, 4rem);
+      line-height:1.05;
+      letter-spacing:-.03em;
+    }
+    .hero p{
+      margin:0;
+      color:var(--muted);
+      max-width:60ch;
+      font-size:1.05rem;
+    }
+    .stats{
+      margin-top:24px;
+      display:flex; gap:14px; flex-wrap:wrap;
+    }
+    .stat{
+      padding:14px 16px; border-radius:18px; min-width:140px;
+      background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1);
+    }
+    .stat strong{display:block; font-size:1.1rem}
+    .stat span{color:var(--muted); font-size:.92rem}
+    .converter{
+      padding:24px;
+      display:flex; flex-direction:column; gap:18px;
+    }
+    .converter h2{
+      margin:0; font-size:1.3rem;
+    }
+    .subtle{color:var(--muted); margin-top:-8px}
+    .field-grid{
+      display:grid; grid-template-columns:1fr auto 1fr; gap:14px; align-items:end;
+    }
+    .field label{
+      display:block; margin-bottom:8px; color:var(--muted); font-size:.92rem;
+    }
+    .input-wrap, .select-wrap, .result-box, .formula, .mini-card, .faq-item, .table-shell{
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.11);
+      border-radius:18px;
+    }
+    .input-wrap input, .select-wrap select{
+      width:100%;
+      border:0; outline:0; background:transparent; color:var(--text);
+      padding:16px 18px; font-size:1.06rem;
+    }
+    select option{color:#111}
+    .swap-btn{
+      width:52px; height:52px; border-radius:16px; border:0;
+      background:linear-gradient(135deg, var(--accent), var(--accent2));
+      color:#06111e; font-size:1.2rem; font-weight:900; cursor:pointer;
+      box-shadow:0 12px 28px rgba(110,231,255,.22);
+      transition:transform .18s ease, box-shadow .18s ease;
+    }
+    .swap-btn:hover{transform:translateY(-2px) rotate(12deg)}
+    .actions{
+      display:flex; gap:12px; flex-wrap:wrap;
+    }
+    .btn{
+      border:0; cursor:pointer; padding:14px 18px; border-radius:16px;
+      font-weight:700; font-size:.97rem;
+    }
+    .btn-primary{
+      background:linear-gradient(135deg, var(--accent), var(--accent2));
+      color:#08111f;
+    }
+    .btn-secondary{
+      background:rgba(255,255,255,.08); color:var(--text);
+      border:1px solid rgba(255,255,255,.12);
+    }
+    .result-box{
+      padding:18px;
+    }
+    .result-label{
+      color:var(--muted); font-size:.92rem; margin-bottom:6px;
+    }
+    .result-value{
+      font-size:clamp(1.6rem, 3vw, 2.4rem); font-weight:800; line-height:1.1;
+      word-break:break-word;
+    }
+    .result-note{
+      margin-top:8px; color:var(--muted); font-size:.92rem;
+    }
+    .quick-pills{
+      display:flex; flex-wrap:wrap; gap:10px;
+    }
+    .pill{
+      border:1px solid rgba(255,255,255,.1); background:rgba(255,255,255,.05);
+      color:var(--text); border-radius:999px; padding:10px 14px; cursor:pointer;
+      font-weight:600;
+    }
+    .section{
+      padding:20px 0;
+    }
+    .grid-3{
+      display:grid; grid-template-columns:repeat(3,1fr); gap:18px;
+    }
+    .mini-card{
+      padding:22px;
+      box-shadow:var(--shadow);
+    }
+    .mini-card h3{margin:0 0 8px}
+    .mini-card p{margin:0; color:var(--muted)}
+    .formula{
+      padding:24px;
+      display:grid; grid-template-columns:1fr 1fr; gap:18px; align-items:center;
+    }
+    .formula-block{
+      padding:18px; border-radius:18px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08);
+    }
+    .formula-line{
+      font-size:1.5rem; font-weight:800; margin:8px 0;
+      letter-spacing:-.02em;
+    }
+    .table-shell{
+      overflow:hidden;
+      box-shadow:var(--shadow);
+    }
+    table{
+      width:100%;
+      border-collapse:collapse;
+    }
+    th, td{
+      text-align:left; padding:16px 18px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    th{
+      background:rgba(255,255,255,.06); color:#d7e6ff;
+      font-size:.92rem; text-transform:uppercase; letter-spacing:.08em;
+    }
+    td{color:#eaf2ff}
+    tbody tr:hover{background:rgba(255,255,255,.04)}
+    .content-grid{
+      display:grid; grid-template-columns:1fr 1fr; gap:18px;
+    }
+    .content-card{
+      padding:24px;
+    }
+    .content-card h2, .faq h2{
+      margin-top:0;
+    }
+    .content-card p{
+      color:var(--muted);
+    }
+    .faq{
+      padding:14px 0 46px;
+    }
+    .faq-list{
+      display:grid; gap:14px;
+    }
+    .faq-item{
+      padding:0;
+      overflow:hidden;
+    }
+    details summary{
+      list-style:none; cursor:pointer; padding:18px 20px; font-weight:700;
+    }
+    details summary::-webkit-details-marker{display:none}
+    details p{
+      margin:0; padding:0 20px 20px; color:var(--muted);
+    }
+    footer{
+      padding:24px 0 40px;
+      color:var(--muted);
+      text-align:center;
+    }
+
+    .fade-in{
+      animation:fadeIn .7s ease both;
+    }
+    @keyframes fadeIn{
+      from{opacity:0; transform:translateY(14px)}
+      to{opacity:1; transform:translateY(0)}
+    }
+
+    @media (max-width: 980px){
+      .hero, .formula, .content-grid{grid-template-columns:1fr}
+      .grid-3{grid-template-columns:1fr}
+    }
+
+    @media (max-width: 720px){
+      .field-grid{grid-template-columns:1fr; align-items:stretch}
+      .swap-btn{width:100%; height:auto; padding:14px}
+      .nav{gap:12px; flex-direction:column; align-items:flex-start}
+      .nav-links{gap:12px}
+      .hero-card, .converter{padding:22px}
+      th, td{padding:14px}
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="container nav">
+      <a class="brand" href="#">
+        <span class="logo">U</span>
+        <span>UnitSpark</span>
+      </a>
+      <nav class="nav-links">
+        <a href="#converter">Converter</a>
+        <a href="#table">Table</a>
+        <a href="#guide">Guide</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero fade-in">
+      <div class="hero-card">
+        <div class="eyebrow">⚡ Fast • Accurate • Static HTML</div>
+        <h1>Milligrams to Grams Converter</h1>
+        <p>
+          A polished, GitHub Pages-ready upgrade of the classic mg ↔ g conversion page.
+          Clean visuals, instant conversion, responsive layout, and zero frameworks.
+        </p>
+        <div class="stats">
+          <div class="stat">
+            <strong>1 mg = 0.001 g</strong>
+            <span>Direct conversion factor</span>
+          </div>
+          <div class="stat">
+            <strong>1 g = 1000 mg</strong>
+            <span>Reverse conversion factor</span>
+          </div>
+          <div class="stat">
+            <strong>100% static</strong>
+            <span>Perfect for GitHub Pages</span>
+          </div>
+        </div>
+      </div>
+
+      <aside id="converter" class="panel converter fade-in">
+        <h2>Convert Instantly</h2>
+        <p class="subtle">Enter a value and switch directions anytime.</p>
+
+        <div class="field-grid">
+          <div class="field">
+            <label for="fromValue">Value</label>
+            <div class="input-wrap">
+              <input id="fromValue" type="number" step="any" value="15" placeholder="Enter value" />
+            </div>
+          </div>
+
+          <button class="swap-btn" id="swapBtn" title="Swap units" aria-label="Swap units">⇄</button>
+
+          <div class="field">
+            <label for="modeSelect">Conversion</label>
+            <div class="select-wrap">
+              <select id="modeSelect">
+                <option value="mg-to-g">Milligrams → Grams</option>
+                <option value="g-to-mg">Grams → Milligrams</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="btn btn-primary" id="convertBtn">Convert</button>
+          <button class="btn btn-secondary" id="clearBtn">Clear</button>
+        </div>
+
+        <div class="result-box">
+          <div class="result-label">Converted result</div>
+          <div class="result-value" id="resultValue">0.015 g</div>
+          <div class="result-note" id="resultNote">15 milligrams equals 0.015 grams.</div>
+        </div>
+
+        <div>
+          <div class="result-label" style="margin-bottom:10px;">Quick examples</div>
+          <div class="quick-pills">
+            <button class="pill" data-value="1">1</button>
+            <button class="pill" data-value="10">10</button>
+            <button class="pill" data-value="50">50</button>
+            <button class="pill" data-value="100">100</button>
+            <button class="pill" data-value="1000">1000</button>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="section grid-3 fade-in">
+      <div class="mini-card">
+        <h3>Elegant UI</h3>
+        <p>Glassmorphism-inspired panels, better hierarchy, and strong readability compared with the original reference page.</p>
+      </div>
+      <div class="mini-card">
+        <h3>Practical for Users</h3>
+        <p>Includes instant output, reverse conversion, a conversion table, and a plain-language explanation.</p>
+      </div>
+      <div class="mini-card">
+        <h3>Easy to Host</h3>
+        <p>Everything is bundled into one file, making deployment on GitHub Pages as simple as uploading <code>index.html</code>.</p>
+      </div>
+    </section>
+
+    <section class="section fade-in">
+      <div class="formula">
+        <div class="formula-block">
+          <div class="result-label">Formula</div>
+          <div class="formula-line">grams = milligrams ÷ 1000</div>
+          <div class="result-note">Use this when converting mg to g.</div>
+        </div>
+        <div class="formula-block">
+          <div class="result-label">Reverse Formula</div>
+          <div class="formula-line">milligrams = grams × 1000</div>
+          <div class="result-note">Use this when converting g to mg.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="table" class="section fade-in">
+      <div class="table-shell">
+        <table>
+          <thead>
+            <tr>
+              <th>Milligrams (mg)</th>
+              <th>Grams (g)</th>
+            </tr>
+          </thead>
+          <tbody id="conversionTableBody">
+            <tr><td>0.01 mg</td><td>0.00001 g</td></tr>
+            <tr><td>0.1 mg</td><td>0.0001 g</td></tr>
+            <tr><td>1 mg</td><td>0.001 g</td></tr>
+            <tr><td>2 mg</td><td>0.002 g</td></tr>
+            <tr><td>3 mg</td><td>0.003 g</td></tr>
+            <tr><td>5 mg</td><td>0.005 g</td></tr>
+            <tr><td>10 mg</td><td>0.01 g</td></tr>
+            <tr><td>20 mg</td><td>0.02 g</td></tr>
+            <tr><td>50 mg</td><td>0.05 g</td></tr>
+            <tr><td>100 mg</td><td>0.1 g</td></tr>
+            <tr><td>1000 mg</td><td>1 g</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="guide" class="section content-grid fade-in">
+      <article class="panel content-card">
+        <h2>What is a milligram?</h2>
+        <p>
+          A milligram is a metric unit of mass equal to one-thousandth of a gram.
+          It is commonly used for medicines, supplements, lab measurements, and very small quantities of material.
+        </p>
+        <p>
+          Because it represents a tiny amount, milligrams are useful when precision matters and grams would be too large a unit.
+        </p>
+      </article>
+
+      <article class="panel content-card">
+        <h2>What is a gram?</h2>
+        <p>
+          A gram is a metric unit of mass widely used in everyday life and science.
+          It is common for food labels, ingredients, small packages, and laboratory measurements.
+        </p>
+        <p>
+          Since 1000 milligrams make 1 gram, converting between the two is straightforward and ideal for a simple calculator like this one.
+        </p>
+      </article>
+    </section>
+
+    <section class="section content-grid fade-in">
+      <article class="panel content-card">
+        <h2>How to convert mg to g</h2>
+        <p>
+          Divide the number of milligrams by 1000. For example:
+          <strong>15 mg ÷ 1000 = 0.015 g</strong>.
+        </p>
+        <p>
+          This works because the gram is a larger unit, so the number becomes smaller when converting upward.
+        </p>
+      </article>
+
+      <article class="panel content-card">
+        <h2>Why this version is better</h2>
+        <p>
+          Instead of a text-heavy, dated utility page, this redesign focuses on visual clarity, mobile responsiveness, and a more premium feel.
+        </p>
+        <p>
+          It keeps the original usefulness—converter, table, definitions, formula—while making the experience much more polished.
+        </p>
+      </article>
+    </section>
+
+    <section id="faq" class="faq fade-in">
+      <h2>Frequently Asked Questions</h2>
+      <div class="faq-list">
+        <div class="faq-item">
+          <details open>
+            <summary>How many grams are in 1 milligram?</summary>
+            <p>1 milligram equals 0.001 grams.</p>
+          </details>
+        </div>
+        <div class="faq-item">
+          <details>
+            <summary>How many milligrams are in 1 gram?</summary>
+            <p>1 gram equals 1000 milligrams.</p>
+          </details>
+        </div>
+        <div class="faq-item">
+          <details>
+            <summary>Can I host this on GitHub Pages?</summary>
+            <p>Yes. This page is fully static HTML with embedded CSS and JavaScript, so it can be hosted directly on GitHub Pages without any build tools.</p>
+          </details>
+        </div>
+        <div class="faq-item">
+          <details>
+            <summary>Can I expand this into a full converter website?</summary>
+            <p>Yes. You can duplicate this file and change the unit labels, formulas, examples, and table values to create more converter pages with the same design system.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Built as a modern static HTML converter page for GitHub Pages hosting.
+  </footer>
+
+  <script>
+    const fromValue = document.getElementById('fromValue');
+    const modeSelect = document.getElementById('modeSelect');
+    const resultValue = document.getElementById('resultValue');
+    const resultNote = document.getElementById('resultNote');
+    const swapBtn = document.getElementById('swapBtn');
+    const convertBtn = document.getElementById('convertBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const pills = document.querySelectorAll('.pill');
+
+    function formatNumber(value){
+      if (!Number.isFinite(value)) return '—';
+      if (Math.abs(value) >= 1000000 || (Math.abs(value) > 0 && Math.abs(value) < 0.001)) {
+        return value.toExponential(6).replace(/\.?0+e/, 'e');
+      }
+      return Number(value.toFixed(12)).toString();
+    }
+
+    function convert(){
+      const input = parseFloat(fromValue.value);
+      if (Number.isNaN(input)) {
+        resultValue.textContent = 'Enter a value';
+        resultNote.textContent = 'Please type a numeric value to convert.';
+        return;
+      }
+
+      let output, label;
+      if (modeSelect.value === 'mg-to-g') {
+        output = input / 1000;
+        label = 'g';
+        resultNote.textContent = `${formatNumber(input)} milligrams equals ${formatNumber(output)} grams.`;
+      } else {
+        output = input * 1000;
+        label = 'mg';
+        resultNote.textContent = `${formatNumber(input)} grams equals ${formatNumber(output)} milligrams.`;
+      }
+
+      resultValue.textContent = `${formatNumber(output)} ${label}`;
+    }
+
+    function swapMode(){
+      modeSelect.value = modeSelect.value === 'mg-to-g' ? 'g-to-mg' : 'mg-to-g';
+      convert();
+    }
+
+    convertBtn.addEventListener('click', convert);
+    swapBtn.addEventListener('click', swapMode);
+    clearBtn.addEventListener('click', () => {
+      fromValue.value = '';
+      resultValue.textContent = 'Enter a value';
+      resultNote.textContent = 'Your result will appear here.';
+      fromValue.focus();
+    });
+    fromValue.addEventListener('input', convert);
+    modeSelect.addEventListener('change', convert);
+
+    pills.forEach(btn => {
+      btn.addEventListener('click', () => {
+        fromValue.value = btn.dataset.value;
+        convert();
+      });
+    });
+
+    convert();
+  </script>
+</body>
+</html>
