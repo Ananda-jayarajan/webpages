@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simple Molarity Calculator</title>
+  <style>
+    :root {
+      --bg: #f6f7fb;
+      --card: #ffffff;
+      --text: #172033;
+      --muted: #5d677a;
+      --border: #d9deea;
+      --accent: #2f6fed;
+      --accent-soft: #e9f0ff;
+      --danger: #b42318;
+      --shadow: 0 12px 32px rgba(20, 28, 45, 0.08);
+      --radius: 18px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: linear-gradient(180deg, #f8faff 0%, #f4f6fb 100%);
+      color: var(--text);
+    }
+    .wrap { max-width: 980px; margin: 0 auto; padding: 32px 16px 56px; }
+    .hero { text-align: center; margin-bottom: 28px; }
+    .hero h1 { margin: 0 0 10px; font-size: clamp(2rem, 4vw, 3rem); line-height: 1.05; }
+    .hero p { margin: 0 auto; max-width: 700px; color: var(--muted); font-size: 1rem; line-height: 1.6; }
+    .note {
+      margin-top: 14px; display: inline-block; background: var(--accent-soft); color: var(--accent);
+      padding: 10px 14px; border-radius: 999px; font-size: 0.95rem; font-weight: 600;
+    }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; margin-top: 26px; }
+    .card {
+      background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+      box-shadow: var(--shadow); padding: 20px;
+    }
+    .card h2 { margin: 0 0 6px; font-size: 1.15rem; }
+    .card .subtitle { margin: 0 0 16px; color: var(--muted); font-size: 0.95rem; line-height: 1.5; }
+    .field { margin-bottom: 12px; }
+    label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 0.95rem; }
+    .input-row { display: grid; grid-template-columns: 1.4fr 1fr; gap: 8px; }
+    input, select, button {
+      width: 100%; border-radius: 12px; border: 1px solid var(--border); padding: 12px 12px;
+      font-size: 0.98rem; background: #fff; color: var(--text);
+    }
+    input:focus, select:focus { outline: 2px solid rgba(47, 111, 237, 0.2); border-color: var(--accent); }
+    .actions { display: flex; gap: 8px; margin-top: 12px; }
+    button { cursor: pointer; font-weight: 700; transition: transform 0.12s ease, opacity 0.12s ease; }
+    button:hover { transform: translateY(-1px); }
+    .primary { background: var(--accent); color: white; border-color: var(--accent); }
+    .secondary { background: white; color: var(--text); }
+    .result {
+      margin-top: 14px; padding: 14px; border-radius: 14px; background: #f8fafc;
+      border: 1px dashed var(--border); min-height: 56px; line-height: 1.5; font-weight: 600;
+    }
+    .error { color: var(--danger); font-weight: 700; }
+    .footer { text-align: center; color: var(--muted); font-size: 0.92rem; margin-top: 26px; }
+    @media (max-width: 520px) {
+      .input-row { grid-template-columns: 1fr; }
+      .actions { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <h1>Simple Molarity Calculator</h1>
+      <p>A cleaner, easier version of the classic molarity calculator. Pick any calculator below, enter your values, and get the result instantly.</p>
+      <div class="note">4 tools: mass, volume, molarity, and dilution</div>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <h2>1. Mass from volume and concentration</h2>
+        <p class="subtitle">Find how much solute mass you need.</p>
+        <div class="field">
+          <label>Concentration</label>
+          <div class="input-row">
+            <input id="mfc-conc" type="number" step="any" placeholder="e.g. 0.5" />
+            <select id="mfc-conc-unit">
+              <option value="1e-15">fM</option><option value="1e-12">pM</option><option value="1e-9">nM</option>
+              <option value="1e-6">µM</option><option value="1e-3">mM</option><option value="1" selected>M</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label>Formula weight (g/mol)</label>
+          <input id="mfc-fw" type="number" step="any" placeholder="e.g. 58.44" />
+        </div>
+        <div class="field">
+          <label>Volume</label>
+          <div class="input-row">
+            <input id="mfc-vol" type="number" step="any" placeholder="e.g. 250" />
+            <select id="mfc-vol-unit">
+              <option value="1e-6">µL</option><option value="1e-3" selected>mL</option><option value="1">L</option>
+            </select>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="primary" onclick="calcMass()">Calculate</button>
+          <button class="secondary" onclick="resetCard(['mfc-conc','mfc-fw','mfc-vol'],'mfc-result')">Clear</button>
+        </div>
+        <div class="result" id="mfc-result">Result will appear here.</div>
+      </article>
+
+      <article class="card">
+        <h2>2. Volume from mass and concentration</h2>
+        <p class="subtitle">Find how much solution volume you can make.</p>
+        <div class="field">
+          <label>Mass</label>
+          <div class="input-row">
+            <input id="vfm-mass" type="number" step="any" placeholder="e.g. 1" />
+            <select id="vfm-mass-unit">
+              <option value="1e-6">µg</option><option value="1e-3">mg</option><option value="1" selected>g</option><option value="1000">kg</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label>Formula weight (g/mol)</label>
+          <input id="vfm-fw" type="number" step="any" placeholder="e.g. 180.16" />
+        </div>
+        <div class="field">
+          <label>Concentration</label>
+          <div class="input-row">
+            <input id="vfm-conc" type="number" step="any" placeholder="e.g. 0.1" />
+            <select id="vfm-conc-unit">
+              <option value="1e-15">fM</option><option value="1e-12">pM</option><option value="1e-9">nM</option>
+              <option value="1e-6">µM</option><option value="1e-3">mM</option><option value="1" selected>M</option>
+            </select>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="primary" onclick="calcVolume()">Calculate</button>
+          <button class="secondary" onclick="resetCard(['vfm-mass','vfm-fw','vfm-conc'],'vfm-result')">Clear</button>
+        </div>
+        <div class="result" id="vfm-result">Result will appear here.</div>
+      </article>
+
+      <article class="card">
+        <h2>3. Molarity from mass and volume</h2>
+        <p class="subtitle">Find the concentration of your prepared solution.</p>
+        <div class="field">
+          <label>Mass</label>
+          <div class="input-row">
+            <input id="mfv-mass" type="number" step="any" placeholder="e.g. 2.5" />
+            <select id="mfv-mass-unit">
+              <option value="1e-6">µg</option><option value="1e-3">mg</option><option value="1" selected>g</option><option value="1000">kg</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label>Formula weight (g/mol)</label>
+          <input id="mfv-fw" type="number" step="any" placeholder="e.g. 98.08" />
+        </div>
+        <div class="field">
+          <label>Volume</label>
+          <div class="input-row">
+            <input id="mfv-vol" type="number" step="any" placeholder="e.g. 500" />
+            <select id="mfv-vol-unit">
+              <option value="1e-6">µL</option><option value="1e-3" selected>mL</option><option value="1">L</option>
+            </select>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="primary" onclick="calcMolarity()">Calculate</button>
+          <button class="secondary" onclick="resetCard(['mfv-mass','mfv-fw','mfv-vol'],'mfv-result')">Clear</button>
+        </div>
+        <div class="result" id="mfv-result">Result will appear here.</div>
+      </article>
+
+      <article class="card">
+        <h2>4. Dilute a stock solution</h2>
+        <p class="subtitle">Use C₁V₁ = C₂V₂ to find stock volume needed.</p>
+        <div class="field">
+          <label>Stock concentration</label>
+          <div class="input-row">
+            <input id="dil-stock" type="number" step="any" placeholder="e.g. 5" />
+            <select id="dil-stock-unit">
+              <option value="1e-15">fM</option><option value="1e-12">pM</option><option value="1e-9">nM</option>
+              <option value="1e-6">µM</option><option value="1e-3">mM</option><option value="1" selected>M</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label>Desired concentration</label>
+          <div class="input-row">
+            <input id="dil-final-conc" type="number" step="any" placeholder="e.g. 0.5" />
+            <select id="dil-final-conc-unit">
+              <option value="1e-15">fM</option><option value="1e-12">pM</option><option value="1e-9">nM</option>
+              <option value="1e-6">µM</option><option value="1e-3">mM</option><option value="1" selected>M</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label>Desired final volume</label>
+          <div class="input-row">
+            <input id="dil-final-vol" type="number" step="any" placeholder="e.g. 100" />
+            <select id="dil-final-vol-unit">
+              <option value="1e-6">µL</option><option value="1e-3" selected>mL</option><option value="1">L</option>
+            </select>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="primary" onclick="calcDilution()">Calculate</button>
+          <button class="secondary" onclick="resetCard(['dil-stock','dil-final-conc','dil-final-vol'],'dil-result')">Clear</button>
+        </div>
+        <div class="result" id="dil-result">Result will appear here.</div>
+      </article>
+    </section>
+
+    <p class="footer">Built as a simpler alternative to the classic multi-tool molarity calculator.</p>
+  </div>
+
+  <script>
+    function val(id) { return parseFloat(document.getElementById(id).value); }
+    function unit(id) { return parseFloat(document.getElementById(id).value); }
+    function safeNumber(...values) { return values.every(v => Number.isFinite(v) && v > 0); }
+    function nice(value) {
+      if (!Number.isFinite(value)) return '—';
+      return Number(value).toLocaleString(undefined, { maximumSignificantDigits: 6 });
+    }
+    function show(id, html, isError = false) {
+      const el = document.getElementById(id);
+      el.innerHTML = isError ? `<span class="error">${html}</span>` : html;
+    }
+    function resetCard(ids, resultId) {
+      ids.forEach(id => document.getElementById(id).value = '');
+      show(resultId, 'Result will appear here.');
+    }
+    function calcMass() {
+      const c = val('mfc-conc') * unit('mfc-conc-unit');
+      const fw = val('mfc-fw');
+      const v = val('mfc-vol') * unit('mfc-vol-unit');
+      if (!safeNumber(c, fw, v)) return show('mfc-result', 'Enter valid positive values.', true);
+      const grams = c * v * fw;
+      show('mfc-result', `Mass needed = <strong>${nice(grams)}</strong> g`);
+    }
+    function calcVolume() {
+      const mass = val('vfm-mass') * unit('vfm-mass-unit');
+      const fw = val('vfm-fw');
+      const c = val('vfm-conc') * unit('vfm-conc-unit');
+      if (!safeNumber(mass, fw, c)) return show('vfm-result', 'Enter valid positive values.', true);
+      const liters = (mass / fw) / c;
+      show('vfm-result', `Volume = <strong>${nice(liters)}</strong> L<br><small>${nice(liters * 1000)} mL</small>`);
+    }
+    function calcMolarity() {
+      const mass = val('mfv-mass') * unit('mfv-mass-unit');
+      const fw = val('mfv-fw');
+      const vol = val('mfv-vol') * unit('mfv-vol-unit');
+      if (!safeNumber(mass, fw, vol)) return show('mfv-result', 'Enter valid positive values.', true);
+      const M = (mass / fw) / vol;
+      show('mfv-result', `Molarity = <strong>${nice(M)}</strong> M`);
+    }
+    function calcDilution() {
+      const c1 = val('dil-stock') * unit('dil-stock-unit');
+      const c2 = val('dil-final-conc') * unit('dil-final-conc-unit');
+      const v2 = val('dil-final-vol') * unit('dil-final-vol-unit');
+      if (!safeNumber(c1, c2, v2)) return show('dil-result', 'Enter valid positive values.', true);
+      if (c2 >= c1) return show('dil-result', 'Desired concentration must be lower than stock concentration for dilution.', true);
+      const v1 = (c2 * v2) / c1;
+      const solvent = v2 - v1;
+      show('dil-result', `Use <strong>${nice(v1)}</strong> L of stock<br><small>Add solvent up to ${nice(v2)} L total (${nice(solvent)} L solvent).</small>`);
+    }
+  </script>
+</body>
+</html>
