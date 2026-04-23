@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Projects</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #fff;
+      color: #24292f;
+      line-height: 1.6;
+    }
+
+    header {
+      background-color: #f6f8fa;
+      border-bottom: 1px solid #e1e4e8;
+      padding: 1.2rem 2rem;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 1.8rem;
+      font-weight: 600;
+    }
+    header p {
+      margin: 0.3rem 0 0;
+      color: #586069;
+    }
+
+    nav {
+      display: flex;
+      justify-content: flex-start;
+      gap: 4rem;
+      margin: 2rem;
+    }
+    nav div {
+      flex: 1;
+    }
+    nav h3 {
+      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+    nav a {
+      display: block;
+      color: #0366d6;
+      text-decoration: none;
+      margin: 0.3rem 0;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    main {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      border-bottom: 1px solid #eaecef;
+      padding-bottom: 0.3em;
+      margin-top: 2rem;
+    }
+
+    p {
+      margin: 0.5rem 0;
+    }
+
+    img {
+      max-width: 100%;
+      margin: 1rem 0;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+    }
+
+    footer {
+      margin-top: 3rem;
+      padding: 2rem;
+      border-top: 1px solid #eaecef;
+      color: #586069;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>🚀 My Projects</h1>
+    <p>A showcase of projects I have worked on so far.</p>
+  </header>
+
+  <!-- Index Section -->
+  <nav>
+    <div>
+      <h3>COMSOL</h3>
+      <a href="#comsol-project1">Polarization of electrolyte</a>
+    </div>
+    <div>
+      <h3>Electrochemical Devices</h3>
+      <a href="#supercapacitor">Supercapacitor</a>
+      <a href="#li-ion-battery">Li-ion Battery</a>
+      <a href="#electrolyzer">Electrolyzer</a>
+      <a href="#Theoretical">Theoretical</a>
+    </div>
+    <div>
+      <h3>Institutions</h3>
+      <a href="#cecri">CSIR-CECRI</a>
+      <a href="#pondicherry">Pondicherry University</a>
+      <a href="#uic">UIC</a>
+      <a href="#uo">University of Oregon</a>
+    </div>
+  </nav>
+
+  <main>
+  <h2 id="comsol-project1">Polarization of an electrolyte: inert electrodes</h2>
+  
+  <p style="text-align: justify;">
+    <strong>Objective:</strong> To analyze the steady-state distribution of ions and electric potential in a 1D electrolyte confined between two inert electrodes using COMSOL Multiphysics. The system models ion migration under an applied electric field and diffusion, with no charge transfer at the electrodes. This allows visualization of electric double layer formation and potential distribution.
+  </p>
+
+  <p style="text-align: justify;">
+    <strong>Results:</strong> The simulation shows that cations accumulate near the left electrode, while anions accumulate near the right electrode, forming electric double layers. The electric potential drops symmetrically across the two electrode interfaces. The fluxes balance so that there is no net current at steady state, confirming consistency with the drift-diffusion model.
+  </p>
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+  <img src="images/Fig3-electric-potential.png" alt="Electric potential profile" style="width:100%; border:1px solid #ddd; border-radius:6px;">
+  <img src="images/Fig1-conc-profile-species-a.png" alt="Concentration profile of species a" style="width:100%; border:1px solid #ddd; border-radius:6px;">
+  <img src="images/Fig2-conc-profile-species-c.png" alt="Concentration profile of species c" style="width:100%; border:1px solid #ddd; border-radius:6px;">
+  <div style="border:1px dashed #aaa; border-radius:6px; background:#f9f9f9;"></div>
+</div>
+
+
+    <h2 id="supercapacitor">Supercapacitor</h2>
+    <h2 id="research-experience">Research Experience: NiCo₂O₄@2D-Carbyne Nanohybrid</h2>
+
+<p style="text-align: justify;">
+  In this project, I synthesized and characterized a heterogeneous NiCo₂O₄@2D-carbyne nanohybrid 
+  as a novel electrode material for hybrid supercapacitors. The motivation was to combine the high 
+  conductivity of carbyne nanosheets with the rich redox activity of NiCo₂O₄, enabling both high 
+  capacitance and excellent cycling stability.
+</p>
+
+<p style="text-align: justify;">
+  Structural and surface characterizations (XRD, Raman, SEM, and XPS) confirmed the successful 
+  integration of NiCo₂O₄ with 2D-carbyne. Electrochemical analysis (CV, GCD, EIS) demonstrated 
+  superior charge storage kinetics, while Ragone plots and cycling tests highlighted the material’s 
+  ability to achieve high energy density (~62 Wh kg⁻¹) without sacrificing power density 
+  or stability (81% capacity retention after 3000 cycles).
+</p>
+
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 20px;">
+
+<!-- Row 1 -->
+<div>
+  <img src="images/xrd.gif" alt="XRD pattern" style="width:100%; border:1px solid #ddd; border-radius:6px;">
+  <p style="text-align:center; font-size:0.9rem;">XRD pattern confirming NiCo₂O₄ crystalline phases</p>
+</div>
+<div>
+  <img src="images/raman.gif" alt="Raman spectra" style="width:100%; border:1px solid #ddd; border-radius:6px;">
+  <p style="text-align:center; font-size:0.9rem;">Raman spectra of NiCo₂O₄@2D-carbyne hybrid</p>
+</div>
+<div>
+  <img src="images/sem1.gif" alt="SEM image" style="width:100%; border:1px solid #ddd; border-radius:6px;">
+  <p style="text-align:center; font-size:0.9rem;">SEM image showing morphology and dispersion</p>
+</div>
+
+<!-- Row 2 -->
+<div>
+  <img src="images/xps.gif" alt="XPS spectra" style="width:100%; border:1px solid #ddd; border-radius:6px;">
+  <p style="text-align:center; font-size:0.9rem;">XPS spectra showing Ni/Co oxidation states</p>
+</div>
+<div>
+  <img src="images/cv.gif" alt="Cyclic voltammetry" style="width:100%; border:1px solid #ddd; border-radius:6px;">
+  <p style="text-align:center; font-size:0.9rem;">CV curves demonstrating capacitive behavior</p>
+</div>
+<div>
+  <img src="images/eis.gif" alt="EIS Nyquist plot" style="width:100%; border:1px solid #ddd; border-radius:6px;">
+  <p style="text-align:center; font-size:0.9rem;">Nyquist plot (EIS) for charge transfer resistance</p>
+</div>
+
+<!-- Row 3 -->
+<div>
+  <img src="images/gcd.gif" alt="GCD curves" style="width:100%; border:1px solid #ddd; border-radius:6px;">
+  <p style="text-align:center; font-size:0.9rem;">Galvanostatic charge–discharge curves</p>
+</div>
+<div>
+  <img src="images/ragone.gif" alt="Ragone plot" style="width:100%; border:1px solid #ddd; border-radius:6px;">
+  <p style="text-align:center; font-size:0.9rem;">Ragone plot of energy vs power density</p>
+</div>
+<div>
+  <img src="images/cycling.gif" alt="Cycling stability" style="width:100%; border:1px solid #ddd; border-radius:6px;">
+  <p style="text-align:center; font-size:0.9rem;">Cycling stability over 3000 cycles</p>
+</div>
+
+<!-- Research Experience Block for BFGO Supercapacitor Project -->
+<h2 id="bfgo-supercapacitor">Research Experience: BFGO Crumpled B, F Co-doped Graphene Nanosheets</h2>
+
+<p style="text-align: justify;">
+  This project focused on developing crumpled B, F co-doped graphene (BFGO) nanosheets via a supercritical water method (1 h reaction), aiming to combine high electronic conductivity, rich doping, and flexible 3D crumpled morphology for all-solid-state flexible supercapacitors (ASFS). Structural, spectroscopic, and imaging methods validated dopant incorporation and morphological architecture; electrochemical tests confirmed high capacitance, energy-power performance, and mechanical/ cycling stability.
+</p>
+
+<p style="text-align: justify;">
+  Key achievements include a specific capacitance of ~832 F g⁻¹ in NaVO₃/H₂SO₄ electrolyte, an energy density of ~24 W h kg⁻¹ at power density ~800 W kg⁻¹ for the solid-state flexible device, and robust cycling under mechanical stress. Figures below show structural (XRD, Raman), morphological (SEM), dopant state (XPS or similar), and electrochemical (CV, GCD, Ragone, stability) results.
+</p>
+
+<div style="display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; margin-top: 20px;">
+
+  <div>
+    <img src="images/bfgo_xrd.gif" alt="XRD pattern BFGO" style="width:100%; border:1px solid #ddd; border-radius:6px;">
+    <p style="text-align:center; font-size:0.9rem;">XRD pattern confirming BFGO structure</p>
+  </div>
+
+  <div>
+    <img src="images/bfgo_raman.gif" alt="Raman of BFGO" style="width:100%; border:1px solid #ddd; border-radius:6px;">
+    <p style="text-align:center; font-size:0.9rem;">Raman spectra: defect/dopant features</p>
+  </div>
+
+  <div>
+    <img src="images/bfgo_sem1.gif" alt="SEM BFGO" style="width:100%; border:1px solid #ddd; border-radius:6px;">
+    <p style="text-align:center; font-size:0.9rem;">SEM image: crumpled morphology</p>
+  </div>
+
+  <div>
+    <img src="images/bfgo_xps.gif" alt="XPS BFGO" style="width:100%; border:1px solid #ddd; border-radius:6px;">
+    <p style="text-align:center; font-size:0.9rem;">XPS showing B, F dopant states</p>
+  </div>
+
+  <div>
+    <img src="images/bfgo_cv.gif" alt="CV BFGO" style="width:100%; border:1px solid #ddd; border-radius:6px;">
+    <p style="text-align:center; font-size:0.9rem;">CV curves: capacitive behavior</p>
+  </div>
+
+  <div>
+    <img src="images/bfgo_gcd.gif" alt="GCD BFGO" style="width:100%; border:1px solid #ddd; border-radius:6px;">
+    <p style="text-align:center; font-size:0.9rem;">Charge-discharge profiles</p>
+  </div>
+
+  <div>
+    <img src="images/bfgo_ragone.gif" alt="Ragone BFGO" style="width:100%; border:1px solid #ddd; border-radius:6px;">
+    <p style="text-align:center; font-size:0.9rem;">Ragone plot: energy vs power</p>
+  </div>
+
+  <div>
+    <img src="images/bfgo_stability.gif" alt="Cycling stability BFGO" style="width:100%; border:1px solid #ddd; border-radius:6px;">
+    <p style="text-align:center; font-size:0.9rem;">Cycling stability over many cycles</p>
+  </div>
+
+  <div>
+    <div style="width:100%; height:0; padding-bottom:100%; background:#f9f9f9; border:1px dashed #aaa; border-radius:6px;"></div>
+    <p style="text-align:center; font-size:0.9rem;">(Additional image placeholder)</p>
+  </div>
+
+</div>
+
+
+    <h2 id="li-ion-battery">Li-ion Battery</h2>
+    <p>Description for Li-ion Battery project goes here.</p>
+
+    <h2 id="electrolyzer">Electrolyzer</h2>
+    <p>Description for Electrolyzer project goes here.</p>
+
+    <h2 id="cecri">CSIR-CECRI</h2>
+    <p>Work and projects related to CSIR-CECRI.</p>
+
+    <h2 id="pondicherry">Pondicherry University</h2>
+    <p>Work and projects related to Pondicherry University.</p>
+
+    <h2 id="uic">UIC</h2>
+    <p>Work and projects related to UIC.</p>
+
+    <h2 id="uo">University of Oregon</h2>
+    <p>Work and projects related to University of Oregon.</p>
+  </main>
+
+  <footer>
+    Built with ❤️ using GitHub Pages style
+  </footer>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
