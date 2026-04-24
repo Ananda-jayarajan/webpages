@@ -3,817 +3,455 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Time Converter</title>
+  <title>Time Difference Converter</title>
   <style>
-    :root {
-      --bg-1: #07111f;
-      --bg-2: #0f1f3a;
-      --panel: rgba(255, 255, 255, 0.06);
-      --panel-strong: rgba(255, 255, 255, 0.1);
-      --border: rgba(255, 255, 255, 0.12);
-      --text: #eef4ff;
-      --muted: #aab7d6;
-      --soft: #7383a7;
-      --accent: #73d7ff;
-      --accent-2: #42c7ff;
-      --active: rgba(115, 215, 255, 0.22);
-      --tile: rgba(255, 255, 255, 0.05);
-      --tile-hover: rgba(255, 255, 255, 0.1);
-      --tile-muted: rgba(255, 255, 255, 0.025);
-      --shadow: 0 20px 70px rgba(0, 0, 0, 0.35);
-      --radius-xl: 28px;
-      --radius-lg: 22px;
-      --radius-md: 16px;
+    :root{
+      --bg:#f7f7f8;
+      --panel:#eeeeef;
+      --text:#2e2e32;
+      --muted:#8d8d92;
+      --line:#ffffff;
+      --blue:#6bbcff;
+      --blue2:#a9d7f7;
+      --blue3:#d7ecfb;
+      --purple:#8758ff;
+      --shadow:0 14px 35px rgba(0,0,0,.12);
+      --radius:8px;
     }
-
-    * {
-      box-sizing: border-box;
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Arial, Helvetica, sans-serif;
+      background:#fff;
+      color:var(--text);
     }
-
-    html, body {
-      margin: 0;
-      padding: 0;
-      min-height: 100%;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      color: var(--text);
-      background:
-        radial-gradient(circle at top, #183057 0%, #0d1830 35%, #07111f 75%),
-        linear-gradient(180deg, #09101b 0%, #060c16 100%);
+    .page{
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      padding:0 12px 40px;
     }
-
-    body {
-      min-height: 100vh;
+    .hint{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      margin-top:4px;
+      font-size:18px;
+      color:#333;
     }
-
-    .container {
-      width: min(1280px, calc(100% - 32px));
-      margin: 0 auto;
-      padding: 36px 0 48px;
+    .hint-icon{
+      width:25px;height:25px;border-radius:50%;
+      border:2px solid #07a5dd;
+      color:#07a5dd;
+      display:grid;place-items:center;
+      font-weight:700;
     }
-
-    .hero {
-      display: grid;
-      gap: 24px;
-      align-items: end;
-      grid-template-columns: 1.4fr 1fr;
-      margin-bottom: 24px;
+    .date-nav{
+      margin:20px 0;
+      width:325px;
+      height:43px;
+      border:1px solid #dedede;
+      border-radius:999px;
+      display:flex;
+      align-items:center;
+      justify-content:space-around;
+      background:#fff;
+      color:#666;
+      box-shadow:0 1px 2px rgba(0,0,0,.03);
     }
-
-    .eyebrow {
-      margin: 0 0 10px;
-      color: var(--accent);
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.28em;
-      font-weight: 700;
+    .date-nav button{
+      border:0;
+      background:transparent;
+      font-size:31px;
+      line-height:1;
+      color:#666;
+      cursor:pointer;
+      padding:0 8px;
     }
-
-    h1 {
-      margin: 0;
-      font-size: clamp(2.25rem, 4vw, 4.25rem);
-      line-height: 1.02;
-      letter-spacing: -0.04em;
+    .date-nav .today{
+      font-size:18px;
+      font-weight:700;
+      color:#555;
+      min-width:110px;
+      text-align:center;
     }
-
-    .hero p {
-      max-width: 780px;
-      font-size: 1.05rem;
-      line-height: 1.7;
-      color: var(--muted);
-      margin: 16px 0 0;
+    .converter-wrap{
+      position:relative;
+      width:min(456px,100%);
+      display:grid;
+      grid-template-columns:37px 1fr;
+      column-gap:0;
     }
-
-    .picker-grid,
-    .clock-grid,
-    .time-grid,
-    .footer-grid {
-      display: grid;
-      gap: 18px;
+    .side-arrows{
+      width:37px;
+      padding-top:76px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:78px;
+      color:#d3d3d3;
     }
-
-    .picker-grid {
-      grid-template-columns: 1fr 1fr;
+    .chev{
+      width:25px;height:25px;
+      border-left:2px solid currentColor;
+      border-top:2px solid currentColor;
     }
-
-    .card,
-    .panel,
-    .info-card,
-    .picker {
-      border: 1px solid var(--border);
-      background: var(--panel);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-radius: var(--radius-xl);
-      box-shadow: var(--shadow);
+    .chev.up{transform:rotate(45deg)}
+    .chev.down{transform:rotate(225deg)}
+    .board{
+      position:relative;
+      background:var(--panel);
+      border-radius:8px 8px 0 0;
+      overflow:hidden;
+      min-height:650px;
+      box-shadow:0 18px 40px rgba(0,0,0,.06);
     }
-
-    .picker {
-      padding: 14px;
+    .headers{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      padding:25px 36px 34px;
+      gap:6px;
+      color:#818181;
     }
-
-    .picker label {
-      display: block;
-      color: var(--muted);
-      font-size: 0.82rem;
-      margin-bottom: 10px;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
+    .city-title{
+      font-size:22px;
+      line-height:1.05;
+      font-weight:700;
     }
-
-    select,
-    input[type="date"] {
-      width: 100%;
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 13px 14px;
-      background: rgba(5, 12, 24, 0.9);
-      color: white;
-      font-size: 0.98rem;
-      outline: none;
+    .city-sub{
+      margin-top:1px;
+      font-size:17px;
+      font-weight:700;
+      color:#b1b1b1;
     }
-
-    select:focus,
-    input[type="date"]:focus {
-      border-color: rgba(115, 215, 255, 0.55);
-      box-shadow: 0 0 0 4px rgba(115, 215, 255, 0.14);
+    .columns{
+      width:calc(100% - 74px);
+      margin:0 auto;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:6px;
+      position:relative;
     }
-
-    .controls-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr auto;
-      gap: 18px;
-      margin-bottom: 24px;
+    .col{
+      border-radius:8px;
+      overflow:hidden;
     }
-
-    .swap-btn {
-      align-self: end;
-      border: 1px solid rgba(115, 215, 255, 0.3);
-      background: linear-gradient(180deg, rgba(115, 215, 255, 0.18), rgba(66, 199, 255, 0.12));
-      color: white;
-      border-radius: 16px;
-      padding: 13px 18px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease;
-      white-space: nowrap;
+    .slot{
+      height:42px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border-bottom:1px solid rgba(255,255,255,.35);
+      font-size:22px;
+      font-weight:800;
+      color:#2c2c30;
+      cursor:pointer;
+      user-select:none;
+      transition:filter .12s ease, transform .12s ease;
     }
-
-    .swap-btn:hover {
-      transform: translateY(-1px);
-      border-color: rgba(115, 215, 255, 0.5);
-      background: linear-gradient(180deg, rgba(115, 215, 255, 0.26), rgba(66, 199, 255, 0.18));
+    .slot:hover{filter:brightness(1.04)}
+    .col.left .slot:nth-child(-n+5){background:#64b5f3}
+    .col.left .slot:nth-child(n+6):nth-child(-n+8){background:#8cc8f3}
+    .col.left .slot:nth-child(n+9){background:#b7dbf4}
+    .col.right .slot:nth-child(-n+4){background:#8dcbf4}
+    .col.right .slot:nth-child(n+5){background:#b7dbf4}
+    .slot.night{background:#5eb0ef!important}
+    .slot.selected{outline:3px solid rgba(135,88,255,.65);outline-offset:-3px}
+    .current-bar{
+      position:absolute;
+      left:0;
+      right:0;
+      top:117px;
+      height:45px;
+      border:2px solid var(--purple);
+      border-radius:8px;
+      background:#fff;
+      display:grid;
+      grid-template-columns:34px 1fr 1fr 1fr;
+      align-items:center;
+      z-index:5;
+      box-shadow:0 5px 14px rgba(0,0,0,.08);
+      font-weight:700;
+      cursor:grab;
+      touch-action:none;
     }
-
-    .clock-grid,
-    .time-grid,
-    .footer-grid {
-      grid-template-columns: 1fr 1fr;
+    .current-bar:active{cursor:grabbing}
+    .drag-dots{
+      color:#252525;
+      font-size:22px;
+      letter-spacing:2px;
+      text-align:center;
+      line-height:.75;
+      transform:rotate(90deg);
     }
-
-    .card {
-      padding: 24px;
+    .bar-label{
+      font-size:18px;
+      color:#4d4d4d;
     }
-
-    .card-top {
-      display: flex;
-      justify-content: space-between;
-      gap: 16px;
-      align-items: flex-start;
+    .bar-time{
+      text-align:center;
+      font-size:25px;
+      color:#555;
+      white-space:nowrap;
     }
-
-    .country {
-      margin: 0 0 6px;
-      color: var(--accent);
-      text-transform: uppercase;
-      font-size: 0.78rem;
-      letter-spacing: 0.22em;
-      font-weight: 700;
+    .bar-date{
+      font-size:12px;
+      color:#888;
+      margin-right:5px;
+      vertical-align:middle;
     }
-
-    .city {
-      margin: 0;
-      font-size: 1.7rem;
-      line-height: 1.1;
+    .settings{
+      margin:22px auto 0;
+      width:min(456px,100%);
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
     }
-
-    .timezone {
-      margin: 10px 0 0;
-      color: var(--soft);
-      font-size: 0.95rem;
+    select{
+      width:100%;
+      padding:11px 10px;
+      border:1px solid #d8d8d8;
+      border-radius:8px;
+      background:#fff;
+      color:#333;
+      font-weight:700;
     }
-
-    .badge {
-      border-radius: 999px;
-      background: rgba(115, 215, 255, 0.14);
-      border: 1px solid rgba(115, 215, 255, 0.2);
-      color: #d6f5ff;
-      font-size: 0.77rem;
-      font-weight: 700;
-      padding: 8px 12px;
-      white-space: nowrap;
-    }
-
-    .clock-time {
-      margin: 20px 0 0;
-      font-size: 1.05rem;
-      color: #dce8ff;
-    }
-
-    .panel {
-      padding: 24px;
-      margin-top: 22px;
-    }
-
-    .summary {
-      display: flex;
-      justify-content: space-between;
-      gap: 16px;
-      align-items: center;
-      border: 1px solid rgba(115, 215, 255, 0.2);
-      background: linear-gradient(180deg, rgba(115, 215, 255, 0.12), rgba(115, 215, 255, 0.06));
-      border-radius: var(--radius-lg);
-      padding: 18px 20px;
-      margin-bottom: 22px;
-    }
-
-    .summary .small {
-      color: #c4ecff;
-      text-transform: uppercase;
-      font-size: 0.74rem;
-      letter-spacing: 0.2em;
-      margin: 0 0 8px;
-      font-weight: 700;
-    }
-
-    .summary h2 {
-      margin: 0;
-      font-size: clamp(1.35rem, 3vw, 2rem);
-    }
-
-    .equals {
-      text-align: right;
-    }
-
-    .equals .value {
-      margin: 6px 0 4px;
-      font-size: clamp(1.8rem, 3.2vw, 2.8rem);
-      font-weight: 800;
-      color: var(--accent);
-    }
-
-    .section-title {
-      display: flex;
-      justify-content: space-between;
-      gap: 16px;
-      align-items: center;
-      margin-bottom: 14px;
-    }
-
-    .section-title h3 {
-      margin: 0;
-      font-size: 1.15rem;
-    }
-
-    .tiles {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 12px;
-    }
-
-    .tile {
-      border: 1px solid var(--border);
-      background: var(--tile);
-      color: var(--text);
-      border-radius: 18px;
-      padding: 14px 14px 12px;
-      min-height: 84px;
-      cursor: pointer;
-      text-align: left;
-      transition: transform 0.16s ease, background 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease;
-    }
-
-    .tile:hover {
-      transform: translateY(-2px);
-      background: var(--tile-hover);
-      border-color: rgba(115, 215, 255, 0.3);
-    }
-
-    .tile.active {
-      background: var(--active);
-      border-color: rgba(115, 215, 255, 0.55);
-      box-shadow: 0 14px 30px rgba(66, 199, 255, 0.16);
-    }
-
-    .tile.muted {
-      background: var(--tile-muted);
-      color: #7f8db1;
-    }
-
-    .tile-hour {
-      font-size: 0.98rem;
-      font-weight: 700;
-      margin-bottom: 6px;
-    }
-
-    .tile-meta {
-      font-size: 0.8rem;
-      opacity: 0.82;
-    }
-
-    .info-card {
-      padding: 22px;
-    }
-
-    .info-card h4 {
-      margin: 0;
-      font-size: 1.05rem;
-    }
-
-    .info-card p {
-      margin: 12px 0 0;
-      color: var(--muted);
-      line-height: 1.65;
-      font-size: 0.95rem;
-    }
-
-    .helper-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin: 0 0 18px;
-    }
-
-    .chip {
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--border);
-      color: var(--muted);
-      padding: 8px 12px;
-      font-size: 0.82rem;
-    }
-
-    .footer-grid {
-      margin-top: 22px;
-      grid-template-columns: repeat(3, 1fr);
-    }
-
-    .site-note {
-      margin-top: 22px;
-      color: var(--soft);
-      font-size: 0.9rem;
-      text-align: center;
-    }
-
-    .site-note a {
-      color: var(--accent);
-    }
-
-    @media (max-width: 1100px) {
-      .hero,
-      .clock-grid,
-      .time-grid,
-      .footer-grid,
-      .controls-row {
-        grid-template-columns: 1fr;
-      }
-
-      .picker-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .swap-btn {
-        width: 100%;
-      }
-    }
-
-    @media (max-width: 760px) {
-      .container {
-        width: min(100% - 18px, 100%);
-        padding-top: 18px;
-      }
-
-      .card,
-      .panel,
-      .info-card,
-      .picker {
-        border-radius: 22px;
-      }
-
-      .summary {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .equals {
-        text-align: left;
-      }
-
-      .tiles {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .card {
-        padding: 18px;
-      }
-
-      .panel {
-        padding: 16px;
-      }
+    @media(max-width:520px){
+      .hint{font-size:14px}
+      .date-nav{width:300px}
+      .converter-wrap{grid-template-columns:25px 1fr}
+      .side-arrows{width:25px}
+      .headers{padding-left:25px;padding-right:25px}
+      .columns{width:calc(100% - 50px)}
+      .slot{font-size:18px;height:40px}
+      .bar-time{font-size:19px}
+      .bar-label{font-size:15px}
+      .current-bar{grid-template-columns:26px 1fr 1fr 1fr}
+      .settings{grid-template-columns:1fr}
     }
   </style>
 </head>
 <body>
-  <main class="container">
-    <section class="hero">
-      <div>
-        <p class="eyebrow">Time conversion</p>
-        <h1>World Time Buddy inspired time converter</h1>
-        <p>
-          Compare two cities visually, hover or click any hour, and see the corresponding time instantly.
-          This version is built as a single-file static site, so it works directly on GitHub Pages without React or a build step.
-        </p>
+  <main class="page">
+    <div class="hint"><span class="hint-icon">i</span> Drag the handle or click on a cell to convert time</div>
+
+    <nav class="date-nav" aria-label="Date controls">
+      <button id="prevWeek" type="button">«</button>
+      <button id="prevDay" type="button">‹</button>
+      <div class="today" id="dateLabel">Today</div>
+      <button id="nextDay" type="button">›</button>
+      <button id="nextWeek" type="button">»</button>
+    </nav>
+
+    <section class="converter-wrap">
+      <div class="side-arrows" aria-hidden="true">
+        <div class="chev up"></div>
+        <div class="chev down"></div>
       </div>
 
-      <div class="picker-grid">
-        <div class="picker">
-          <label for="fromZone">From</label>
-          <select id="fromZone"></select>
-        </div>
-        <div class="picker">
-          <label for="toZone">To</label>
-          <select id="toZone"></select>
-        </div>
-      </div>
-    </section>
-
-    <section class="controls-row">
-      <div class="picker">
-        <label for="datePicker">Date</label>
-        <input id="datePicker" type="date" />
-      </div>
-      <div class="picker">
-        <label for="focusHour">Selected hour</label>
-        <select id="focusHour"></select>
-      </div>
-      <button id="swapBtn" class="swap-btn" type="button">Swap cities</button>
-    </section>
-
-    <section class="clock-grid">
-      <article class="card">
-        <div class="card-top">
+      <div class="board" id="board">
+        <div class="headers">
           <div>
-            <p class="country" id="fromCountry"></p>
-            <h2 class="city" id="fromCity"></h2>
-            <p class="timezone" id="fromTimezone"></p>
+            <div class="city-title" id="leftCityTitle">Michigan</div>
+            <div class="city-sub" id="leftSub">MI, Local time</div>
           </div>
-          <div class="badge" id="fromAbbr"></div>
-        </div>
-        <p class="clock-time" id="fromClock"></p>
-      </article>
-
-      <article class="card">
-        <div class="card-top">
           <div>
-            <p class="country" id="toCountry"></p>
-            <h2 class="city" id="toCity"></h2>
-            <p class="timezone" id="toTimezone"></p>
+            <div class="city-title" id="rightCityTitle">London</div>
+            <div class="city-sub" id="rightSub">BST</div>
           </div>
-          <div class="badge" id="toAbbr"></div>
         </div>
-        <p class="clock-time" id="toClock"></p>
-      </article>
-    </section>
 
-    <section class="panel">
-      <div class="summary">
-        <div>
-          <p class="small">Selected conversion</p>
-          <h2 id="summaryFrom"></h2>
+        <div class="columns">
+          <div class="col left" id="leftCol"></div>
+          <div class="col right" id="rightCol"></div>
         </div>
-        <div class="equals">
-          <div>equals</div>
-          <div class="value" id="summaryTo"></div>
-          <div id="summaryToLabel"></div>
+
+        <div class="current-bar" id="currentBar" title="Drag up/down to change time">
+          <div class="drag-dots">••<br>••</div>
+          <div class="bar-label">Current time</div>
+          <div class="bar-time" id="leftCurrent"></div>
+          <div class="bar-time" id="rightCurrent"></div>
         </div>
-      </div>
-
-      <div class="helper-row">
-        <span class="chip">DST-aware using IANA time zones</span>
-        <span class="chip">Hover any tile to preview</span>
-        <span class="chip">Click a tile to lock selection</span>
-      </div>
-
-      <div class="time-grid">
-        <section>
-          <div class="section-title">
-            <h3 id="fromSectionTitle"></h3>
-            <span class="badge" id="fromSectionAbbr"></span>
-          </div>
-          <div class="tiles" id="fromTiles"></div>
-        </section>
-
-        <section>
-          <div class="section-title">
-            <h3 id="toSectionTitle"></h3>
-            <span class="badge" id="toSectionAbbr"></span>
-          </div>
-          <div class="tiles" id="toTiles"></div>
-        </section>
       </div>
     </section>
 
-    <section class="footer-grid">
-      <article class="info-card">
-        <h4>Why this clone feels close</h4>
-        <p>
-          The main interaction is visual, not form-heavy. People scan the hour grid, select a time, and compare both cities at a glance.
-        </p>
-      </article>
-      <article class="info-card">
-        <h4>What matters technically</h4>
-        <p>
-          Real timezone identifiers such as <strong>Europe/London</strong> and <strong>America/New_York</strong> are used so daylight saving changes are handled correctly.
-        </p>
-      </article>
-      <article class="info-card">
-        <h4>Good next upgrades</h4>
-        <p>
-          Add more cities, a drag range selector, URL sharing, work-hours highlighting, and a mobile-first compact row mode.
-        </p>
-      </article>
+    <section class="settings">
+      <select id="leftZone"></select>
+      <select id="rightZone"></select>
     </section>
-
-    <p class="site-note">
-      Built for static hosting. Save this file as <strong>index.html</strong> in your GitHub Pages repo and publish.
-    </p>
   </main>
 
   <script>
-    const ZONES = [
-      { label: "London", tz: "Europe/London", country: "United Kingdom" },
-      { label: "New York", tz: "America/New_York", country: "United States" },
-      { label: "Chicago", tz: "America/Chicago", country: "United States" },
-      { label: "Denver", tz: "America/Denver", country: "United States" },
-      { label: "Los Angeles", tz: "America/Los_Angeles", country: "United States" },
-      { label: "Detroit", tz: "America/Detroit", country: "United States" },
-      { label: "Toronto", tz: "America/Toronto", country: "Canada" },
-      { label: "UTC", tz: "UTC", country: "Global" },
-      { label: "Paris", tz: "Europe/Paris", country: "France" },
-      { label: "Dubai", tz: "Asia/Dubai", country: "United Arab Emirates" },
-      { label: "Mumbai", tz: "Asia/Kolkata", country: "India" },
-      { label: "Tokyo", tz: "Asia/Tokyo", country: "Japan" },
-      { label: "Chennai", tz: "Asia/Kolkata" },
-      { label: "New Delhi", tz: "Asia/Kolkata" },
-      { label: "Moscow", tz: "Europe/Moscow" },
-      { label: "Jerusalem", tz: "Asia/Jerusalem" },
-      { label: "Colombo", tz: "Asia/Colombo" },
-      { label: "Doha", tz: "Asia/Qatar" },
-      { label: "Singapore", tz: "Asia/Singapore" },
-      { label: "Kuala Lumpur", tz: "Asia/Kuala_Lumpur" },
-      { label: "Portland (OR)", tz: "America/Los_Angeles" },
-      { label: "Havana", tz: "America/Havana" },
-      { label: "Tehran", tz: "Asia/Tehran" },
-      { label: "Shanghai", tz: "Asia/Shanghai" },
-      { label: "Sydney", tz: "Australia/Sydney" },
-      { label: "Auckland", tz: "Pacific/Auckland" },
-      { label: "Lisbon", tz: "Europe/Lisbon" },
-      { label: "Buenos Aires", tz: "America/Argentina/Buenos_Aires" },
-      { label: "Sydney", tz: "Australia/Sydney", country: "Australia" }
+    const zones = [
+      {name:"Michigan", sub:"MI, Local time", tz:"America/Detroit"},
+      {name:"London", sub:"London", tz:"Europe/London"},
+      {name:"Chennai", sub:"India", tz:"Asia/Kolkata"},
+      {name:"New Delhi", sub:"India", tz:"Asia/Kolkata"},
+      {name:"Moscow", sub:"Russia", tz:"Europe/Moscow"},
+      {name:"Jerusalem", sub:"Israel", tz:"Asia/Jerusalem"},
+      {name:"Colombo", sub:"Sri Lanka", tz:"Asia/Colombo"},
+      {name:"Doha", sub:"Qatar", tz:"Asia/Qatar"},
+      {name:"Singapore", sub:"Singapore", tz:"Asia/Singapore"},
+      {name:"Kuala Lumpur", sub:"Malaysia", tz:"Asia/Kuala_Lumpur"},
+      {name:"Portland OR", sub:"Oregon", tz:"America/Los_Angeles"},
+      {name:"Havana", sub:"Cuba", tz:"America/Havana"},
+      {name:"Tehran", sub:"Iran", tz:"Asia/Tehran"},
+      {name:"Shanghai", sub:"China", tz:"Asia/Shanghai"},
+      {name:"Sydney", sub:"Australia", tz:"Australia/Sydney"},
+      {name:"Auckland", sub:"New Zealand", tz:"Pacific/Auckland"},
+      {name:"Lisbon", sub:"Portugal", tz:"Europe/Lisbon"},
+      {name:"Buenos Aires", sub:"Argentina", tz:"America/Argentina/Buenos_Aires"}
     ];
 
     const state = {
-      fromZone: "Europe/London",
-      toZone: "America/New_York",
-      selectedHour: 9,
-      date: toInputDate(new Date()),
-      pinned: true
+      left: "America/Detroit",
+      right: "Europe/London",
+      baseDate: new Date(),
+      selectedHour: new Date().getHours()
     };
 
-    const els = {
-      fromZone: document.getElementById("fromZone"),
-      toZone: document.getElementById("toZone"),
-      datePicker: document.getElementById("datePicker"),
-      focusHour: document.getElementById("focusHour"),
-      swapBtn: document.getElementById("swapBtn"),
-      fromCountry: document.getElementById("fromCountry"),
-      fromCity: document.getElementById("fromCity"),
-      fromTimezone: document.getElementById("fromTimezone"),
-      fromAbbr: document.getElementById("fromAbbr"),
-      fromClock: document.getElementById("fromClock"),
-      toCountry: document.getElementById("toCountry"),
-      toCity: document.getElementById("toCity"),
-      toTimezone: document.getElementById("toTimezone"),
-      toAbbr: document.getElementById("toAbbr"),
-      toClock: document.getElementById("toClock"),
-      summaryFrom: document.getElementById("summaryFrom"),
-      summaryTo: document.getElementById("summaryTo"),
-      summaryToLabel: document.getElementById("summaryToLabel"),
-      fromSectionTitle: document.getElementById("fromSectionTitle"),
-      toSectionTitle: document.getElementById("toSectionTitle"),
-      fromSectionAbbr: document.getElementById("fromSectionAbbr"),
-      toSectionAbbr: document.getElementById("toSectionAbbr"),
-      fromTiles: document.getElementById("fromTiles"),
-      toTiles: document.getElementById("toTiles")
-    };
+    const slotH = 42;
+    const barTopStart = 117;
 
-    function toInputDate(date) {
-      const y = date.getFullYear();
-      const m = String(date.getMonth() + 1).padStart(2, "0");
-      const d = String(date.getDate()).padStart(2, "0");
-      return `${y}-${m}-${d}`;
+    const $ = id => document.getElementById(id);
+    const leftCol = $("leftCol");
+    const rightCol = $("rightCol");
+    const bar = $("currentBar");
+
+    function zoneMeta(tz){ return zones.find(z => z.tz === tz) || zones[0]; }
+
+    function fmtHour(date, tz){
+      return new Intl.DateTimeFormat("en-US",{timeZone:tz,hour:"numeric",minute:"2-digit",hour12:true}).format(date);
     }
-
-    function formatDateTime(date, timeZone) {
-      return new Intl.DateTimeFormat("en-US", {
-        timeZone,
-        weekday: "short",
-        month: "short",
-        day: "numeric",
-        hour: "numeric",
-        minute: "2-digit",
-        hour12: true
-      }).format(date);
+    function fmtAbbr(date, tz){
+      const parts = new Intl.DateTimeFormat("en-US",{timeZone:tz,hour:"numeric",timeZoneName:"short"}).formatToParts(date);
+      return parts.find(p => p.type === "timeZoneName")?.value || "";
     }
-
-    function formatHour(date, timeZone) {
-      return new Intl.DateTimeFormat("en-US", {
-        timeZone,
-        hour: "numeric",
-        hour12: true
-      }).format(date);
+    function weekday(date, tz){
+      return new Intl.DateTimeFormat("en-US",{timeZone:tz,weekday:"short"}).format(date).toUpperCase();
     }
-
-    function zoneAbbr(date, timeZone) {
-      const parts = new Intl.DateTimeFormat("en-US", {
-        timeZone,
-        timeZoneName: "short",
-        hour: "numeric"
-      }).formatToParts(date);
-      return parts.find(part => part.type === "timeZoneName")?.value || timeZone;
+    function dayStart(){
+      const d = new Date(state.baseDate);
+      d.setHours(0,0,0,0);
+      return d;
     }
-
-    function buildUtcBaseFromLocalDate(dateStr) {
-      const [y, m, d] = dateStr.split("-").map(Number);
-      return new Date(Date.UTC(y, m - 1, d, 0, 0, 0, 0));
+    function dateAtHour(h){
+      const d = dayStart();
+      d.setHours(h,0,0,0);
+      return d;
     }
+    function optionLabel(z){ return `${z.name} — ${z.tz}`; }
 
-    function getSelectedDate(hour) {
-      const base = buildUtcBaseFromLocalDate(state.date);
-      base.setUTCHours(hour, 0, 0, 0);
-      return base;
-    }
-
-    function getMeta(tz) {
-      return ZONES.find(zone => zone.tz === tz);
-    }
-
-    function isMutedHour(hour) {
-      return hour < 8 || hour > 18;
-    }
-
-    function buildOptions() {
-      ZONES.forEach(zone => {
-        const option1 = document.createElement("option");
-        option1.value = zone.tz;
-        option1.textContent = `${zone.label} — ${zone.tz}`;
-        els.fromZone.appendChild(option1);
-
-        const option2 = document.createElement("option");
-        option2.value = zone.tz;
-        option2.textContent = `${zone.label} — ${zone.tz}`;
-        els.toZone.appendChild(option2);
+    function buildSelects(){
+      ["leftZone","rightZone"].forEach(id => {
+        const sel = $(id);
+        sel.innerHTML = "";
+        zones.forEach(z => {
+          const opt = document.createElement("option");
+          opt.value = z.tz;
+          opt.textContent = optionLabel(z);
+          sel.appendChild(opt);
+        });
       });
+      $("leftZone").value = state.left;
+      $("rightZone").value = state.right;
+    }
 
-      for (let hour = 0; hour < 24; hour += 1) {
-        const option = document.createElement("option");
-        option.value = String(hour);
-        const d = getSelectedDate(hour);
-        option.textContent = formatHour(d, state.fromZone);
-        els.focusHour.appendChild(option);
+    function renderHeaders(){
+      const l = zoneMeta(state.left), r = zoneMeta(state.right);
+      $("leftCityTitle").textContent = l.name;
+      $("leftSub").textContent = `${l.sub}, Local time`;
+      $("rightCityTitle").textContent = r.name;
+      $("rightSub").textContent = fmtAbbr(dateAtHour(state.selectedHour), state.right);
+      $("dateLabel").textContent = sameDay(state.baseDate,new Date()) ? "Today" :
+        new Intl.DateTimeFormat("en-US",{month:"short",day:"numeric"}).format(state.baseDate);
+    }
+
+    function sameDay(a,b){
+      return a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate();
+    }
+
+    function renderColumns(){
+      leftCol.innerHTML = "";
+      rightCol.innerHTML = "";
+
+      for(let h=0; h<24; h++){
+        const d = dateAtHour(h);
+        leftCol.appendChild(slot(d, state.left, h));
+        rightCol.appendChild(slot(d, state.right, h));
       }
     }
 
-    function buildTile(buttonDate, zone, label, hour, isActive) {
-      const button = document.createElement("button");
-      button.type = "button";
-      button.className = `tile${isActive ? " active" : ""}${isMutedHour(hour) ? " muted" : ""}`;
-      button.innerHTML = `
-        <div class="tile-hour">${formatHour(buttonDate, zone)}</div>
-        <div class="tile-meta">${label}</div>
-      `;
-
-      button.addEventListener("mouseenter", () => {
+    function slot(d, tz, hour){
+      const div = document.createElement("div");
+      div.className = "slot" + (hour < 6 ? " night" : "") + (hour === state.selectedHour ? " selected" : "");
+      div.textContent = fmtHour(d, tz).replace(":00", ":00");
+      div.addEventListener("click", () => {
         state.selectedHour = hour;
-        state.pinned = false;
         render();
       });
-
-      button.addEventListener("click", () => {
-        state.selectedHour = hour;
-        state.pinned = true;
-        render();
-      });
-
-      return button;
+      return div;
     }
 
-    function renderTiles() {
-      const fromMeta = getMeta(state.fromZone);
-      const toMeta = getMeta(state.toZone);
+    function renderBar(){
+      const d = dateAtHour(state.selectedHour);
+      $("leftCurrent").innerHTML = `<span class="bar-date">${weekday(d,state.left)}</span>${fmtHour(d,state.left)}`;
+      $("rightCurrent").innerHTML = `<span class="bar-date">${weekday(d,state.right)}</span>${fmtHour(d,state.right)}`;
+      bar.style.top = `${barTopStart + state.selectedHour * slotH}px`;
+    }
 
-      els.fromTiles.innerHTML = "";
-      els.toTiles.innerHTML = "";
+    function render(){
+      $("leftZone").value = state.left;
+      $("rightZone").value = state.right;
+      renderHeaders();
+      renderColumns();
+      renderBar();
+    }
 
-      for (let hour = 0; hour < 24; hour += 1) {
-        const date = getSelectedDate(hour);
-        els.fromTiles.appendChild(buildTile(date, state.fromZone, fromMeta.label, hour, state.selectedHour === hour));
-        els.toTiles.appendChild(buildTile(date, state.toZone, toMeta.label, hour, state.selectedHour === hour));
+    function moveDate(days){
+      const d = new Date(state.baseDate);
+      d.setDate(d.getDate() + days);
+      state.baseDate = d;
+      render();
+    }
+
+    $("leftZone").addEventListener("change", e => { state.left = e.target.value; render(); });
+    $("rightZone").addEventListener("change", e => { state.right = e.target.value; render(); });
+    $("prevDay").addEventListener("click", () => moveDate(-1));
+    $("nextDay").addEventListener("click", () => moveDate(1));
+    $("prevWeek").addEventListener("click", () => moveDate(-7));
+    $("nextWeek").addEventListener("click", () => moveDate(7));
+
+    let dragging = false;
+    function setHourFromY(clientY){
+      const rect = $("board").getBoundingClientRect();
+      const y = clientY - rect.top - barTopStart + slotH/2;
+      const h = Math.max(0, Math.min(23, Math.round(y / slotH)));
+      if(h !== state.selectedHour){
+        state.selectedHour = h;
+        render();
       }
     }
-
-    function renderSummary() {
-      const fromMeta = getMeta(state.fromZone);
-      const toMeta = getMeta(state.toZone);
-      const selectedDate = getSelectedDate(state.selectedHour);
-
-      els.summaryFrom.textContent = `${formatHour(selectedDate, state.fromZone)} in ${fromMeta.label}`;
-      els.summaryTo.textContent = formatHour(selectedDate, state.toZone);
-      els.summaryToLabel.textContent = `in ${toMeta.label}`;
-      els.fromSectionTitle.textContent = fromMeta.label;
-      els.toSectionTitle.textContent = toMeta.label;
-      els.fromSectionAbbr.textContent = zoneAbbr(selectedDate, state.fromZone);
-      els.toSectionAbbr.textContent = zoneAbbr(selectedDate, state.toZone);
-    }
-
-    function renderClocks() {
-      const now = new Date();
-      const fromMeta = getMeta(state.fromZone);
-      const toMeta = getMeta(state.toZone);
-      const selectedDate = getSelectedDate(state.selectedHour);
-
-      els.fromCountry.textContent = fromMeta.country;
-      els.fromCity.textContent = fromMeta.label;
-      els.fromTimezone.textContent = fromMeta.tz;
-      els.fromAbbr.textContent = zoneAbbr(selectedDate, state.fromZone);
-      els.fromClock.textContent = formatDateTime(now, state.fromZone);
-
-      els.toCountry.textContent = toMeta.country;
-      els.toCity.textContent = toMeta.label;
-      els.toTimezone.textContent = toMeta.tz;
-      els.toAbbr.textContent = zoneAbbr(selectedDate, state.toZone);
-      els.toClock.textContent = formatDateTime(now, state.toZone);
-    }
-
-    function refreshHourDropdownLabels() {
-      const options = [...els.focusHour.options];
-      options.forEach((option, hour) => {
-        const date = getSelectedDate(hour);
-        option.textContent = formatHour(date, state.fromZone);
-      });
-      els.focusHour.value = String(state.selectedHour);
-    }
-
-    function render() {
-      els.fromZone.value = state.fromZone;
-      els.toZone.value = state.toZone;
-      els.datePicker.value = state.date;
-      refreshHourDropdownLabels();
-      renderClocks();
-      renderSummary();
-      renderTiles();
-    }
-
-    els.fromZone.addEventListener("change", event => {
-      state.fromZone = event.target.value;
-      render();
+    bar.addEventListener("pointerdown", e => {
+      dragging = true;
+      bar.setPointerCapture(e.pointerId);
+      setHourFromY(e.clientY);
     });
-
-    els.toZone.addEventListener("change", event => {
-      state.toZone = event.target.value;
-      render();
+    bar.addEventListener("pointermove", e => {
+      if(dragging) setHourFromY(e.clientY);
     });
+    bar.addEventListener("pointerup", () => dragging = false);
+    bar.addEventListener("pointercancel", () => dragging = false);
 
-    els.datePicker.addEventListener("change", event => {
-      state.date = event.target.value;
-      render();
-    });
-
-    els.focusHour.addEventListener("change", event => {
-      state.selectedHour = Number(event.target.value);
-      state.pinned = true;
-      render();
-    });
-
-    els.swapBtn.addEventListener("click", () => {
-      const temp = state.fromZone;
-      state.fromZone = state.toZone;
-      state.toZone = temp;
-      render();
-    });
-
-    buildOptions();
+    buildSelects();
     render();
-    setInterval(renderClocks, 30000);
+    setInterval(() => {
+      if(sameDay(state.baseDate,new Date())){
+        state.selectedHour = new Date().getHours();
+        render();
+      }
+    }, 60000);
   </script>
 </body>
 </html>
