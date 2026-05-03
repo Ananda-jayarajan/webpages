@@ -1,7 +1,7 @@
 const expressionEl = document.getElementById("expression");
 const resultEl = document.getElementById("result");
 const keysEl = document.getElementById("keys");
-const angleBtn = document.getElementById("angleBtn");
+
 
 let expression = "";
 let answer = 0;
