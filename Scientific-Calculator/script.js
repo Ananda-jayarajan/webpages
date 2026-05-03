@@ -1,7 +1,7 @@
 const expressionEl = document.getElementById("expression");
 const resultEl = document.getElementById("result");
 const keysEl = document.getElementById("keys");
-
+const angleBtn = document.getElementById("angleBtn");
 
 let expression = "";
 let answer = 0;
@@ -478,7 +478,7 @@ function runAction(action) {
 
     case "toggleAngle":
       angleMode = angleMode === "DEG" ? "RAD" : "DEG";
-      angleBtn.textContent = angleMode;
+      if (angleBtn) angleBtn.textContent = angleMode;
       break;
 
     default:
@@ -526,10 +526,12 @@ keysEl.addEventListener("click", (event) => {
   }
 });
 
-angleBtn.addEventListener("click", () => {
-  angleMode = angleMode === "DEG" ? "RAD" : "DEG";
-  angleBtn.textContent = angleMode;
-});
+if (angleBtn) {
+  angleBtn.addEventListener("click", () => {
+    angleMode = angleMode === "DEG" ? "RAD" : "DEG";
+    angleBtn.textContent = angleMode;
+  });
+}
 
 document.addEventListener("keydown", (event) => {
   const key = event.key;
