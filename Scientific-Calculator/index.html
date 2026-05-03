@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Calculator</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="page">
+    <div class="screen" id="display">0</div>
+
+    <div class="keys">
+      <button data-action="sin">sin</button>
+      <button data-action="cos">cos</button>
+      <button data-action="tan">tan</button>
+      <div class="angle"><span class="dot"></span> Deg <span class="emptydot"></span> Rad</div>
+      <button class="num" data-value="7">7</button>
+      <button class="num" data-value="8">8</button>
+      <button class="num" data-value="9">9</button>
+      <button class="op" data-op="+">+</button>
+      <button class="op" data-action="back">Back</button>
+
+      <button data-action="asin">sin<sup>-1</sup></button>
+      <button data-action="acos">cos<sup>-1</sup></button>
+      <button data-action="atan">tan<sup>-1</sup></button>
+      <button data-value="pi">π</button>
+      <button data-value="e">e</button>
+      <button class="num" data-value="4">4</button>
+      <button class="num" data-value="5">5</button>
+      <button class="num" data-value="6">6</button>
+      <button class="op" data-op="-">−</button>
+      <button class="op" data-action="ans">Ans</button>
+
+      <button data-action="pow">x<sup>y</sup></button>
+      <button data-action="cube">x<sup>3</sup></button>
+      <button data-action="square">x<sup>2</sup></button>
+      <button data-action="exp">e<sup>x</sup></button>
+      <button data-action="pow10">10<sup>x</sup></button>
+      <button class="num" data-value="1">1</button>
+      <button class="num" data-value="2">2</button>
+      <button class="num" data-value="3">3</button>
+      <button class="op" data-op="*">×</button>
+      <button class="op" data-action="mplus">M+</button>
+
+      <button data-action="yroot"><sup>y</sup>√x</button>
+      <button data-action="cuberoot"><sup>3</sup>√x</button>
+      <button data-action="sqrt">√x</button>
+      <button data-action="ln">ln</button>
+      <button data-action="log">log</button>
+      <button class="num" data-value="0">0</button>
+      <button class="num" data-value=".">.</button>
+      <button class="num" data-action="expNotation">EXP</button>
+      <button class="op" data-op="/">/</button>
+      <button class="op" data-action="mminus">M-</button>
+
+      <button data-value="(">(</button>
+      <button data-value=")">)</button>
+      <button data-action="reciprocal">1/x</button>
+      <button data-action="percent">%</button>
+      <button data-action="factorial">n!</button>
+      <button class="op" data-action="sign">±</button>
+      <button class="op" data-action="rnd">RND</button>
+      <button class="num" data-action="clear">AC</button>
+      <button class="num" data-action="equals">=</button>
+      <button class="op" data-action="mr">MR</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
