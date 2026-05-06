@@ -75,9 +75,9 @@ body {
   position: absolute;
   font-size: 24px;
   animation: float 4s infinite ease-in-out;
+  will-change: transform;
 }
 
-/* positions */
 .icon:nth-child(1) { top: 0; left: 20%; }
 .icon:nth-child(2) { top: 40px; left: 70%; }
 .icon:nth-child(3) { top: 100px; left: 30%; }
@@ -85,8 +85,13 @@ body {
 .icon:nth-child(5) { top: 120px; left: 80%; }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-15px); }
+  0%, 100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-15px);
+  }
 }
 
 /* PANELS */
@@ -107,29 +112,37 @@ body {
   font-size: 26px;
   box-shadow: 10px 10px 0 #ff2d2d;
   transform: skew(-2deg);
-  transition: 0.25s;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
   position: relative;
+  overflow: hidden;
+  will-change: transform;
+}
+
+.panel h2 {
+  margin: 0;
+  position: relative;
+  z-index: 1;
 }
 
 /* comic shine */
 .panel::before {
   content: "";
   position: absolute;
+  inset: 0;
   width: 200%;
-  height: 100%;
   background: linear-gradient(
     120deg,
     transparent,
-    rgba(255,255,255,0.2),
+    rgba(255,255,255,0.25),
     transparent
   );
-  top: 0;
-  left: -100%;
+  transform: translateX(-120%);
+  transition: transform 0.6s ease;
+  pointer-events: none;
 }
 
 .panel:hover::before {
-  left: 100%;
-  transition: 0.6s;
+  transform: translateX(80%);
 }
 
 .panel:hover {
