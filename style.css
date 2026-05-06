@@ -1,0 +1,94 @@
+@import url('https://fonts.googleapis.com/css2?family=Bangers&family=Montserrat:wght@400;700&display=swap');
+
+body {
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+  background: #f7c948; /* comic yellow */
+  color: #111;
+}
+
+/* HEADER */
+header {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+header h1 {
+  font-family: 'Bangers', cursive;
+  font-size: 90px;
+  margin: 0;
+  color: black;
+  text-shadow: 5px 5px #ff2d2d;
+}
+
+header p {
+  font-size: 18px;
+}
+
+/* GRID */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 30px;
+  padding: 40px;
+}
+
+/* CARD */
+.card {
+  background: black;
+  color: white;
+  padding: 30px;
+  border-radius: 15px;
+  text-decoration: none;
+  box-shadow: 8px 8px 0 #ff2d2d;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* comic stripe effect */
+.card::before {
+  content: "";
+  position: absolute;
+  width: 200%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(255,255,255,0.05),
+    rgba(255,255,255,0.05) 10px,
+    transparent 10px,
+    transparent 20px
+  );
+  top: 0;
+  left: -50%;
+}
+
+.card h2 {
+  font-family: 'Bangers', cursive;
+  font-size: 28px;
+  margin-top: 0;
+}
+
+.card:hover {
+  transform: translate(-6px, -6px);
+  box-shadow: 14px 14px 0 #ff2d2d;
+}
+
+/* BUTTON STYLE */
+.card::after {
+  content: "OPEN →";
+  display: inline-block;
+  margin-top: 15px;
+  background: #ff2d2d;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-weight: bold;
+}
+
+/* FOOTER */
+footer {
+  text-align: center;
+  padding: 20px;
+  background: black;
+  color: white;
+}
