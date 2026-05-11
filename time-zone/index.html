@@ -341,7 +341,7 @@
       d.setHours(h,0,0,0);
       return d;
     }
-    function optionLabel(z){ return `${z.name} — ${z.tz}`; }
+    function optionLabel(z){ return z.name; }
 
     function buildSelects(){
       ["leftZone","rightZone"].forEach(id => {
