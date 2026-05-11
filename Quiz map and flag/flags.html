@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Flags of the World Quiz</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="page">
+    <nav class="topbar">
+  <div class="nav-menu">
+    <button class="nav-trigger" type="button">Map Quiz</button>
+    <div class="dropdown-menu">
+      <a href="index.html">Whole Map Quiz</a>
+      <a href="europe.html">Europe</a>
+      <a href="asia.html">Asia</a>
+      <a href="africa.html">Africa</a>
+      <a href="north-america.html">North America</a>
+      <a href="south-america.html">South America</a>
+      <a href="oceania.html">Oceania</a>
+    </div>
+  </div>
+
+  <div class="nav-menu">
+    <button class="nav-trigger" type="button">Flag Quiz</button>
+    <div class="dropdown-menu">
+      <a href="flags.html">Whole World</a>
+    </div>
+  </div>
+</nav>
+
+    <h1>Flags of the World Quiz</h1>
+    <p class="subtitle">Guess the country from the flag.</p>
+
+    <div class="quiz-panel">
+      <div class="quiz-top">
+        <div class="timer" id="timer">10:00</div>
+        <div class="score"><span id="score">0</span> / 196</div>
+      </div>
+
+      <div class="controls">
+        <input id="answerInput" type="text" placeholder="Enter country name" autocomplete="off" disabled />
+        <button id="startBtn">Start</button>
+        <button id="skipBtn" disabled>Skip</button>
+        <button id="giveUpBtn" disabled>Give Up</button>
+      </div>
+
+      <div id="status" class="status"></div>
+
+      <div class="flag-box">
+        <img id="flagImg" src="" alt="Country flag" />
+      </div>
+    </div>
+  </div>
+
+  <script src="flags.js"></script>
+</body>
+</html>
