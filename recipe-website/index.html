@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Recipe Hub Preview</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f7f7ee;
+      color: #111;
+    }
+
+    .topbar {
+      background: #000;
+      color: white;
+      height: 88px;
+      display: flex;
+      align-items: center;
+      padding: 0 9%;
+      gap: 34px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand {
+      font-size: 58px;
+      line-height: 1;
+      font-weight: 900;
+      letter-spacing: -3px;
+      color: #fff;
+      white-space: nowrap;
+    }
+
+    .brand span { color: #ffd634; }
+
+    .navlinks {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+      flex: 1;
+    }
+
+    .nav-item {
+      position: relative;
+      height: 88px;
+      display: flex;
+      align-items: center;
+      font-size: 16px;
+      font-weight: 900;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .nav-item::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 25px;
+      height: 3px;
+      background: #52e6e6;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: 0.2s ease;
+    }
+
+    .nav-item:hover::after { transform: scaleX(1); }
+
+    .dropdown {
+      position: absolute;
+      top: 88px;
+      left: 0;
+      width: 270px;
+      background: #000;
+      padding: 22px 28px 26px;
+      display: none;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.35);
+    }
+
+    .nav-item:hover .dropdown { display: block; }
+
+    .dropdown a {
+      display: block;
+      color: white;
+      text-decoration: none;
+      font-size: 20px;
+      font-weight: 500;
+      text-transform: none;
+      letter-spacing: 0;
+      padding: 8px 0;
+    }
+
+    .dropdown a:hover { color: #52e6e6; }
+
+    .dropdown .see-more {
+      color: #52e6e6;
+      font-weight: 900;
+      margin-top: 12px;
+    }
+
+    .top-icons {
+      display: flex;
+      gap: 20px;
+      font-size: 28px;
+      align-items: center;
+      white-space: nowrap;
+    }
+
+    .hero-banner {
+      min-height: 470px;
+      background:
+        linear-gradient(90deg, rgba(0,0,0,0.82), rgba(0,0,0,0.25)),
+        url("https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=1600&q=80") center/cover;
+      color: white;
+      display: flex;
+      align-items: end;
+      padding: 0 10% 70px;
+    }
+
+    .hero-title {
+      max-width: 700px;
+    }
+
+    .hero-title h1 {
+      font-size: 58px;
+      line-height: 1.15;
+      letter-spacing: 2px;
+      margin: 0 0 28px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .hero-title button {
+      background: #ffd634;
+      border: none;
+      padding: 18px 38px;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      font-size: 17px;
+      cursor: pointer;
+    }
+
+    .navbar {
+      min-height: 78px;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      padding: 18px 10%;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+    }
+
+    .search {
+      display: flex;
+      flex: 1;
+      max-width: 680px;
+      margin: auto;
+    }
+
+    .search input {
+      width: 100%;
+      padding: 15px 18px;
+      border: 1px solid #888;
+      border-right: none;
+      font-size: 16px;
+    }
+
+    .search button {
+      width: 58px;
+      background: #e7471c;
+      color: white;
+      border: none;
+      font-size: 22px;
+      cursor: pointer;
+    }
+
+    .hero {
+      padding: 38px 10% 50px;
+      overflow: hidden;
+    }
+
+    .recipe-row {
+      display: flex;
+      gap: 28px;
+      overflow-x: auto;
+      padding-bottom: 20px;
+      scroll-snap-type: x mandatory;
+    }
+
+    .recipe-card {
+      min-width: 330px;
+      background: white;
+      box-shadow: 0 5px 14px rgba(0,0,0,0.16);
+      scroll-snap-align: start;
+    }
+
+    .recipe-card img {
+      width: 100%;
+      height: 190px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .tag {
+      display: inline-block;
+      background: #ffc847;
+      font-weight: 900;
+      padding: 10px 18px;
+      margin-left: 24px;
+      transform: translateY(-22px);
+      border-radius: 8px 8px 0 0;
+      letter-spacing: 0.5px;
+    }
+
+    .card-body {
+      padding: 0 24px 26px;
+      margin-top: -8px;
+    }
+
+    .card-body h2 {
+      font-size: 25px;
+      line-height: 1.08;
+      margin: 0 0 12px;
+      font-weight: 900;
+    }
+
+    .meta {
+      font-size: 15px;
+      margin-bottom: 34px;
+    }
+
+    .save-btn {
+      width: 100%;
+      padding: 16px;
+      background: white;
+      border: 1.5px solid #111;
+      border-radius: 6px;
+      font-weight: 900;
+      font-size: 17px;
+      cursor: pointer;
+    }
+
+    .hint {
+      text-align: center;
+      font-size: 19px;
+      margin-top: 8px;
+    }
+
+    .trending {
+      background: white;
+      padding: 70px 10%;
+    }
+
+    .trending h2 {
+      font-size: 36px;
+      display: inline-block;
+      margin-bottom: 30px;
+      box-shadow: inset 0 -12px #e7a52d;
+    }
+
+    .trend-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 44px;
+    }
+
+    .trend-item {
+      display: grid;
+      grid-template-columns: 190px 1fr;
+      gap: 18px;
+      align-items: center;
+    }
+
+    .trend-item img {
+      width: 190px;
+      height: 130px;
+      object-fit: cover;
+    }
+
+    .category {
+      color: #666;
+      font-size: 13px;
+      letter-spacing: 1.3px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .trend-item h3 {
+      margin: 10px 0 0;
+      font-size: 23px;
+      line-height: 1.2;
+    }
+
+    @media (max-width: 1100px) {
+      .topbar { padding: 0 22px; gap: 18px; }
+      .brand { font-size: 45px; }
+      .navlinks { gap: 18px; }
+      .nav-item { font-size: 14px; }
+      .top-icons { display: none; }
+    }
+
+    @media (max-width: 780px) {
+      .topbar {
+        height: auto;
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 18px;
+      }
+
+      .navlinks {
+        width: 100%;
+        overflow-x: auto;
+        gap: 22px;
+      }
+
+      .nav-item { height: 48px; flex: 0 0 auto; }
+      .nav-item::after { bottom: 4px; }
+      .dropdown { top: 48px; }
+      .hero-banner { padding: 0 22px 50px; min-height: 360px; }
+      .hero-title h1 { font-size: 38px; }
+      .trend-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 600px) {
+      .navbar { padding: 16px; }
+      .hero, .trending { padding-left: 18px; padding-right: 18px; }
+      .recipe-card { min-width: 290px; }
+      .trend-item { grid-template-columns: 1fr; }
+      .trend-item img { width: 100%; height: 180px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">Food<span>.</span></div>
+
+    <nav class="navlinks">
+      <div class="nav-item">
+        Home
+        <div class="dropdown">
+          <a href="#">Featured Recipes</a>
+          <a href="#">Latest Recipes</a>
+          <a href="#">Trending Now</a>
+          <a href="#">Recipe Collections</a>
+          <a class="see-more" href="#">See More</a>
+        </div>
+      </div>
+
+      <div class="nav-item">
+        Breakfast
+        <div class="dropdown">
+          <a href="#">Pancakes</a>
+          <a href="#">Omelets</a>
+          <a href="#">Smoothies</a>
+          <a href="#">Breakfast Bowls</a>
+          <a href="#">South Indian Breakfast</a>
+          <a class="see-more" href="#">See More</a>
+        </div>
+      </div>
+
+      <div class="nav-item">
+        Lunch
+        <div class="dropdown">
+          <a href="#">Rice Bowls</a>
+          <a href="#">Sandwiches</a>
+          <a href="#">Salads</a>
+          <a href="#">Wraps</a>
+          <a href="#">Meal Prep Lunches</a>
+          <a class="see-more" href="#">See More</a>
+        </div>
+      </div>
+
+      <div class="nav-item">
+        Dinner
+        <div class="dropdown">
+          <a href="#">Chicken Dinners</a>
+          <a href="#">Pasta Dinners</a>
+          <a href="#">Vegetarian Dinners</a>
+          <a href="#">One-Pot Meals</a>
+          <a href="#">Quick Dinners</a>
+          <a class="see-more" href="#">See More</a>
+        </div>
+      </div>
+
+      <div class="nav-item">
+        Snacks
+        <div class="dropdown">
+          <a href="#">Evening Snacks</a>
+          <a href="#">Healthy Snacks</a>
+          <a href="#">Fried Snacks</a>
+          <a href="#">Party Bites</a>
+          <a href="#">Dips & Sauces</a>
+          <a class="see-more" href="#">See More</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="top-icons">⌕ ♡ 👤</div>
+  </header>
+
+  <section class="hero-banner">
+    <div class="hero-title">
+      <h1>Top 100 easy dinners everyone will love</h1>
+      <button>SEE THEM ALL</button>
+    </div>
+  </section>
+
+  <section class="navbar">
+    <div class="search">
+      <input id="searchInput" type="text" placeholder="Find a recipe or ingredient" />
+      <button onclick="searchRecipe()">⌕</button>
+    </div>
+  </section>
+
+  <section class="hero">
+    <div class="recipe-row">
+      <article class="recipe-card">
+        <img src="https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?auto=format&fit=crop&w=900&q=80" alt="Chicken rice" />
+        <span class="tag">DINNER WINNER</span>
+        <div class="card-body">
+          <h2>Spicy Chicken Rice</h2>
+          <div class="meta">★★★★☆ (1,195) ⏱ 1 hr 20 mins</div>
+          <button class="save-btn">Save Recipe ♡</button>
+        </div>
+      </article>
+
+      <article class="recipe-card">
+        <img src="https://images.unsplash.com/photo-1563379926898-05f4575a45d8?auto=format&fit=crop&w=900&q=80" alt="Casserole" />
+        <span class="tag">COZY CASSEROLE</span>
+        <div class="card-body">
+          <h2>Cheesy Taco Bake</h2>
+          <div class="meta">★★★★★ (2,842) ⏱ 1 hr 15 mins</div>
+          <button class="save-btn">Save Recipe ♡</button>
+        </div>
+      </article>
+
+      <article class="recipe-card">
+        <img src="https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=900&q=80" alt="Chocolate cake" />
+        <span class="tag">SWEET TREAT</span>
+        <div class="card-body">
+          <h2>Chocolate Dump Cake</h2>
+          <div class="meta">★★★★☆ (808) ⏱ 50 mins</div>
+          <button class="save-btn">Save Recipe ♡</button>
+        </div>
+      </article>
+
+      <article class="recipe-card">
+        <img src="https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=900&q=80" alt="Greek salad" />
+        <span class="tag">POTLUCK PICK</span>
+        <div class="card-body">
+          <h2>Fresh Greek Pasta Salad</h2>
+          <div class="meta">★★★★★ (1,061) ⏱ 35 mins</div>
+          <button class="save-btn">Save Recipe ♡</button>
+        </div>
+      </article>
+    </div>
+    <p class="hint">Click the cards to flip! ↻</p>
+  </section>
+
+  <section class="trending">
+    <h2>Trending Now</h2>
+    <div class="trend-grid">
+      <div class="trend-item">
+        <img src="https://images.unsplash.com/photo-1543339308-43e59d6b73a6?auto=format&fit=crop&w=900&q=80" alt="Dinner bowl" />
+        <div>
+          <div class="category">Entertaining</div>
+          <h3>14 Build-Your-Own Dinner Ideas Everyone Will Love</h3>
+        </div>
+      </div>
+
+      <div class="trend-item">
+        <img src="https://images.unsplash.com/photo-1527477396000-e27163b481c2?auto=format&fit=crop&w=900&q=80" alt="Chicken wings" />
+        <div>
+          <div class="category">Main Dishes</div>
+          <h3>17 Crowd-Pleasing Dishes Perfect for Outdoor Potlucks</h3>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    function searchRecipe() {
+      const value = document.getElementById('searchInput').value.trim();
+      alert(value ? `Searching for: ${value}` : 'Type a recipe or ingredient first');
+    }
+
+    document.querySelectorAll('.save-btn').forEach(button => {
+      button.addEventListener('click', event => {
+        event.stopPropagation();
+        button.textContent = button.textContent.includes('♡') ? 'Saved ♥' : 'Save Recipe ♡';
+      });
+    });
+  </script>
+</body>
+</html>
