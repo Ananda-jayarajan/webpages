@@ -1,8 +1,62 @@
-<a class="card" href="thakkali-thokku.html">
-  <img src="../../../assets/images/recipes/thakkali-thokku.jpg" alt="Thakkali Thokku">
-  <div class="card-content">
-    <span class="tag">VEGETARIAN</span>
-    <h3>Thakkali Thokku Recipe | Tomato Gravy</h3>
-    <p>South Indian tomato thokku made with onion, garlic, spices, and curry leaves.</p>
-  </div>
-</a>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vegetarian Recipes</title>
+  <link rel="stylesheet" href="../../../styles.css">
+</head>
+
+<body>
+
+  <header class="topbar">
+    <a class="brand" href="../../../index.html">Food<span>.</span></a>
+
+    <nav class="navlinks">
+      <div class="nav-item"><a href="../../../index.html">Home</a></div>
+
+      <div class="nav-item">
+        <a href="../index.html">Lunch</a>
+        <div class="dropdown">
+          <a href="index.html">Vegetarian</a>
+          <a href="../non-vegetarian/index.html">Non-Vegetarian</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <section class="searchbar">
+    <div class="search">
+      <input id="searchInput" type="text" placeholder="Find a recipe or ingredient">
+      <button onclick="searchRecipe()">⌕</button>
+    </div>
+  </section>
+
+  <section class="section">
+    <h1>Vegetarian Recipes</h1>
+
+    <div class="recipe-row">
+
+      <a class="recipe-card" href="thakkali-thokku.html">
+        <img src="../../../assets/images/recipes/thakkali-thokku.jpg" alt="Thakkali Thokku">
+
+        <span class="tag">VEGETARIAN</span>
+
+        <div class="card-body">
+          <h2>Thakkali Thokku Recipe | Tomato Gravy</h2>
+          <div class="meta">★★★★★ South Indian tomato recipe</div>
+          <button class="save-btn" type="button">View Recipe</button>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>© 2026 Food. All recipes by Anand.</p>
+  </footer>
+
+  <script src="../../../script.js"></script>
+
+</body>
+</html>
