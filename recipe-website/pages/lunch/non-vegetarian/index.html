@@ -1,156 +1,259 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Non-Vegetarian Recipes</title>
-  <link rel="stylesheet" href="../../../styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Non-Vegetarian Grid Preview</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f7f7ee;
+      color: #111;
+    }
+
+    .topbar {
+      background: #000;
+      color: white;
+      min-height: 88px;
+      display: flex;
+      align-items: center;
+      padding: 0 8%;
+      gap: 30px;
+    }
+
+    .brand {
+      font-size: 56px;
+      font-weight: 900;
+      letter-spacing: -3px;
+      color: white;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .brand span { color: #ffd634; }
+
+    .navlinks {
+      display: flex;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .navlinks a {
+      color: white;
+      text-decoration: none;
+      text-transform: uppercase;
+      font-weight: 900;
+      letter-spacing: 1.3px;
+    }
+
+    .searchbar {
+      background: white;
+      padding: 20px 8%;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .search {
+      display: flex;
+      max-width: 700px;
+      margin: auto;
+    }
+
+    .search input {
+      flex: 1;
+      padding: 15px 18px;
+      border: 1px solid #888;
+      border-right: 0;
+      font-size: 16px;
+    }
+
+    .search button {
+      width: 58px;
+      background: #e7471c;
+      color: white;
+      border: 0;
+      font-size: 22px;
+    }
+
+    .section {
+      padding: 55px 8%;
+    }
+
+    .section h1 {
+      font-size: 42px;
+      display: inline-block;
+      box-shadow: inset 0 -12px #e7a52d;
+      margin: 0 0 35px;
+    }
+
+    .recipe-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 34px;
+      align-items: stretch;
+    }
+
+    .recipe-card {
+      background: white;
+      box-shadow: 0 5px 14px rgba(0,0,0,0.16);
+      text-decoration: none;
+      color: #111;
+      display: block;
+      overflow: hidden;
+      min-height: 470px;
+    }
+
+    .recipe-card img {
+      width: 100%;
+      height: 210px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .tag {
+      display: inline-block;
+      background: #ffc847;
+      font-weight: 900;
+      padding: 10px 18px;
+      margin-left: 24px;
+      transform: translateY(-22px);
+      border-radius: 4px;
+      font-size: 14px;
+      letter-spacing: 0.5px;
+    }
+
+    .card-body {
+      padding: 0 24px 26px;
+      margin-top: -8px;
+    }
+
+    .card-body h2 {
+      font-size: 27px;
+      line-height: 1.08;
+      margin: 0 0 18px;
+      font-weight: 900;
+    }
+
+    .meta {
+      font-size: 17px;
+      margin-bottom: 30px;
+    }
+
+    .save-btn {
+      width: 100%;
+      padding: 16px;
+      background: white;
+      border: 1.5px solid #111;
+      border-radius: 6px;
+      font-weight: 900;
+      font-size: 17px;
+      cursor: pointer;
+    }
+
+    .footer {
+      background: #000;
+      color: white;
+      text-align: center;
+      padding: 30px 8%;
+      margin-top: 40px;
+    }
+
+    @media (max-width: 1000px) {
+      .recipe-grid-3 { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 650px) {
+      .recipe-grid-3 { grid-template-columns: 1fr; }
+      .topbar { flex-direction: column; align-items: flex-start; padding: 18px; }
+      .brand { font-size: 44px; }
+      .section { padding: 40px 20px; }
+    }
+  </style>
 </head>
-
 <body>
-
   <header class="topbar">
-    <a class="brand" href="../../../index.html">Food<span>.</span></a>
-
+    <a class="brand" href="#">Food<span>.</span></a>
     <nav class="navlinks">
-      <div class="nav-item"><a href="../../../index.html">Home</a></div>
-      <div class="nav-item"><a href="../../breakfast/index.html">Breakfast</a></div>
-
-      <div class="nav-item">
-        <a href="../index.html">Lunch</a>
-        <div class="dropdown">
-          <a href="../vegetarian/index.html">Vegetarian</a>
-          <a href="index.html">Non-Vegetarian</a>
-        </div>
-      </div>
-
-      <div class="nav-item"><a href="../../dinner/index.html">Dinner</a></div>
-      <div class="nav-item"><a href="../../snacks/index.html">Snacks</a></div>
+      <a href="#">Home</a>
+      <a href="#">Lunch</a>
+      <a href="#">Non-Vegetarian</a>
     </nav>
-
-    <div class="top-icons">⌕ ♡ 👤</div>
   </header>
 
   <section class="searchbar">
     <div class="search">
-      <input id="searchInput" type="text" placeholder="Find a recipe or ingredient">
-      <button onclick="searchRecipe()">⌕</button>
+      <input type="text" placeholder="Find a recipe or ingredient">
+      <button>⌕</button>
     </div>
   </section>
 
   <section class="section">
     <h1>Non-Vegetarian Recipes</h1>
 
-    <div class="recipe-row">
-
-      <a class="recipe-card" href="recipes/chicken-biryani.html">
+    <div class="recipe-grid-3">
+      <a class="recipe-card" href="#">
         <img src="https://images.unsplash.com/photo-1589302168068-964664d93dc0?auto=format&fit=crop&w=900&q=80" alt="Chicken Biryani">
         <span class="tag">NON-VEG</span>
         <div class="card-body">
           <h2>Chicken Biryani</h2>
           <div class="meta">★★★★★ Classic biryani recipe</div>
-          <button class="save-btn" type="button">View Recipe</button>
+          <button class="save-btn">View Recipe</button>
         </div>
       </a>
 
-      <a class="recipe-card" href="recipes/fish-curry.html">
+      <a class="recipe-card" href="#">
         <img src="https://images.unsplash.com/photo-1627366422957-3efa9c6df0fc?auto=format&fit=crop&w=900&q=80" alt="Fish Curry">
         <span class="tag">NON-VEG</span>
         <div class="card-body">
           <h2>Fish Curry</h2>
           <div class="meta">★★★★★ Spicy fish gravy</div>
-          <button class="save-btn" type="button">View Recipe</button>
+          <button class="save-btn">View Recipe</button>
         </div>
       </a>
 
-      <a class="recipe-card" href="recipes/salmon-stuffed-avocados.html">
-        <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=900&q=80" alt="Salmon-Stuffed Avocados">
-        <span class="tag">NON-VEG</span>
-        <div class="card-body">
-          <h2>Salmon-Stuffed Avocados</h2>
-          <div class="meta">★★★★★ Fresh salmon snack</div>
-          <button class="save-btn" type="button">View Recipe</button>
-        </div>
-      </a>
-
-      <a class="recipe-card" href="recipes/meen-kulambu-v2.html">
-        <img src="https://images.unsplash.com/photo-1627366422957-3efa9c6df0fc?auto=format&fit=crop&w=900&q=80" alt="Meen Kulambu V2">
-        <span class="tag">NON-VEG</span>
-        <div class="card-body">
-          <h2>Meen Kulambu V2</h2>
-          <div class="meta">★★★★★ South Indian fish curry</div>
-          <button class="save-btn" type="button">View Recipe</button>
-        </div>
-      </a>
-
-      <a class="recipe-card" href="recipes/garlic-chicken-gravey.html">
-        <img src="https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&w=900&q=80" alt="Garlic Chicken Gravey">
-        <span class="tag">NON-VEG</span>
-        <div class="card-body">
-          <h2>Garlic Chicken Gravey</h2>
-          <div class="meta">★★★★★ Garlic chicken curry</div>
-          <button class="save-btn" type="button">View Recipe</button>
-        </div>
-      </a>
-
-      <a class="recipe-card" href="recipes/madurai-prawn-thokku.html">
-        <img src="https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?auto=format&fit=crop&w=900&q=80" alt="Madurai Prawn Thokku">
-        <span class="tag">NON-VEG</span>
-        <div class="card-body">
-          <h2>Madurai Prawn Thokku</h2>
-          <div class="meta">★★★★★ Spicy prawn thokku</div>
-          <button class="save-btn" type="button">View Recipe</button>
-        </div>
-      </a>
-
-      <a class="recipe-card" href="recipes/pepper-beef-liver-stir-fry.html">
-        <img src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80" alt="Pepper Beef Liver Stir-fry">
-        <span class="tag">NON-VEG</span>
-        <div class="card-body">
-          <h2>Pepper Beef Liver Stir-fry</h2>
-          <div class="meta">★★★★★ Pepper liver fry</div>
-          <button class="save-btn" type="button">View Recipe</button>
-        </div>
-      </a>
-
-      <a class="recipe-card" href="recipes/chicken-liver-roast.html">
-        <img src="https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&w=900&q=80" alt="Chicken Liver Roast">
-        <span class="tag">NON-VEG</span>
-        <div class="card-body">
-          <h2>Chicken Liver Roast / Chicken Liver Fry</h2>
-          <div class="meta">★★★★★ Spicy chicken liver fry</div>
-          <button class="save-btn" type="button">View Recipe</button>
-        </div>
-      </a>
-
-      <a class="recipe-card" href="recipes/tandoori-chicken.html">
+      <a class="recipe-card" href="#">
         <img src="https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?auto=format&fit=crop&w=900&q=80" alt="Tandoori Chicken">
         <span class="tag">NON-VEG</span>
         <div class="card-body">
           <h2>Tandoori Chicken</h2>
           <div class="meta">★★★★★ Smoky chicken starter</div>
-          <button class="save-btn" type="button">View Recipe</button>
+          <button class="save-btn">View Recipe</button>
         </div>
       </a>
 
-      <a class="recipe-card" href="recipes/chicken-gravy-in-10-minutes.html">
-        <img src="https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&w=900&q=80" alt="Chicken Gravy in 10 Minutes">
+      <a class="recipe-card" href="#">
+        <img src="https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&w=900&q=80" alt="Garlic Chicken Gravy">
         <span class="tag">NON-VEG</span>
         <div class="card-body">
-          <h2>Chicken Gravy in 10 Minutes</h2>
-          <div class="meta">★★★★★ Quick chicken gravy</div>
-          <button class="save-btn" type="button">View Recipe</button>
+          <h2>Garlic Chicken Gravy</h2>
+          <div class="meta">★★★★★ Garlic chicken curry</div>
+          <button class="save-btn">View Recipe</button>
         </div>
       </a>
 
+      <a class="recipe-card" href="#">
+        <img src="https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?auto=format&fit=crop&w=900&q=80" alt="Madurai Prawn Thokku">
+        <span class="tag">NON-VEG</span>
+        <div class="card-body">
+          <h2>Madurai Prawn Thokku</h2>
+          <div class="meta">★★★★★ Spicy prawn thokku</div>
+          <button class="save-btn">View Recipe</button>
+        </div>
+      </a>
+
+      <a class="recipe-card" href="#">
+        <img src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80" alt="Pepper Beef Liver Stir-fry">
+        <span class="tag">NON-VEG</span>
+        <div class="card-body">
+          <h2>Pepper Beef Liver Stir-fry</h2>
+          <div class="meta">★★★★★ Pepper liver fry</div>
+          <button class="save-btn">View Recipe</button>
+        </div>
+      </a>
     </div>
   </section>
 
-  <footer class="footer">
-    <p>© 2026 Food. All recipes by Anand.</p>
-  </footer>
-
-  <script src="../../../script.js"></script>
-
+  <footer class="footer">© 2026 Food. All recipes by Anand.</footer>
 </body>
 </html>
