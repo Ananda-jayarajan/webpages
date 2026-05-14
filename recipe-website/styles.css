@@ -410,3 +410,32 @@ li {
   max-width: none;
   width: 100%;
 }
+
+.brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-decoration: none;
+  color: white;
+  white-space: nowrap;
+}
+
+.brand-logo img {
+  width: 62px;
+  height: 62px;
+  object-fit: contain;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 0.95;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-size: 28px;
+}
+
+.brand-text span:last-child {
+  color: white;
+}
