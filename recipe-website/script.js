@@ -7,8 +7,13 @@ function searchRecipe() {
 document.getElementById("navbar").innerHTML = `
 <header class="topbar">
 
-  <a class="brand" href="/webpages/recipe-website/index.html">
-    Food<span>.</span>
+  <a class="brand-logo" href="/webpages/recipe-website/index.html">
+    <img src="/webpages/recipe-website/assets/icons/logo.png" alt="Anand's Recipe Logo">
+  
+    <div class="brand-text">
+      <span>Anand's</span>
+      <span>Recipe.</span>
+    </div>
   </a>
 
   <nav class="navlinks">
