@@ -398,3 +398,15 @@ li {
     height: 180px;
   }
 }
+
+.recipe-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 34px;
+}
+
+.recipe-grid-3 .recipe-card {
+  min-width: 0;
+  max-width: none;
+  width: 100%;
+}
