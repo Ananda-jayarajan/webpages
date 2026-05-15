@@ -468,3 +468,84 @@ li {
   font-size: 24px;
   color: white;
 }
+
+@media (max-width: 768px) {
+  .topbar {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 18px;
+    height: auto;
+    gap: 16px;
+  }
+
+  .brand-logo img {
+    width: 42px;
+    height: 42px;
+  }
+
+  .brand-text {
+    font-size: 20px;
+  }
+
+  .navlinks {
+    width: 100%;
+    overflow-x: auto;
+    gap: 18px;
+    padding-bottom: 8px;
+  }
+
+  .nav-item {
+    height: 44px;
+    flex: 0 0 auto;
+    font-size: 14px;
+  }
+
+  .dropdown {
+    top: 44px;
+  }
+
+  .searchbar {
+    padding: 16px;
+  }
+
+  .search {
+    width: 100%;
+  }
+
+  .section {
+    padding: 32px 18px;
+  }
+
+  .section h1 {
+    font-size: 34px;
+  }
+
+  .recipe-grid-3 {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .recipe-card {
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+  }
+
+  .recipe-card img {
+    height: 210px;
+  }
+
+  .card-body h2 {
+    font-size: 26px;
+  }
+
+  .hero-banner {
+    min-height: 360px;
+    padding: 0 22px 45px;
+  }
+
+  .hero-title h1 {
+    font-size: 36px;
+    line-height: 1.1;
+  }
+}
