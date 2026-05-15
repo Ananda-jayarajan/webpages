@@ -35,7 +35,8 @@ if (navbar) {
         <a href="/webpages/recipe-website/pages/breakfast/index.html">Breakfast</a>
 
         <div class="dropdown">
-          <a href="/webpages/recipe-website/pages/breakfast/index.html">Breakfast Eggs</a>
+        
+          <a href="/webpages/recipe-website/pages/breakfast/breakfast-eggs/index.html">Breakfast Eggs</a>
           <a href="/webpages/recipe-website/pages/breakfast/smoothies/index.html">Smoothies</a>
           <a href="/webpages/recipe-website/pages/breakfast/breakfast-bowls/index.html">Breakfast Bowls</a>
           <a href="/webpages/recipe-website/pages/breakfast/south-indian-breakfast/index.html">South Indian Breakfast</a>
