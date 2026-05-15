@@ -80,6 +80,7 @@ if (navbar) {
 
         <div class="dropdown">
           <a href="/webpages/recipe-website/pages/others/soups/index.html">Soups</a>
+          <a href="/webpages/recipe-website/pages/others/restaurant-recipes/index.html">Restaurant Recipes</a>
           <a class="see-more" href="/webpages/recipe-website/pages/others/index.html">See More</a>
         </div>
       </div>
