@@ -89,3 +89,61 @@ if (navbar) {
   </header>
   `;
 }
+
+const recipes = [
+  {
+    title: "Thakkali Thokku Recipe | Tomato Gravy",
+    tag: "VEGETARIAN",
+    meta: "★★★★★ South Indian tomato recipe",
+    image: "https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=900&q=80",
+    link: "/webpages/recipe-website/pages/lunch/vegetarian/thakkali-thokku.html"
+  },
+  {
+    title: "Tomato Chutney Recipe | Thakkali Chutney",
+    tag: "VEGETARIAN",
+    meta: "★★★★★ Best with idli and dosa",
+    image: "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=900&q=80",
+    link: "/webpages/recipe-website/pages/lunch/vegetarian/tomato-chutney.html"
+  },
+  {
+    title: "Chicken Soup Recipe | Spiced Chicken Soup",
+    tag: "SOUP",
+    meta: "★★★★★ Warm and comforting soup",
+    image: "https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=900&q=80",
+    link: "/webpages/recipe-website/pages/others/soups/chicken-soup.html"
+  },
+  {
+    title: "Scrambled Eggs",
+    tag: "BREAKFAST",
+    meta: "★★★★★ Quick egg breakfast",
+    image: "https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=900&q=80",
+    link: "/webpages/recipe-website/pages/breakfast/breakfast-eggs/scrambled-eggs.html"
+  },
+  {
+    title: "Paneer Butter Masala",
+    tag: "VEGETARIAN",
+    meta: "★★★★★ Creamy paneer curry",
+    image: "https://images.unsplash.com/photo-1631452180519-c014fe946bc7?auto=format&fit=crop&w=900&q=80",
+    link: "/webpages/recipe-website/pages/lunch/vegetarian/paneer-butter-masala.html"
+  }
+];
+
+const randomContainer = document.getElementById("randomRecipeCards");
+
+if (randomContainer) {
+  const shuffledRecipes = recipes.sort(() => 0.5 - Math.random());
+  const selectedRecipes = shuffledRecipes.slice(0, 4);
+
+  randomContainer.innerHTML = selectedRecipes.map(recipe => `
+    <a class="recipe-card" href="${recipe.link}">
+      <img src="${recipe.image}" alt="${recipe.title}">
+      <span class="tag">${recipe.tag}</span>
+
+      <div class="card-body">
+        <h2>${recipe.title}</h2>
+        <div class="meta">${recipe.meta}</div>
+        <button class="save-btn" type="button">View Recipe</button>
+      </div>
+    </a>
+  `).join("");
+}
