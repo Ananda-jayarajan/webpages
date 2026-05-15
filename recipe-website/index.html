@@ -336,71 +336,8 @@
   </style>
 </head>
 <body>
-  <header class="topbar">
-    <div class="brand">Anand's Recipe<span>.</span></div>
-
-    <nav class="navlinks">
-      <div class="nav-item">
-        Home
-        <div class="dropdown">
-          <a href="pages/home/featured-recipes/index.html">Featured Recipes</a>
-          <a href="pages/home/latest-recipes/index.html">Latest Recipes</a>
-          <a href="pages/home/recipe-collections/index.html">Recipe Collections</a>
-          
-        </div>
-      </div>
-
-      <div class="nav-item">
-        Breakfast
-        <div class="dropdown">
-          <a href="pages/breakfast/breakfast-eggs/index.html">Breakfast Eggs</a>
-          <a href="pages/breakfast/smoothies/index.html">Smoothies</a>
-          <a href="pages/breakfast/breakfast-bowls/index.html">Breakfast Bowls</a>
-          <a href="pages/breakfast/south-indian-breakfast/index.html">South Indian Breakfast</a>
-          
-        </div>
-      </div>
-
-      <div class="nav-item">
-        Lunch
-        <div class="dropdown">
-          <a href="pages/lunch/vegetarian/index.html">Vegetarian dishes</a>
-          <a href="pages/lunch/non-vegetarian/index.html">Non-Vegetarian dishes</a>
-          <a class="see-more" href="pages/lunch/index.html">See More</a>
-        </div>
-      </div>
-
-      <div class="nav-item">
-        Dinner
-        <div class="dropdown">
-          <a href="#">Chicken Dinners</a>
-          <a href="#">Pasta Dinners</a>
-          <a href="#">Vegetarian Dinners</a>
-          <a href="#">One-Pot Meals</a>
-          <a href="#">Quick Dinners</a>
-          <a class="see-more" href="#">See More</a>
-        </div>
-      </div>
-
-      <div class="nav-item">
-        Snacks
-        <div class="dropdown">
-          <a href="#">Healthy Snacks</a>
-          <a class="see-more" href="#">See More</a>
-        </div>
-      </div>
-
-      <div class="nav-item">
-        Others
-        <div class="dropdown">
-          <a href="pages/others/soups/index.html">Soups</a>
-          <a class="see-more" href="pages/others/index.html">See More</a>
-        </div>
-      </div>
-    </nav>
-
-    <div class="top-icons"> </div>
-  </header>
+  
+<div id="navbar"></div>
 
   <section class="hero-banner">
     <div class="hero-title">
@@ -484,18 +421,7 @@
     </div>
   </section>
 
-  <script>
-    function searchRecipe() {
-      const value = document.getElementById('searchInput').value.trim();
-      alert(value ? `Searching for: ${value}` : 'Type a recipe or ingredient first');
-    }
 
-    document.querySelectorAll('.save-btn').forEach(button => {
-      button.addEventListener('click', event => {
-        event.stopPropagation();
-        button.textContent = button.textContent.includes('♡') ? 'Saved ♥' : 'Save Recipe ♡';
-      });
-    });
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
