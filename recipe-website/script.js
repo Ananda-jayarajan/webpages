@@ -147,3 +147,16 @@ if (randomContainer) {
     </a>
   `).join("");
 }
+
+const memeImages = [
+  "/webpages/recipe-website/assets/images/meme1.jpg",
+  "/webpages/recipe-website/assets/images/meme2.jpg",
+  "/webpages/recipe-website/assets/images/meme3.jpg"
+];
+
+const randomMeme = document.getElementById("randomMeme");
+
+if (randomMeme) {
+  const selectedMeme = memeImages[Math.floor(Math.random() * memeImages.length)];
+  randomMeme.src = selectedMeme;
+}
