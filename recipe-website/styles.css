@@ -439,3 +439,32 @@ li {
 .brand-text span:last-child {
   color: white;
 }
+
+.brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: white;
+  height: 88px;
+  max-height: 88px;
+  overflow: hidden;
+}
+
+.brand-logo img {
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
+  display: block;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 0.95;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-size: 24px;
+  color: white;
+}
