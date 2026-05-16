@@ -150,28 +150,6 @@ if (randomContainer) {
 }
 
 
-  const memeImages = [
-  "/webpages/recipe-website/assets/images/meme1.jpg",
-  "/webpages/recipe-website/assets/images/meme2.jpg",
-  "/webpages/recipe-website/assets/images/meme3.jpg",
-  "/webpages/recipe-website/assets/images/meme4.jpg",
-  "/webpages/recipe-website/assets/images/meme5.jpg",
-  "/webpages/recipe-website/assets/images/meme6.jpg",
-  "/webpages/recipe-website/assets/images/meme7.jpg",
-  "/webpages/recipe-website/assets/images/meme8.jpg",
-  "/webpages/recipe-website/assets/images/meme9.jpg",
-  "/webpages/recipe-website/assets/images/meme10.jpg",
-  "/webpages/recipe-website/assets/images/meme11.jpg",
-  "/webpages/recipe-website/assets/images/meme12.jpg"
-];
-
-const randomMeme = document.getElementById("randomMeme");
-
-if (randomMeme) {
-  const selectedMeme = memeImages[Math.floor(Math.random() * memeImages.length)];
-  randomMeme.src = selectedMeme;
-}
-];
 
 const randomMeme = document.getElementById("randomMeme");
 
