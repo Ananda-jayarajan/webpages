@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Modern Video Player</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #111827, #1e3a8a);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 900px;
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(16px);
+      border-radius: 24px;
+      padding: 30px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
+      text-align: center;
+    }
+
+    h1 {
+      margin-top: 0;
+      font-size: 36px;
+      letter-spacing: 1px;
+    }
+
+    p {
+      color: #d1d5db;
+      margin-bottom: 25px;
+    }
+
+    .upload-label {
+      display: inline-block;
+      padding: 14px 24px;
+      background: #3b82f6;
+      color: white;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+      margin-bottom: 25px;
+    }
+
+    .upload-label:hover {
+      background: #2563eb;
+      transform: translateY(-2px);
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    video {
+      width: 100%;
+      max-height: 500px;
+      border-radius: 18px;
+      background: black;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.45);
+      outline: none;
+    }
+
+    .filename {
+      margin-top: 15px;
+      color: #e5e7eb;
+      font-size: 14px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Local Video Player</h1>
+    <p>Select a video from your computer and play it instantly.</p>
+
+    <label class="upload-label" for="videoInput">
+      Choose Video
+    </label>
+
+    <input type="file" id="videoInput" accept="video/*" />
+
+    <video id="videoPlayer" controls></video>
+
+    <div class="filename" id="fileName">No video selected</div>
+  </div>
+
+  <script>
+    const input = document.getElementById("videoInput");
+    const video = document.getElementById("videoPlayer");
+    const fileName = document.getElementById("fileName");
+
+    input.addEventListener("change", function () {
+      const file = this.files[0];
+
+      if (file) {
+        const videoURL = URL.createObjectURL(file);
+        video.src = videoURL;
+        video.play();
+        fileName.textContent = "Now playing: " + file.name;
+      }
+    });
+  </script>
+</body>
+</html>
