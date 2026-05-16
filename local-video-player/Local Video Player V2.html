@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Local Video Player</title>
+</head>
+<body>
+  <h2>Choose a video file</h2>
+
+  <input type="file" id="videoInput" accept="video/*">
+
+  <br><br>
+
+  <video id="videoPlayer" width="800" controls></video>
+
+  <script>
+    const input = document.getElementById("videoInput");
+    const video = document.getElementById("videoPlayer");
+
+    input.addEventListener("change", function () {
+      const file = this.files[0];
+
+      if (file) {
+        const videoURL = URL.createObjectURL(file);
+        video.src = videoURL;
+        video.play();
+      }
+    });
+  </script>
+</body>
+</html>

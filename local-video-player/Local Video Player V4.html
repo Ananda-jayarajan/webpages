@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Modern Offline Video Player</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  font-family: Inter, Arial, sans-serif;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: #111;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+}
+
+.app {
+  width: 100%;
+  max-width: 1200px;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 38px;
+}
+
+.header p {
+  color: #aaa;
+}
+
+.player {
+  position: relative;
+  background: black;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 30px 90px rgba(0,0,0,0.6);
+}
+
+video {
+  width: 100%;
+  display: block;
+  max-height: 680px;
+  background: black;
+}
+
+.controls {
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  bottom: 18px;
+  padding: 14px 18px;
+  border-radius: 999px;
+  background: rgba(28, 45, 52, 0.92);
+  backdrop-filter: blur(18px);
+  border: 1px solid rgba(255,255,255,0.12);
+  box-shadow: 0 10px 35px rgba(0,0,0,0.45);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  transition: opacity .25s, transform .25s;
+}
+
+.player.hide-controls .controls {
+  opacity: 0;
+  transform: translateY(20px);
+  pointer-events: none;
+}
+
+button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px;
+  opacity: .95;
+}
+
+button:hover {
+  transform: scale(1.12);
+}
+
+.time {
+  font-size: 15px;
+  white-space: nowrap;
+}
+
+.progress-wrap {
+  flex: 1;
+  position: relative;
+  height: 18px;
+  display: flex;
+  align-items: center;
+}
+
+.progress-bg {
+  position: absolute;
+  width: 100%;
+  height: 5px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.25);
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #ffffff, #7dd3fc);
+  border-radius: 999px;
+}
+
+.progress {
+  position: absolute;
+  width: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.volume {
+  width: 80px;
+  accent-color: white;
+}
+
+select {
+  background: transparent;
+  color: white;
+  border: none;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+select option {
+  color: black;
+}
+
+.big-play {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  background: rgba(28,45,52,.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,.2);
+  font-size: 42px;
+}
+
+.upload {
+  margin-top: 22px;
+  padding: 24px;
+  border: 2px dashed rgba(255,255,255,.25);
+  border-radius: 22px;
+  text-align: center;
+  background: rgba(255,255,255,.05);
+}
+
+.upload.drag {
+  border-color: #7dd3fc;
+  background: rgba(125,211,252,.12);
+}
+
+.upload-btn {
+  display: inline-block;
+  background: white;
+  color: #111;
+  padding: 13px 24px;
+  border-radius: 999px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+.filename {
+  margin-top: 12px;
+  color: #ccc;
+  font-size: 14px;
+}
+
+@media (max-width: 700px) {
+  .controls {
+    border-radius: 20px;
+    flex-wrap: wrap;
+  }
+
+  .progress-wrap {
+    width: 100%;
+    order: -1;
+    flex: auto;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+  <div class="header">
+    <h1>Offline Web Player</h1>
+    <p>Video.js-inspired local video player</p>
+  </div>
+
+  <div class="player" id="player">
+    <video id="video"></video>
+
+    <button class="big-play" id="bigPlay">▶</button>
+
+    <div class="controls">
+      <button id="play">▶</button>
+      <button id="back">↺10</button>
+      <button id="forward">10↻</button>
+
+      <span class="time" id="current">0:00</span>
+
+      <div class="progress-wrap">
+        <div class="progress-bg">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <input class="progress" id="progress" type="range" min="0" max="100" value="0">
+      </div>
+
+      <span class="time" id="duration">0:00</span>
+
+      <select id="speed">
+        <option value="0.5">0.5x</option>
+        <option value="1" selected>1x</option>
+        <option value="1.25">1.25x</option>
+        <option value="1.5">1.5x</option>
+        <option value="2">2x</option>
+      </select>
+
+      <button id="mute">🔊</button>
+      <input class="volume" id="volume" type="range" min="0" max="1" step="0.01" value="1">
+
+      <button id="pip">▣</button>
+      <button id="full">⛶</button>
+    </div>
+  </div>
+
+  <div class="upload" id="dropArea">
+    <label class="upload-btn" for="fileInput">Choose Local Video</label>
+    <input type="file" id="fileInput" accept="video/*">
+    <div class="filename" id="filename">Or drag and drop a video here</div>
+  </div>
+</div>
+
+<script>
+const video = document.getElementById("video");
+const player = document.getElementById("player");
+const fileInput = document.getElementById("fileInput");
+const filename = document.getElementById("filename");
+const play = document.getElementById("play");
+const bigPlay = document.getElementById("bigPlay");
+const back = document.getElementById("back");
+const forward = document.getElementById("forward");
+const current = document.getElementById("current");
+const duration = document.getElementById("duration");
+const progress = document.getElementById("progress");
+const progressFill = document.getElementById("progressFill");
+const mute = document.getElementById("mute");
+const volume = document.getElementById("volume");
+const speed = document.getElementById("speed");
+const full = document.getElementById("full");
+const pip = document.getElementById("pip");
+const dropArea = document.getElementById("dropArea");
+
+let hideTimer;
+
+function loadVideo(file) {
+  if (!file) return;
+  video.src = URL.createObjectURL(file);
+  filename.textContent = "Now playing: " + file.name;
+  video.play();
+}
+
+fileInput.addEventListener("change", () => loadVideo(fileInput.files[0]));
+
+dropArea.addEventListener("dragover", e => {
+  e.preventDefault();
+  dropArea.classList.add("drag");
+});
+
+dropArea.addEventListener("dragleave", () => {
+  dropArea.classList.remove("drag");
+});
+
+dropArea.addEventListener("drop", e => {
+  e.preventDefault();
+  dropArea.classList.remove("drag");
+  loadVideo(e.dataTransfer.files[0]);
+});
+
+function togglePlay() {
+  if (!video.src) return;
+  video.paused ? video.play() : video.pause();
+}
+
+play.onclick = togglePlay;
+bigPlay.onclick = togglePlay;
+video.onclick = togglePlay;
+
+video.addEventListener("play", () => {
+  play.textContent = "❚❚";
+  bigPlay.style.display = "none";
+});
+
+video.addEventListener("pause", () => {
+  play.textContent = "▶";
+  bigPlay.style.display = "block";
+});
+
+back.onclick = () => video.currentTime -= 10;
+forward.onclick = () => video.currentTime += 10;
+
+video.addEventListener("loadedmetadata", () => {
+  duration.textContent = format(video.duration);
+});
+
+video.addEventListener("timeupdate", () => {
+  const percent = (video.currentTime / video.duration) * 100 || 0;
+  progress.value = percent;
+  progressFill.style.width = percent + "%";
+  current.textContent = format(video.currentTime);
+});
+
+progress.addEventListener("input", () => {
+  video.currentTime = (progress.value / 100) * video.duration;
+});
+
+volume.addEventListener("input", () => {
+  video.volume = volume.value;
+  video.muted = false;
+  mute.textContent = "🔊";
+});
+
+mute.onclick = () => {
+  video.muted = !video.muted;
+  mute.textContent = video.muted ? "🔇" : "🔊";
+};
+
+speed.onchange = () => {
+  video.playbackRate = speed.value;
+};
+
+full.onclick = () => {
+  document.fullscreenElement ? document.exitFullscreen() : player.requestFullscreen();
+};
+
+pip.onclick = async () => {
+  if (document.pictureInPictureElement) {
+    document.exitPictureInPicture();
+  } else if (document.pictureInPictureEnabled) {
+    await video.requestPictureInPicture();
+  }
+};
+
+function format(seconds) {
+  if (isNaN(seconds)) return "0:00";
+  const m = Math.floor(seconds / 60);
+  const s = Math.floor(seconds % 60).toString().padStart(2, "0");
+  return `${m}:${s}`;
+}
+
+function showControls() {
+  player.classList.remove("hide-controls");
+  clearTimeout(hideTimer);
+  hideTimer = setTimeout(() => {
+    if (!video.paused) player.classList.add("hide-controls");
+  }, 2500);
+}
+
+player.addEventListener("mousemove", showControls);
+player.addEventListener("touchstart", showControls);
+
+document.addEventListener("keydown", e => {
+  if (e.code === "Space") {
+    e.preventDefault();
+    togglePlay();
+  }
+
+  if (e.code === "ArrowRight") video.currentTime += 10;
+  if (e.code === "ArrowLeft") video.currentTime -= 10;
+  if (e.key.toLowerCase() === "f") full.click();
+  if (e.key.toLowerCase() === "m") mute.click();
+});
+</script>
+
+</body>
+</html>
