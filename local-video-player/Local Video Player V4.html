@@ -401,5 +401,71 @@ document.addEventListener("keydown", e => {
 });
 </script>
 
+
+  <div class="version-switcher">
+  <button class="version-btn">Switch ▾</button>
+  <div class="version-menu">
+    <a href="Local%20Video%20Player%20V1.html">V1</a>
+    <a href="Local%20Video%20Player%20V2.html">V2</a>
+    <a href="Local%20Video%20Player%20V3.html">V3</a>
+    <a href="Local%20Video%20Player%20V4.html">V4</a>
+    <a href="Local%20Video%20Player%20V5.html">V5</a>
+  </div>
+</div>
+
+<style>
+.version-switcher {
+  position: fixed;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 9999;
+  font-family: Segoe UI, Arial, sans-serif;
+}
+
+.version-btn {
+  width: 82px;
+  height: 38px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.35);
+  background: linear-gradient(
+    rgba(255,255,255,0.35),
+    rgba(120,170,220,0.18)
+  );
+  color: white;
+  backdrop-filter: blur(10px);
+  box-shadow:
+    inset 0 1px 1px rgba(255,255,255,0.55),
+    0 6px 18px rgba(0,0,0,0.35);
+  cursor: pointer;
+}
+
+.version-menu {
+  display: none;
+  margin-top: 8px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(20, 30, 45, 0.62);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255,255,255,0.25);
+  box-shadow: 0 8px 22px rgba(0,0,0,0.4);
+}
+
+.version-menu a {
+  display: block;
+  padding: 10px 22px;
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.version-menu a:hover {
+  background: rgba(120, 180, 255, 0.35);
+}
+
+.version-switcher:hover .version-menu {
+  display: block;
+}
+</style>
 </body>
 </html>
