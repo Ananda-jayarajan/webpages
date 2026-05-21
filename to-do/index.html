@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stylish To-do List</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: "Inter", "Segoe UI", sans-serif;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(#d7d7e8 1px, transparent 1px),
+        linear-gradient(135deg, #eef0ff, #ffffff);
+      background-size: 22px 22px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #2b2b35;
+    }
+
+    .todo-card {
+      width: 430px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid #ddddea;
+      border-radius: 18px;
+      box-shadow: 0 25px 60px rgba(40, 40, 90, 0.18);
+      overflow: hidden;
+      transform: rotate(-3deg);
+    }
+
+    .header {
+      padding: 24px 26px 18px;
+      border-bottom: 1px solid #e4e4ef;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 30px;
+      font-weight: 800;
+      letter-spacing: -1px;
+    }
+
+    .cursor {
+      font-size: 34px;
+      transform: rotate(-20deg);
+    }
+
+    .list {
+      padding: 18px 20px 14px;
+    }
+
+    .task {
+      background: #fff;
+      border: 1px solid #e1e1ec;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      padding: 12px 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 3px 10px rgba(30, 30, 80, 0.04);
+      transition: 0.2s ease;
+    }
+
+    .task:hover {
+      transform: translateX(4px);
+      box-shadow: 0 8px 18px rgba(30, 30, 80, 0.08);
+    }
+
+    .circle {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid #8b8b95;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .task.completed .circle {
+      background: #50d66d;
+      border-color: #50d66d;
+      color: white;
+    }
+
+    .task.completed .circle::after {
+      content: "✓";
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .task span {
+      flex: 1;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .task.completed span {
+      text-decoration: line-through;
+      color: #999;
+    }
+
+    .delete {
+      border: none;
+      background: transparent;
+      color: #aaa;
+      font-size: 18px;
+      cursor: pointer;
+      opacity: 0;
+      transition: 0.2s;
+    }
+
+    .task:hover .delete {
+      opacity: 1;
+    }
+
+    .delete:hover {
+      color: #ff4d6d;
+    }
+
+    .add-box {
+      border: 2px dashed #dfdfeb;
+      border-radius: 8px;
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #777;
+      background: rgba(255, 255, 255, 0.5);
+    }
+
+    .plus {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid #777;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+    }
+
+    input {
+      border: none;
+      outline: none;
+      background: transparent;
+      flex: 1;
+      font-size: 16px;
+      color: #333;
+    }
+
+    @media (max-width: 500px) {
+      .todo-card {
+        width: 90%;
+        transform: rotate(0deg);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="todo-card">
+    <div class="header">
+      <h1>To-do list</h1>
+      <div class="cursor">➤</div>
+    </div>
+
+    <div class="list" id="taskList"></div>
+
+    <div class="list">
+      <div class="add-box">
+        <div class="plus">+</div>
+        <input id="taskInput" type="text" placeholder="Create a new task" />
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const taskList = document.getElementById("taskList");
+    const taskInput = document.getElementById("taskInput");
+
+    let tasks = JSON.parse(localStorage.getItem("todoTasks")) || [
+      { text: "Meet client", completed: true },
+      { text: "Update app content", completed: true },
+      { text: "Review contract", completed: false },
+      { text: "Analyze campaign performance", completed: false },
+      { text: "Finalize kickoff", completed: false },
+      { text: "Launch website", completed: false }
+    ];
+
+    function saveTasks() {
+      localStorage.setItem("todoTasks", JSON.stringify(tasks));
+    }
+
+    function renderTasks() {
+      taskList.innerHTML = "";
+
+      tasks.forEach((task, index) => {
+        const item = document.createElement("div");
+        item.className = task.completed ? "task completed" : "task";
+
+        item.innerHTML = `
+          <div class="circle" onclick="toggleTask(${index})"></div>
+          <span onclick="toggleTask(${index})">${task.text}</span>
+          <button class="delete" onclick="deleteTask(${index})">×</button>
+        `;
+
+        taskList.appendChild(item);
+      });
+    }
+
+    function addTask() {
+      const text = taskInput.value.trim();
+      if (!text) return;
+
+      tasks.push({
+        text: text,
+        completed: false
+      });
+
+      taskInput.value = "";
+      saveTasks();
+      renderTasks();
+    }
+
+    function toggleTask(index) {
+      tasks[index].completed = !tasks[index].completed;
+      saveTasks();
+      renderTasks();
+    }
+
+    function deleteTask(index) {
+      tasks.splice(index, 1);
+      saveTasks();
+      renderTasks();
+    }
+
+    taskInput.addEventListener("keydown", function(e) {
+      if (e.key === "Enter") {
+        addTask();
+      }
+    });
+
+    saveTasks();
+    renderTasks();
+  </script>
+
+</body>
+</html>
