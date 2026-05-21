@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stopwatch</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #121016;
+      color: #eee8f0;
+      display: flex;
+      justify-content: center;
+    }
+
+    .phone {
+      width: 100%;
+      max-width: 430px;
+      min-height: 100vh;
+      padding: 36px 26px 0;
+      position: relative;
+    }
+
+    .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 65px;
+    }
+
+    .top h1 {
+      font-size: 34px;
+      font-weight: 400;
+      margin: 0;
+    }
+
+    .menu {
+      font-size: 34px;
+      color: #cfc6d5;
+    }
+
+    .time {
+      text-align: center;
+      font-size: 82px;
+      font-weight: 300;
+      letter-spacing: -4px;
+      color: #d8ccd9;
+      margin-bottom: 320px;
+    }
+
+    .start-btn {
+      width: 100%;
+      height: 132px;
+      border: none;
+      border-radius: 80px;
+      background: #764248;
+      color: #fff7f7;
+      font-size: 30px;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .start-btn:hover {
+      transform: scale(1.02);
+      background: #875057;
+    }
+
+    .start-btn.running {
+      background: #4f3340;
+    }
+
+    .controls {
+      display: none;
+      gap: 16px;
+    }
+
+    .controls.show {
+      display: flex;
+    }
+
+    .small-btn {
+      flex: 1;
+      height: 95px;
+      border: none;
+      border-radius: 60px;
+      font-size: 24px;
+      cursor: pointer;
+      color: white;
+    }
+
+    .reset {
+      background: #332b37;
+    }
+
+    .pause {
+      background: #764248;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 430px;
+      height: 95px;
+      background: #211b25;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      color: #cfc6d5;
+      border-top: 1px solid #2e2633;
+    }
+
+    .nav-item {
+      text-align: center;
+      font-size: 13px;
+      opacity: 0.7;
+    }
+
+    .nav-item span {
+      display: block;
+      font-size: 24px;
+      margin-bottom: 5px;
+    }
+
+    .nav-item.active {
+      opacity: 1;
+      color: #f1dff5;
+      background: #5e4a70;
+      padding: 8px 14px;
+      border-radius: 28px;
+    }
+
+    @media (max-width: 420px) {
+      .time {
+        font-size: 72px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="phone">
+    <div class="top">
+      <h1>Stopwatch</h1>
+      <div class="menu">⋮</div>
+    </div>
+
+    <div class="time" id="display">00:00.00</div>
+
+    <button class="start-btn" id="startBtn">Start</button>
+
+    <div class="controls" id="controls">
+      <button class="small-btn reset" id="resetBtn">Reset</button>
+      <button class="small-btn pause" id="pauseBtn">Pause</button>
+    </div>
+  </div>
+
+  <div class="bottom-nav">
+    <div class="nav-item">
+      <span>⏰</span>
+      Alarms
+    </div>
+    <div class="nav-item">
+      <span>🌐</span>
+      World clock
+    </div>
+    <div class="nav-item">
+      <span>⌛</span>
+      Timers
+    </div>
+    <div class="nav-item active">
+      <span>⏱</span>
+      Stopwatch
+    </div>
+    <div class="nav-item">
+      <span>🛏</span>
+      Bedtime
+    </div>
+  </div>
+
+  <script>
+    const display = document.getElementById("display");
+    const startBtn = document.getElementById("startBtn");
+    const controls = document.getElementById("controls");
+    const resetBtn = document.getElementById("resetBtn");
+    const pauseBtn = document.getElementById("pauseBtn");
+
+    let startTime = 0;
+    let elapsedTime = 0;
+    let timer = null;
+    let running = false;
+
+    function formatTime(ms) {
+      const totalCentiseconds = Math.floor(ms / 10);
+      const centiseconds = totalCentiseconds % 100;
+      const totalSeconds = Math.floor(totalCentiseconds / 100);
+      const seconds = totalSeconds % 60;
+      const minutes = Math.floor(totalSeconds / 60);
+
+      return (
+        String(minutes).padStart(2, "0") + ":" +
+        String(seconds).padStart(2, "0") + "." +
+        String(centiseconds).padStart(2, "0")
+      );
+    }
+
+    function updateDisplay() {
+      const currentTime = Date.now();
+      elapsedTime = currentTime - startTime;
+      display.textContent = formatTime(elapsedTime);
+    }
+
+    function startTimer() {
+      startTime = Date.now() - elapsedTime;
+      timer = setInterval(updateDisplay, 10);
+      running = true;
+
+      startBtn.style.display = "none";
+      controls.classList.add("show");
+    }
+
+    function pauseTimer() {
+      clearInterval(timer);
+      running = false;
+      pauseBtn.textContent = "Resume";
+    }
+
+    function resumeTimer() {
+      startTime = Date.now() - elapsedTime;
+      timer = setInterval(updateDisplay, 10);
+      running = true;
+      pauseBtn.textContent = "Pause";
+    }
+
+    function resetTimer() {
+      clearInterval(timer);
+      elapsedTime = 0;
+      running = false;
+      display.textContent = "00:00.00";
+
+      startBtn.style.display = "block";
+      controls.classList.remove("show");
+      pauseBtn.textContent = "Pause";
+    }
+
+    startBtn.addEventListener("click", startTimer);
+
+    pauseBtn.addEventListener("click", () => {
+      running ? pauseTimer() : resumeTimer();
+    });
+
+    resetBtn.addEventListener("click", resetTimer);
+  </script>
+
+</body>
+</html>
