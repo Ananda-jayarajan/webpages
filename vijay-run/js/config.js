@@ -18,10 +18,20 @@ window.GAME_CONFIG = {
 
   player: {
     x: 118,
-    width: 64,
-    height: 118,
-    slideHeight: 64,
-    hitboxPadding: 12
+
+    // Put the image here:
+    // assets/characters/vijay.png
+    image: "assets/characters/vijay.png",
+
+    // Adjust if the image looks too small or too large.
+    width: 105,
+    height: 142,
+
+    slideHeight: 72,
+
+    hitboxPaddingX: 24,
+    hitboxPaddingTop: 18,
+    hitboxPaddingBottom: 10
   },
 
   scoring: {
@@ -38,7 +48,6 @@ window.GAME_CONFIG = {
     scarf: "#f4d35e"
   },
 
-  // Keep these original/custom. Add real image URLs later only if you have permission.
   obstacles: [
     { name: "Barricade", type: "ground", width: 72, height: 78, color: "#e84d5b", label: "STOP" },
     { name: "Podium", type: "ground", width: 76, height: 86, color: "#7f5af0", label: "MIC" },
@@ -50,5 +59,9 @@ window.GAME_CONFIG = {
   collectible: {
     size: 34,
     glowSize: 18
+  },
+
+  debug: {
+    showHitboxes: false
   }
 };
