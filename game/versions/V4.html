@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Political Runner</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: #101014;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.game {
+  width: 950px;
+  max-width: 96vw;
+  height: 460px;
+  position: relative;
+  overflow: hidden;
+  border: 5px solid #111;
+  border-radius: 18px;
+  background: linear-gradient(#78d9ff 0 62%, #49b84d 62% 100%);
+  box-shadow: 0 25px 70px rgba(0,0,0,0.45);
+}
+
+.title, .score {
+  position: absolute;
+  top: 16px;
+  z-index: 20;
+  font-size: 22px;
+  font-weight: 900;
+}
+
+.title { left: 20px; }
+.score { right: 20px; }
+
+.ground {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 92px;
+  background: linear-gradient(#8b5a2b 0 30%, #5d3518 30%);
+  border-top: 5px solid #158a2b;
+}
+
+.player {
+  position: absolute;
+  left: 90px;
+  bottom: 92px;
+  width: 72px;
+  height: 120px;
+  z-index: 10;
+}
+
+.head {
+  position: absolute;
+  top: 0;
+  left: 18px;
+  width: 36px;
+  height: 38px;
+  background: #c88755;
+  border: 3px solid #111;
+  border-radius: 50%;
+}
+
+.hair {
+  position: absolute;
+  top: -3px;
+  left: 11px;
+  width: 50px;
+  height: 24px;
+  background: #111;
+  border-radius: 60% 60% 35% 35%;
+  z-index: 2;
+}
+
+.glasses {
+  position: absolute;
+  top: 15px;
+  left: 21px;
+  width: 30px;
+  height: 9px;
+  z-index: 3;
+}
+
+.glasses::before,
+.glasses::after {
+  content: "";
+  position: absolute;
+  width: 13px;
+  height: 9px;
+  background: #111;
+  border-radius: 4px;
+}
+
+.glasses::before { left: 0; }
+.glasses::after { right: 0; }
+
+.mustache {
+  position: absolute;
+  top: 28px;
+  left: 28px;
+  width: 16px;
+  height: 4px;
+  background: #111;
+  border-radius: 50%;
+  z-index: 4;
+}
+
+.suit {
+  position: absolute;
+  top: 38px;
+  left: 10px;
+  width: 52px;
+  height: 58px;
+  background: #050505;
+  border: 3px solid #111;
+  border-radius: 12px 12px 5px 5px;
+}
+
+.suit::before {
+  content: "";
+  position: absolute;
+  top: 5px;
+  left: 17px;
+  width: 14px;
+  height: 42px;
+  background: white;
+  clip-path: polygon(0 0, 100% 0, 72% 100%, 28% 100%);
+}
+
+.suit::after {
+  content: "";
+  position: absolute;
+  top: 8px;
+  left: 22px;
+  width: 5px;
+  height: 32px;
+  background: #8b1e1e;
+  border-radius: 3px;
+}
+
+.arm, .leg {
+  position: absolute;
+  background: #050505;
+  border: 3px solid #111;
+  transform-origin: top center;
+}
+
+.arm {
+  top: 46px;
+  width: 15px;
+  height: 42px;
+  border-radius: 12px;
+}
+
+.arm.left { left: 0; animation: armA .28s infinite alternate; }
+.arm.right { right: 0; animation: armB .28s infinite alternate; }
+
+.leg {
+  top: 94px;
+  width: 18px;
+  height: 36px;
+  border-radius: 0 0 9px 9px;
+}
+
+.leg.left { left: 17px; animation: legA .28s infinite alternate; }
+.leg.right { right: 17px; animation: legB .28s infinite alternate; }
+
+@keyframes armA { from { transform: rotate(32deg); } to { transform: rotate(-32deg); } }
+@keyframes armB { from { transform: rotate(-32deg); } to { transform: rotate(32deg); } }
+@keyframes legA { from { transform: rotate(-26deg); } to { transform: rotate(26deg); } }
+@keyframes legB { from { transform: rotate(26deg); } to { transform: rotate(-26deg); } }
+
+.obstacle {
+  position: absolute;
+  bottom: 92px;
+  right: -120px;
+  width: 86px;
+  height: 86px;
+  z-index: 9;
+  border: 4px solid #111;
+  border-radius: 16px;
+  background: white;
+  overflow: hidden;
+}
+
+.obstacle img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.obstacle .fallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  background: white;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-weight: 900;
+  font-size: 14px;
+  padding: 6px;
+}
+
+.obstacle.party {
+  border-radius: 50%;
+}
+
+.obstacle.person {
+  border-radius: 50% 50% 42% 42%;
+}
+
+.vote {
+  position: absolute;
+  bottom: 190px;
+  right: -70px;
+  width: 44px;
+  height: 44px;
+  background: gold;
+  border: 3px solid #111;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 900;
+  z-index: 8;
+}
+
+.screen {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,.48);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 50;
+}
+
+#gameOver {
+  display: none;
+}
+
+.panel {
+  background: white;
+  border: 4px solid #111;
+  border-radius: 18px;
+  padding: 28px;
+  text-align: center;
+  max-width: 380px;
+}
+
+button {
+  border: 3px solid #111;
+  background: #ffcc00;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.mobile-jump {
+  display: none;
+  position: absolute;
+  right: 18px;
+  bottom: 112px;
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  z-index: 30;
+}
+
+@media(max-width:650px) {
+  .game { height: 390px; }
+  .mobile-jump { display: block; }
+  .title, .score { font-size: 17px; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="game" id="game">
+  <div class="title">Political Runner</div>
+  <div class="score" id="score">Score: 0 | Votes: 0</div>
+
+  <div class="player" id="player">
+    <div class="head"></div>
+    <div class="hair"></div>
+    <div class="glasses"></div>
+    <div class="mustache"></div>
+    <div class="arm left"></div>
+    <div class="arm right"></div>
+    <div class="suit"></div>
+    <div class="leg left"></div>
+    <div class="leg right"></div>
+  </div>
+
+  <div class="obstacle" id="obstacle"></div>
+  <div class="vote" id="vote">V</div>
+  <div class="ground"></div>
+
+  <button class="mobile-jump" id="mobileJump">↑</button>
+
+  <div class="screen" id="startScreen">
+    <div class="panel">
+      <h1>Political Runner</h1>
+      <p>Jump over party logos and caricature obstacles. Collect votes.</p>
+      <p>Press Space / ↑ / Tap</p>
+      <button onclick="startGame()">Start</button>
+    </div>
+  </div>
+
+  <div class="screen" id="gameOver">
+    <div class="panel">
+      <h1>Game Over</h1>
+      <p id="finalScore"></p>
+      <button onclick="restartGame()">Restart</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const game = document.getElementById("game");
+const player = document.getElementById("player");
+const obstacle = document.getElementById("obstacle");
+const vote = document.getElementById("vote");
+const scoreText = document.getElementById("score");
+const startScreen = document.getElementById("startScreen");
+const gameOver = document.getElementById("gameOver");
+const finalScore = document.getElementById("finalScore");
+const mobileJump = document.getElementById("mobileJump");
+
+/*
+Replace the empty image values with direct image URLs.
+
+Example:
+image: "https://example.com/dmk-logo.png"
+
+Use direct image links ending in .jpg, .png, .webp, or .svg.
+*/
+const obstacles = [
+  { type: "party", label: "DMK Rising Sun", image: "" },
+  { type: "party", label: "ADMK Leaves", image: "" },
+  { type: "party", label: "BJP Lotus", image: "" },
+  { type: "party", label: "Congress Hand", image: "" },
+  { type: "party", label: "NTK Symbol", image: "" },
+  { type: "party", label: "VCK Symbol", image: "" },
+  { type: "party", label: "IUML Symbol", image: "" },
+  { type: "party", label: "CPI Symbol", image: "" },
+  { type: "party", label: "CPM Symbol", image: "" },
+
+  { type: "person", label: "Modi Caricature", image: "" },
+  { type: "person", label: "Rahul Caricature", image: "" },
+  { type: "person", label: "Jayalalithaa Caricature", image: "" },
+  { type: "person", label: "Karunanidhi Caricature", image: "" },
+  { type: "person", label: "Stalin Caricature", image: "" },
+  { type: "person", label: "Udhayanidhi Caricature", image: "" },
+  { type: "person", label: "Seeman Caricature", image: "" },
+  { type: "person", label: "EPS Caricature", image: "" }
+];
+
+let playerY = 0;
+let velocityY = 0;
+let gravity = 0.85;
+let jumpPower = 18;
+
+let obstacleX = 950;
+let obstacleSpeed = 6;
+
+let voteX = 1250;
+let voteY = 190;
+
+let score = 0;
+let votes = 0;
+let running = false;
+let animationId;
+
+function makeObstacle() {
+  const item = obstacles[Math.floor(Math.random() * obstacles.length)];
+
+  obstacle.className = "obstacle " + item.type;
+
+  if (item.image && item.image.trim() !== "") {
+    obstacle.innerHTML = `
+      <img src="${item.image}" alt="${item.label}">
+    `;
+  } else {
+    obstacle.innerHTML = `
+      <div class="fallback">${item.label}</div>
+    `;
+  }
+}
+
+function startGame() {
+  startScreen.style.display = "none";
+  gameOver.style.display = "none";
+  running = true;
+  resetValues();
+  makeObstacle();
+  gameLoop();
+}
+
+function resetValues() {
+  playerY = 0;
+  velocityY = 0;
+  obstacleX = game.clientWidth + 180;
+  voteX = game.clientWidth + 520;
+  obstacleSpeed = 6;
+  score = 0;
+  votes = 0;
+  updateScore();
+}
+
+function updateScore() {
+  scoreText.textContent = `Score: ${score} | Votes: ${votes}`;
+}
+
+function jump() {
+  if (!running) return;
+
+  if (playerY === 0) {
+    velocityY = jumpPower;
+    player.style.transform = "rotate(-5deg)";
+    setTimeout(() => {
+      player.style.transform = "rotate(0deg)";
+    }, 170);
+  }
+}
+
+function gameLoop() {
+  if (!running) return;
+
+  velocityY -= gravity;
+  playerY += velocityY;
+
+  if (playerY <= 0) {
+    playerY = 0;
+    velocityY = 0;
+  }
+
+  player.style.bottom = 92 + playerY + "px";
+
+  obstacleX -= obstacleSpeed;
+
+  if (obstacleX < -130) {
+    obstacleX = game.clientWidth + Math.random() * 470;
+    score++;
+    obstacleSpeed += 0.25;
+    makeObstacle();
+    updateScore();
+  }
+
+  obstacle.style.right = game.clientWidth - obstacleX + "px";
+
+  voteX -= obstacleSpeed;
+
+  if (voteX < -80) {
+    voteX = game.clientWidth + 650 + Math.random() * 500;
+    voteY = 165 + Math.random() * 110;
+  }
+
+  vote.style.right = game.clientWidth - voteX + "px";
+  vote.style.bottom = voteY + "px";
+
+  checkObstacleHit();
+  checkVoteCollect();
+
+  animationId = requestAnimationFrame(gameLoop);
+}
+
+function checkObstacleHit() {
+  const p = player.getBoundingClientRect();
+  const o = obstacle.getBoundingClientRect();
+
+  const hit =
+    p.left < o.right - 10 &&
+    p.right > o.left + 10 &&
+    p.top < o.bottom - 8 &&
+    p.bottom > o.top + 8;
+
+  if (hit) endGame();
+}
+
+function checkVoteCollect() {
+  const p = player.getBoundingClientRect();
+  const v = vote.getBoundingClientRect();
+
+  const collected =
+    p.left < v.right &&
+    p.right > v.left &&
+    p.top < v.bottom &&
+    p.bottom > v.top;
+
+  if (collected) {
+    votes++;
+    score += 2;
+    voteX = game.clientWidth + 700 + Math.random() * 500;
+    updateScore();
+  }
+}
+
+function endGame() {
+  running = false;
+  cancelAnimationFrame(animationId);
+  finalScore.textContent = `Score: ${score} | Votes: ${votes}`;
+  gameOver.style.display = "flex";
+}
+
+function restartGame() {
+  startGame();
+}
+
+document.addEventListener("keydown", e => {
+  if (e.code === "Space" || e.code === "ArrowUp") {
+    e.preventDefault();
+    jump();
+  }
+});
+
+game.addEventListener("click", e => {
+  if (!e.target.closest("button")) jump();
+});
+
+mobileJump.addEventListener("click", jump);
+</script>
+
+</body>
+</html>
