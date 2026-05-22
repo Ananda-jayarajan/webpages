@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Villupuram Run</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:#111;
+  font-family:Arial, sans-serif;
+  overflow:hidden;
+}
+#game{
+  width:100vw;
+  height:100vh;
+  background:linear-gradient(#8bdcff 0 55%,#4caf50 55% 72%,#5b3318 72%);
+  position:relative;
+  overflow:hidden;
+}
+.hud{
+  position:absolute;
+  top:12px;
+  left:12px;
+  right:12px;
+  display:flex;
+  justify-content:space-between;
+  z-index:20;
+  color:white;
+  font-weight:900;
+  text-shadow:2px 2px #000;
+}
+.title{
+  position:absolute;
+  top:52px;
+  left:0;
+  right:0;
+  text-align:center;
+  font-size:34px;
+  font-weight:900;
+  color:#fff;
+  text-shadow:3px 3px #000;
+  z-index:20;
+}
+.controls{
+  position:absolute;
+  bottom:18px;
+  left:0;
+  right:0;
+  text-align:center;
+  color:white;
+  z-index:20;
+  font-weight:800;
+  text-shadow:2px 2px #000;
+}
+.ground{
+  position:absolute;
+  bottom:0;
+  width:100%;
+  height:28%;
+  background:repeating-linear-gradient(
+    45deg,
+    #5b3318,
+    #5b3318 20px,
+    #6d4022 20px,
+    #6d4022 40px
+  );
+  border-top:8px solid #1d8d38;
+}
+.player{
+  position:absolute;
+  left:90px;
+  bottom:28%;
+  width:74px;
+  height:124px;
+  z-index:10;
+  transition:height .15s;
+}
+.player.slide{
+  height:70px;
+}
+.head{
+  position:absolute;
+  top:0;
+  left:19px;
+  width:36px;
+  height:38px;
+  background:#c88755;
+  border:3px solid #111;
+  border-radius:50%;
+}
+.hair{
+  position:absolute;
+  top:-4px;
+  left:12px;
+  width:50px;
+  height:24px;
+  background:#111;
+  border-radius:60% 60% 35% 35%;
+}
+.glasses{
+  position:absolute;
+  top:15px;
+  left:22px;
+  width:30px;
+  height:9px;
+  z-index:3;
+}
+.glasses:before,.glasses:after{
+  content:"";
+  position:absolute;
+  width:13px;
+  height:9px;
+  background:#111;
+  border-radius:4px;
+}
+.glasses:before{left:0}
+.glasses:after{right:0}
+.mustache{
+  position:absolute;
+  top:28px;
+  left:29px;
+  width:16px;
+  height:4px;
+  background:#111;
+  border-radius:50%;
+}
+.suit{
+  position:absolute;
+  top:38px;
+  left:10px;
+  width:54px;
+  height:60px;
+  background:#050505;
+  border:3px solid #111;
+  border-radius:12px 12px 5px 5px;
+}
+.suit:before{
+  content:"";
+  position:absolute;
+  top:5px;
+  left:18px;
+  width:14px;
+  height:43px;
+  background:white;
+  clip-path:polygon(0 0,100% 0,72% 100%,28% 100%);
+}
+.suit:after{
+  content:"";
+  position:absolute;
+  top:8px;
+  left:23px;
+  width:5px;
+  height:33px;
+  background:#8b1e1e;
+  border-radius:3px;
+}
+.arm,.leg{
+  position:absolute;
+  background:#050505;
+  border:3px solid #111;
+  transform-origin:top center;
+}
+.arm{
+  top:47px;
+  width:15px;
+  height:43px;
+  border-radius:12px;
+}
+.arm.left{left:0;animation:armA .25s infinite alternate}
+.arm.right{right:0;animation:armB .25s infinite alternate}
+.leg{
+  top:96px;
+  width:18px;
+  height:38px;
+  border-radius:0 0 9px 9px;
+}
+.leg.left{left:18px;animation:legA .25s infinite alternate}
+.leg.right{right:18px;animation:legB .25s infinite alternate}
+.player.slide .head,
+.player.slide .hair,
+.player.slide .glasses,
+.player.slide .mustache{
+  transform:translateY(25px);
+}
+.player.slide .arm,
+.player.slide .leg{
+  display:none;
+}
+@keyframes armA{from{transform:rotate(35deg)}to{transform:rotate(-35deg)}}
+@keyframes armB{from{transform:rotate(-35deg)}to{transform:rotate(35deg)}}
+@keyframes legA{from{transform:rotate(-28deg)}to{transform:rotate(28deg)}}
+@keyframes legB{from{transform:rotate(28deg)}to{transform:rotate(-28deg)}}
+
+.obstacle{
+  position:absolute;
+  bottom:28%;
+  right:-110px;
+  width:88px;
+  height:88px;
+  background:white;
+  border:4px solid #111;
+  border-radius:18px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  font-weight:900;
+  z-index:9;
+  overflow:hidden;
+}
+.obstacle.high{
+  bottom:calc(28% + 95px);
+}
+.obstacle img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+.vote{
+  position:absolute;
+  right:-80px;
+  bottom:calc(28% + 150px);
+  width:46px;
+  height:46px;
+  background:gold;
+  border:3px solid #111;
+  border-radius:50%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-weight:900;
+  z-index:8;
+}
+.screen{
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,.55);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:50;
+}
+.panel{
+  background:white;
+  border:5px solid #111;
+  border-radius:20px;
+  padding:30px;
+  text-align:center;
+  max-width:420px;
+}
+.panel h1{margin-top:0}
+button{
+  border:3px solid #111;
+  background:#ffcc00;
+  border-radius:12px;
+  padding:12px 24px;
+  font-size:18px;
+  font-weight:900;
+  cursor:pointer;
+}
+#gameOver{display:none}
+.touchBtns{
+  position:absolute;
+  bottom:70px;
+  left:0;
+  right:0;
+  display:flex;
+  justify-content:center;
+  gap:20px;
+  z-index:30;
+}
+.touchBtns button{
+  width:100px;
+  height:60px;
+  opacity:.9;
+}
+</style>
+</head>
+
+<body>
+
+<div id="game">
+  <div class="hud">
+    <div id="cancels">CANCELS: 0</div>
+    <div id="speed">Speed: 5.0</div>
+    <button onclick="shareGame()">Share</button>
+  </div>
+
+  <div class="title">The Villupuram Run!</div>
+
+  <div id="player" class="player">
+    <div class="head"></div>
+    <div class="hair"></div>
+    <div class="glasses"></div>
+    <div class="mustache"></div>
+    <div class="arm left"></div>
+    <div class="arm right"></div>
+    <div class="suit"></div>
+    <div class="leg left"></div>
+    <div class="leg right"></div>
+  </div>
+
+  <div id="obstacle" class="obstacle"></div>
+  <div id="vote" class="vote">+1</div>
+  <div class="ground"></div>
+
+  <div class="controls">
+    Controls: Space / ↓ Slide / ↑ Jump<br>
+    Swipe ↑ Jump, Swipe ↓ Slide
+  </div>
+
+  <div class="touchBtns">
+    <button onmousedown="slide()" ontouchstart="slide()">SLIDE</button>
+    <button onclick="jump()">JUMP</button>
+  </div>
+
+  <div id="startScreen" class="screen">
+    <div class="panel">
+      <h1>The Villupuram Run!</h1>
+      <p>Jump, slide, collect points, and avoid obstacles.</p>
+      <button onclick="startGame()">Start Game</button>
+    </div>
+  </div>
+
+  <div id="gameOver" class="screen">
+    <div class="panel">
+      <h1>GAME OVER</h1>
+      <p id="finalScore"></p>
+      <button onclick="restartGame()">Restart</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const game = document.getElementById("game");
+const player = document.getElementById("player");
+const obstacle = document.getElementById("obstacle");
+const vote = document.getElementById("vote");
+
+const speedText = document.getElementById("speed");
+const cancelsText = document.getElementById("cancels");
+const startScreen = document.getElementById("startScreen");
+const gameOver = document.getElementById("gameOver");
+const finalScore = document.getElementById("finalScore");
+
+const obstacles = [
+  { label:"DMK<br>Rising Sun", image:"" },
+  { label:"ADMK<br>Leaves", image:"" },
+  { label:"BJP<br>Lotus", image:"" },
+  { label:"Congress<br>Hand", image:"" },
+  { label:"NTK", image:"" },
+  { label:"VCK", image:"" },
+  { label:"IUML", image:"" },
+  { label:"CPI", image:"" },
+  { label:"CPM", image:"" },
+  { label:"Caricature<br>Obstacle", image:"" }
+];
+
+let running = false;
+let animationId;
+
+let y = 0;
+let velocity = 0;
+let gravity = 0.9;
+let jumpPower = 19;
+
+let obstacleX = 1000;
+let voteX = 1300;
+
+let speed = 5;
+let points = 0;
+let cancels = 0;
+let sliding = false;
+
+function startGame(){
+  startScreen.style.display = "none";
+  gameOver.style.display = "none";
+  resetGame();
+  running = true;
+  newObstacle();
+  loop();
+}
+
+function resetGame(){
+  y = 0;
+  velocity = 0;
+  obstacleX = game.clientWidth + 200;
+  voteX = game.clientWidth + 600;
+  speed = 5;
+  points = 0;
+  cancels = 0;
+  updateHud();
+}
+
+function updateHud(){
+  speedText.textContent = "Speed: " + speed.toFixed(1);
+  cancelsText.textContent = "CANCELS: " + cancels;
+}
+
+function newObstacle(){
+  const item = obstacles[Math.floor(Math.random() * obstacles.length)];
+  const high = Math.random() > 0.65;
+
+  obstacle.className = high ? "obstacle high" : "obstacle";
+
+  if(item.image){
+    obstacle.innerHTML = `<img src="${item.image}" alt="${item.label}">`;
+  }else{
+    obstacle.innerHTML = item.label;
+  }
+}
+
+function jump(){
+  if(!running || sliding) return;
+  if(y === 0){
+    velocity = jumpPower;
+  }
+}
+
+function slide(){
+  if(!running || y > 0) return;
+  sliding = true;
+  player.classList.add("slide");
+  setTimeout(() => {
+    sliding = false;
+    player.classList.remove("slide");
+  }, 650);
+}
+
+function loop(){
+  if(!running) return;
+
+  velocity -= gravity;
+  y += velocity;
+
+  if(y <= 0){
+    y = 0;
+    velocity = 0;
+  }
+
+  player.style.bottom = `calc(28% + ${y}px)`;
+
+  obstacleX -= speed;
+  voteX -= speed;
+
+  if(obstacleX < -130){
+    obstacleX = game.clientWidth + 250 + Math.random() * 350;
+    points++;
+    speed += 0.15;
+    newObstacle();
+    updateHud();
+  }
+
+  if(voteX < -90){
+    voteX = game.clientWidth + 600 + Math.random() * 500;
+    vote.style.bottom = `calc(28% + ${120 + Math.random()*120}px)`;
+  }
+
+  obstacle.style.right = game.clientWidth - obstacleX + "px";
+  vote.style.right = game.clientWidth - voteX + "px";
+
+  checkHit();
+  checkVote();
+
+  animationId = requestAnimationFrame(loop);
+}
+
+function checkHit(){
+  const p = player.getBoundingClientRect();
+  const o = obstacle.getBoundingClientRect();
+
+  const hit =
+    p.left < o.right - 12 &&
+    p.right > o.left + 12 &&
+    p.top < o.bottom - 12 &&
+    p.bottom > o.top + 12;
+
+  if(hit){
+    cancels++;
+    endGame();
+  }
+}
+
+function checkVote(){
+  const p = player.getBoundingClientRect();
+  const v = vote.getBoundingClientRect();
+
+  const collect =
+    p.left < v.right &&
+    p.right > v.left &&
+    p.top < v.bottom &&
+    p.bottom > v.top;
+
+  if(collect){
+    points += 5;
+    voteX = game.clientWidth + 700 + Math.random() * 500;
+  }
+}
+
+function endGame(){
+  running = false;
+  cancelAnimationFrame(animationId);
+  finalScore.innerHTML = `
+    <b>POINTS:</b> ${points}<br>
+    <b>CANCELS:</b> ${cancels}<br>
+    <b>Speed:</b> ${speed.toFixed(1)}
+  `;
+  gameOver.style.display = "flex";
+}
+
+function restartGame(){
+  startGame();
+}
+
+function shareGame(){
+  const text = `I scored ${points} points in The Villupuram Run!`;
+  if(navigator.share){
+    navigator.share({ title:"The Villupuram Run", text });
+  }else{
+    navigator.clipboard.writeText(text);
+    alert("Score copied!");
+  }
+}
+
+document.addEventListener("keydown", e => {
+  if(e.code === "Space" || e.code === "ArrowUp"){
+    e.preventDefault();
+    jump();
+  }
+  if(e.code === "ArrowDown"){
+    e.preventDefault();
+    slide();
+  }
+});
+
+let touchStartY = 0;
+
+game.addEventListener("touchstart", e => {
+  touchStartY = e.touches[0].clientY;
+});
+
+game.addEventListener("touchend", e => {
+  const endY = e.changedTouches[0].clientY;
+  const diff = touchStartY - endY;
+
+  if(diff > 40) jump();
+  if(diff < -40) slide();
+});
+</script>
+
+</body>
+</html>
