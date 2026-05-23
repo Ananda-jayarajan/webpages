@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>The Villupuram Run Pro</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+
+<body>
+  <main id="app">
+    <canvas id="gameCanvas" aria-label="The Villupuram Run Pro game canvas"></canvas>
+
+    <section id="hud" class="hud">
+      <div class="brand">
+        <span class="brand-mark">★</span>
+        <div>
+          <h1>The Villupuram Run Pro</h1>
+          <p>Jump • Slide • Collect votes</p>
+        </div>
+      </div>
+
+      <div class="hud-right">
+        <button id="musicBtn" class="audio-btn" type="button" aria-label="Toggle background music">
+          🔊 Music
+        </button>
+
+        <div class="hud-stats">
+          <div class="stat">
+            <span class="label">Score</span>
+            <span id="scoreText">0</span>
+          </div>
+          <div class="stat">
+            <span class="label">Votes</span>
+            <span id="votesText">0</span>
+          </div>
+          <div class="stat">
+            <span class="label">Best</span>
+            <span id="bestText">0</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="startScreen" class="screen visible">
+      <div class="panel">
+        <div class="badge">Fixed Image + Music v1.2</div>
+        <h2>The Villupuram Run Pro</h2>
+        <p>
+          Put your Vijay image at <strong>assets/characters/vijay.png</strong>
+          and your background song at <strong>assets/audio/theme.mp3</strong>.
+        </p>
+
+        <div class="controls-grid">
+          <div><strong>Jump</strong><span>Space / ↑ / Swipe Up</span></div>
+          <div><strong>Slide</strong><span>↓ / Swipe Down</span></div>
+          <div><strong>Music</strong><span>M / Music button</span></div>
+        </div>
+
+        <button id="startBtn" class="primary-btn">Start Game</button>
+      </div>
+    </section>
+
+    <section id="pauseScreen" class="screen">
+      <div class="panel small">
+        <h2>Paused</h2>
+        <p>Press <strong>P</strong> or tap resume to continue.</p>
+        <button id="resumeBtn" class="primary-btn">Resume</button>
+      </div>
+    </section>
+
+    <section id="gameOverScreen" class="screen">
+      <div class="panel">
+        <div class="badge danger">Game Over</div>
+        <h2>Run Complete</h2>
+        <p id="finalText">Score: 0</p>
+        <button id="restartBtn" class="primary-btn">Restart</button>
+      </div>
+    </section>
+
+    <div class="touch-controls" aria-label="Mobile controls">
+      <button id="slideBtn" type="button">Slide</button>
+      <button id="jumpBtn" type="button">Jump</button>
+    </div>
+
+    <div class="hint">
+      Space / ↑ = Jump &nbsp; • &nbsp; ↓ = Slide &nbsp; • &nbsp; P = Pause &nbsp; • &nbsp; M = Music
+    </div>
+
+    <audio id="bgMusic" preload="auto" loop></audio>
+  </main>
+
+  <script src="js/config.js"></script>
+  <script src="js/game.js"></script>
+</body>
+</html>
