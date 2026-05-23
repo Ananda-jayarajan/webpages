@@ -110,6 +110,8 @@ const assets = {
   player: new Image()
 };
 
+const obstacleImages = {};
+
 let playerImageLoaded = false;
 let playerImageFailed = false;
 let musicEnabled = localStorage.getItem("villupuramRunMusic") !== "off";
