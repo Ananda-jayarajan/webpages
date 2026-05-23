@@ -34,6 +34,22 @@ window.GAME_CONFIG = {
     hitboxPaddingBottom: 10
   },
 
+  audio: {
+    // Put your background song here:
+    // assets/audio/theme.mp3
+    src: "assets/audio/theme.mp3",
+
+    enabled: true,
+    volume: 0.45,
+    loop: true,
+
+    // Music pauses when you pause the game.
+    pauseWhenPaused: true,
+
+    // Music stops after game over.
+    continueAfterGameOver: false
+  },
+
   scoring: {
     distanceMultiplier: 0.055,
     voteValue: 10,
