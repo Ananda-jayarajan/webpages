@@ -20,6 +20,16 @@ button {
   font-family: inherit;
 }
 
+button,
+canvas {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  user-select: none;
+}
+
 #app {
   position: relative;
   width: 100vw;
