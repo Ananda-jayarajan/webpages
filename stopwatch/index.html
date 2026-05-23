@@ -20,6 +20,57 @@
       justify-content: center;
     }
 
+    /* Page Switcher */
+    .page-switcher {
+      position: fixed;
+      top: 26px;
+      right: 26px;
+      z-index: 1000;
+      display: flex;
+      gap: 10px;
+      background: rgba(33, 27, 37, 0.95);
+      padding: 8px;
+      border-radius: 20px;
+      border: 1px solid #2e2633;
+    }
+
+    .switcher-btn {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 16px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: transparent;
+      color: #cfc6d5;
+    }
+
+    .switcher-btn.active {
+      background: #764248;
+      color: #fff7f7;
+    }
+
+    .switcher-btn:hover {
+      background: rgba(118, 66, 72, 0.6);
+      color: #fff7f7;
+    }
+
+    /* Page Container */
+    .page {
+      display: none;
+      width: 100%;
+    }
+
+    .page.active {
+      display: flex;
+    }
+
+    /* ===== VERSION 1 STYLES ===== */
+    .page-v1 {
+      justify-content: center;
+    }
+
     .phone {
       width: 100%;
       max-width: 430px;
@@ -139,9 +190,172 @@
       border-radius: 28px;
     }
 
+    /* ===== VERSION 2 STYLES ===== */
+    .page-v2 {
+      justify-content: center;
+      align-items: center;
+    }
+
+    .v2-container {
+      width: 100%;
+      max-width: 600px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 20px;
+      position: relative;
+    }
+
+    .v2-header {
+      margin-bottom: 60px;
+      text-align: center;
+    }
+
+    .v2-logo {
+      font-size: 36px;
+      font-weight: 300;
+      letter-spacing: 2px;
+      color: #f1dff5;
+      margin: 0;
+    }
+
+    .v2-sublogo {
+      font-size: 12px;
+      letter-spacing: 1px;
+      color: #b89fbe;
+      margin-top: 4px;
+      font-weight: 400;
+    }
+
+    .v2-display-section {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .v2-main-time {
+      font-size: 120px;
+      font-weight: 300;
+      letter-spacing: -6px;
+      color: #ffffff;
+      line-height: 1;
+      margin: 0;
+      text-shadow: 0 0 40px rgba(118, 66, 72, 0.3);
+    }
+
+    .v2-current-time {
+      font-size: 18px;
+      color: #b89fbe;
+      margin-top: 16px;
+      letter-spacing: 0.5px;
+    }
+
+    .v2-button-group {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 50px;
+      flex-wrap: wrap;
+    }
+
+    .v2-primary-btn {
+      padding: 14px 40px;
+      border: none;
+      border-radius: 25px;
+      background: linear-gradient(135deg, #6d28d9 0%, #5e22c1 100%);
+      color: #ffffff;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      letter-spacing: 0.5px;
+    }
+
+    .v2-primary-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(109, 40, 217, 0.4);
+    }
+
+    .v2-secondary-btn {
+      padding: 14px 30px;
+      border: 2px solid #764248;
+      border-radius: 25px;
+      background: transparent;
+      color: #d8ccd9;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      letter-spacing: 0.5px;
+    }
+
+    .v2-secondary-btn:hover {
+      background: rgba(118, 66, 72, 0.2);
+      color: #f1dff5;
+    }
+
+    .v2-icon-btn {
+      width: 50px;
+      height: 50px;
+      border: 2px solid #764248;
+      border-radius: 50%;
+      background: transparent;
+      color: #d8ccd9;
+      font-size: 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .v2-icon-btn:hover {
+      background: rgba(118, 66, 72, 0.2);
+      color: #f1dff5;
+    }
+
+    .v2-stats {
+      margin-top: 60px;
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .v2-stat-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 20px;
+      border-bottom: 1px solid #2e2633;
+      color: #b89fbe;
+      font-size: 14px;
+    }
+
+    .v2-stat-row:last-child {
+      border-bottom: none;
+    }
+
+    .v2-stat-value {
+      color: #f1dff5;
+      font-weight: 500;
+    }
+
+    /* Responsive */
     @media (max-width: 420px) {
       .time {
         font-size: 72px;
+      }
+
+      .v2-main-time {
+        font-size: 90px;
+      }
+
+      .v2-container {
+        padding: 30px 16px;
+      }
+
+      .page-switcher {
+        top: 16px;
+        right: 16px;
       }
     }
   </style>
@@ -149,56 +363,126 @@
 
 <body>
 
-  <div class="phone">
-    <div class="top">
-      <h1>Stopwatch</h1>
-      <div class="menu">⋮</div>
+  <!-- Page Switcher -->
+  <div class="page-switcher">
+    <button class="switcher-btn active" data-version="v1">V1</button>
+    <button class="switcher-btn" data-version="v2">V2</button>
+  </div>
+
+  <!-- VERSION 1 -->
+  <div class="page page-v1 active" id="page-v1">
+    <div class="phone">
+      <div class="top">
+        <h1>Stopwatch</h1>
+        <div class="menu">⋮</div>
+      </div>
+
+      <div class="time" id="display-v1">00:00.00</div>
+
+      <button class="start-btn" id="startBtn-v1">Start</button>
+
+      <div class="controls" id="controls-v1">
+        <button class="small-btn reset" id="resetBtn-v1">Reset</button>
+        <button class="small-btn pause" id="pauseBtn-v1">Pause</button>
+      </div>
     </div>
 
-    <div class="time" id="display">00:00.00</div>
-
-    <button class="start-btn" id="startBtn">Start</button>
-
-    <div class="controls" id="controls">
-      <button class="small-btn reset" id="resetBtn">Reset</button>
-      <button class="small-btn pause" id="pauseBtn">Pause</button>
+    <div class="bottom-nav">
+      <div class="nav-item">
+        <span>⏰</span>
+        Alarms
+      </div>
+      <div class="nav-item">
+        <span>🌐</span>
+        World clock
+      </div>
+      <div class="nav-item">
+        <span>⌛</span>
+        Timers
+      </div>
+      <div class="nav-item active">
+        <span>⏱</span>
+        Stopwatch
+      </div>
+      <div class="nav-item">
+        <span>🛏</span>
+        Bedtime
+      </div>
     </div>
   </div>
 
-  <div class="bottom-nav">
-    <div class="nav-item">
-      <span>⏰</span>
-      Alarms
-    </div>
-    <div class="nav-item">
-      <span>🌐</span>
-      World clock
-    </div>
-    <div class="nav-item">
-      <span>⌛</span>
-      Timers
-    </div>
-    <div class="nav-item active">
-      <span>⏱</span>
-      Stopwatch
-    </div>
-    <div class="nav-item">
-      <span>🛏</span>
-      Bedtime
+  <!-- VERSION 2 -->
+  <div class="page page-v2" id="page-v2">
+    <div class="v2-container">
+      <div class="v2-header">
+        <h1 class="v2-logo">FLOCUS</h1>
+        <p class="v2-sublogo">BY GRIFI11</p>
+      </div>
+
+      <div class="v2-display-section">
+        <div class="v2-main-time" id="display-v2">00:37.50</div>
+        <div class="v2-current-time">Current: <span id="current-time-v2">00:08.4</span></div>
+      </div>
+
+      <div class="v2-button-group">
+        <button class="v2-primary-btn" id="startBtn-v2">Start</button>
+        <button class="v2-secondary-btn" id="lapBtn-v2" style="display: none;">Lap</button>
+        <button class="v2-icon-btn" id="refreshBtn-v2">↻</button>
+        <button class="v2-icon-btn" id="clockBtn-v2">🕐</button>
+      </div>
+
+      <div class="v2-stats">
+        <div class="v2-stat-row">
+          <span>Lap 10</span>
+          <span class="v2-stat-value">00:00.0</span>
+          <span class="v2-stat-value">00:29.0</span>
+        </div>
+        <div class="v2-stat-row">
+          <span>Lap 9</span>
+          <span class="v2-stat-value">00:00.1</span>
+          <span class="v2-stat-value">00:28.9</span>
+        </div>
+        <div class="v2-stat-row">
+          <span>Lap 8</span>
+          <span class="v2-stat-value">00:00.1</span>
+          <span class="v2-stat-value">00:28.7</span>
+        </div>
+        <div class="v2-stat-row">
+          <span>Lap 7</span>
+          <span class="v2-stat-value">00:00.0</span>
+          <span class="v2-stat-value">00:28.5</span>
+        </div>
+      </div>
     </div>
   </div>
 
   <script>
-    const display = document.getElementById("display");
-    const startBtn = document.getElementById("startBtn");
-    const controls = document.getElementById("controls");
-    const resetBtn = document.getElementById("resetBtn");
-    const pauseBtn = document.getElementById("pauseBtn");
+    // ===== PAGE SWITCHER =====
+    document.querySelectorAll('.switcher-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const version = e.target.dataset.version;
+        
+        // Update buttons
+        document.querySelectorAll('.switcher-btn').forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
+        
+        // Update pages
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(`page-${version}`).classList.add('active');
+      });
+    });
 
-    let startTime = 0;
-    let elapsedTime = 0;
-    let timer = null;
-    let running = false;
+    // ===== VERSION 1 STOPWATCH =====
+    const display_v1 = document.getElementById("display-v1");
+    const startBtn_v1 = document.getElementById("startBtn-v1");
+    const controls_v1 = document.getElementById("controls-v1");
+    const resetBtn_v1 = document.getElementById("resetBtn-v1");
+    const pauseBtn_v1 = document.getElementById("pauseBtn-v1");
+
+    let startTime_v1 = 0;
+    let elapsedTime_v1 = 0;
+    let timer_v1 = null;
+    let running_v1 = false;
 
     function formatTime(ms) {
       const totalCentiseconds = Math.floor(ms / 10);
@@ -214,52 +498,140 @@
       );
     }
 
-    function updateDisplay() {
+    function updateDisplay_v1() {
       const currentTime = Date.now();
-      elapsedTime = currentTime - startTime;
-      display.textContent = formatTime(elapsedTime);
+      elapsedTime_v1 = currentTime - startTime_v1;
+      display_v1.textContent = formatTime(elapsedTime_v1);
     }
 
-    function startTimer() {
-      startTime = Date.now() - elapsedTime;
-      timer = setInterval(updateDisplay, 10);
-      running = true;
+    function startTimer_v1() {
+      startTime_v1 = Date.now() - elapsedTime_v1;
+      timer_v1 = setInterval(updateDisplay_v1, 10);
+      running_v1 = true;
 
-      startBtn.style.display = "none";
-      controls.classList.add("show");
+      startBtn_v1.style.display = "none";
+      controls_v1.classList.add("show");
     }
 
-    function pauseTimer() {
-      clearInterval(timer);
-      running = false;
-      pauseBtn.textContent = "Resume";
+    function pauseTimer_v1() {
+      clearInterval(timer_v1);
+      running_v1 = false;
+      pauseBtn_v1.textContent = "Resume";
     }
 
-    function resumeTimer() {
-      startTime = Date.now() - elapsedTime;
-      timer = setInterval(updateDisplay, 10);
-      running = true;
-      pauseBtn.textContent = "Pause";
+    function resumeTimer_v1() {
+      startTime_v1 = Date.now() - elapsedTime_v1;
+      timer_v1 = setInterval(updateDisplay_v1, 10);
+      running_v1 = true;
+      pauseBtn_v1.textContent = "Pause";
     }
 
-    function resetTimer() {
-      clearInterval(timer);
-      elapsedTime = 0;
-      running = false;
-      display.textContent = "00:00.00";
+    function resetTimer_v1() {
+      clearInterval(timer_v1);
+      elapsedTime_v1 = 0;
+      running_v1 = false;
+      display_v1.textContent = "00:00.00";
 
-      startBtn.style.display = "block";
-      controls.classList.remove("show");
-      pauseBtn.textContent = "Pause";
+      startBtn_v1.style.display = "block";
+      controls_v1.classList.remove("show");
+      pauseBtn_v1.textContent = "Pause";
     }
 
-    startBtn.addEventListener("click", startTimer);
+    startBtn_v1.addEventListener("click", startTimer_v1);
+    pauseBtn_v1.addEventListener("click", () => {
+      running_v1 ? pauseTimer_v1() : resumeTimer_v1();
+    });
+    resetBtn_v1.addEventListener("click", resetTimer_v1);
 
-    pauseBtn.addEventListener("click", () => {
-      running ? pauseTimer() : resumeTimer();
+    // ===== VERSION 2 STOPWATCH =====
+    const display_v2 = document.getElementById("display-v2");
+    const currentTime_v2 = document.getElementById("current-time-v2");
+    const startBtn_v2 = document.getElementById("startBtn-v2");
+    const lapBtn_v2 = document.getElementById("lapBtn-v2");
+    const refreshBtn_v2 = document.getElementById("refreshBtn-v2");
+
+    let startTime_v2 = 0;
+    let elapsedTime_v2 = 0;
+    let timer_v2 = null;
+    let running_v2 = false;
+    let lapTime_v2 = 0;
+    let laps_v2 = [];
+
+    function formatTimeV2(ms) {
+      const totalCentiseconds = Math.floor(ms / 10);
+      const centiseconds = totalCentiseconds % 100;
+      const totalSeconds = Math.floor(totalCentiseconds / 100);
+      const seconds = totalSeconds % 60;
+      const minutes = Math.floor(totalSeconds / 60);
+
+      return (
+        String(minutes).padStart(2, "0") + ":" +
+        String(seconds).padStart(2, "0") + "." +
+        String(centiseconds).padStart(2, "0")
+      );
+    }
+
+    function updateDisplay_v2() {
+      const currentTime = Date.now();
+      elapsedTime_v2 = currentTime - startTime_v2;
+      display_v2.textContent = formatTimeV2(elapsedTime_v2);
+      currentTime_v2.textContent = formatTimeV2(elapsedTime_v2);
+    }
+
+    function startTimer_v2() {
+      startTime_v2 = Date.now() - elapsedTime_v2;
+      timer_v2 = setInterval(updateDisplay_v2, 10);
+      running_v2 = true;
+      startBtn_v2.textContent = "Stop";
+      lapBtn_v2.style.display = "inline-block";
+    }
+
+    function stopTimer_v2() {
+      clearInterval(timer_v2);
+      running_v2 = false;
+      startBtn_v2.textContent = "Resume";
+      lapBtn_v2.style.display = "none";
+    }
+
+    function resumeTimer_v2() {
+      startTime_v2 = Date.now() - elapsedTime_v2;
+      timer_v2 = setInterval(updateDisplay_v2, 10);
+      running_v2 = true;
+      startBtn_v2.textContent = "Stop";
+      lapBtn_v2.style.display = "inline-block";
+    }
+
+    function resetTimer_v2() {
+      clearInterval(timer_v2);
+      elapsedTime_v2 = 0;
+      running_v2 = false;
+      laps_v2 = [];
+      display_v2.textContent = "00:00.00";
+      currentTime_v2.textContent = "00:00.0";
+      startBtn_v2.textContent = "Start";
+      lapBtn_v2.style.display = "none";
+    }
+
+    function recordLap_v2() {
+      if (running_v2) {
+        const lapTime = elapsedTime_v2 - lapTime_v2;
+        laps_v2.push(lapTime);
+        lapTime_v2 = elapsedTime_v2;
+      }
+    }
+
+    startBtn_v2.addEventListener("click", () => {
+      if (!running_v2 && elapsedTime_v2 === 0) {
+        startTimer_v2();
+      } else if (running_v2) {
+        stopTimer_v2();
+      } else {
+        resumeTimer_v2();
+      }
     });
 
-    resetBtn.addEventListener("click", resetTimer);
+    lapBtn_v2.addEventListener("click", recordLap_v2);
+    refreshBtn_v2.addEventListener("click", resetTimer_v2);
   </script>
 
 </body>
