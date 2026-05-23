@@ -818,29 +818,32 @@ function drawPlayer() {
 }
 
 function drawPlayerImage() {
-  const runBob = player.grounded && !player.sliding ? Math.sin(player.runFrame * Math.PI * 2) * 2.2 : 0;
-  const tilt = player.sliding ? 0.18 : (!player.grounded ? -0.08 : Math.sin(player.runFrame) * 0.025);
+  /*
+    Stable image mode:
+    - No running bobbing.
+    - No automatic rotation.
+    - No frame-to-frame shake.
+    The image only moves when the player jumps or slides.
+  */
 
   ctx.save();
 
   const drawX = player.x;
-  const drawY = player.sliding ? groundY - player.normalHeight + 18 : player.y + runBob;
+  const drawY = player.sliding
+    ? groundY - player.normalHeight + 18
+    : player.y;
+
   const drawWidth = player.normalWidth;
   const drawHeight = player.normalHeight;
 
-  ctx.translate(drawX + drawWidth / 2, drawY + drawHeight / 2);
-  ctx.rotate(tilt);
-  ctx.translate(-drawWidth / 2, -drawHeight / 2);
+  ctx.shadowColor = "rgba(0, 0, 0, 0.35)";
+  ctx.shadowBlur = 10;
+  ctx.shadowOffsetY = 6;
 
-  ctx.shadowColor = "rgba(0, 0, 0, 0.45)";
-  ctx.shadowBlur = 14;
-  ctx.shadowOffsetY = 8;
-
-  ctx.drawImage(assets.player, 0, 0, drawWidth, drawHeight);
+  ctx.drawImage(assets.player, drawX, drawY, drawWidth, drawHeight);
 
   ctx.restore();
 }
-
 function drawCharacterShadow(x, y) {
   ctx.save();
   ctx.globalAlpha = 0.24;
