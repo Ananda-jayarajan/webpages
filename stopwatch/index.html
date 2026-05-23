@@ -197,47 +197,23 @@
       justify-content: center;
       align-items: center;
       flex-direction: column;
-      background: linear-gradient(135deg, #0a0e27 0%, #1a0f2e 50%, #2d1a3d 100%);
-      transition: background 0.6s ease;
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
       position: relative;
       overflow: hidden;
     }
 
-    /* Animated background elements */
     .page-v2::before {
       content: '';
       position: absolute;
-      top: -50%;
-      right: -50%;
-      width: 500px;
-      height: 500px;
-      background: radial-gradient(circle, rgba(216, 133, 159, 0.15) 0%, transparent 70%);
-      border-radius: 50%;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.25);
       pointer-events: none;
-      animation: float 20s ease-in-out infinite;
-    }
-
-    .page-v2::after {
-      content: '';
-      position: absolute;
-      bottom: -30%;
-      left: -30%;
-      width: 400px;
-      height: 400px;
-      background: radial-gradient(circle, rgba(127, 185, 127, 0.1) 0%, transparent 70%);
-      border-radius: 50%;
-      pointer-events: none;
-      animation: float-reverse 25s ease-in-out infinite;
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translate(0, 0); }
-      50% { transform: translate(50px, -50px); }
-    }
-
-    @keyframes float-reverse {
-      0%, 100% { transform: translate(0, 0); }
-      50% { transform: translate(-50px, 50px); }
+      z-index: 1;
     }
 
     .v2-top-controls {
@@ -256,7 +232,7 @@
       font-weight: 600;
       letter-spacing: 3px;
       color: #ffffff;
-      text-shadow: 0 2px 10px rgba(255, 255, 255, 0.1);
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
     }
 
     .theme-selector {
@@ -272,7 +248,7 @@
       border: 2px solid transparent;
       transition: all 0.3s ease;
       opacity: 0.6;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     }
 
     .theme-dot:hover {
@@ -302,7 +278,7 @@
 
     .v2-quote {
       font-size: 18px;
-      color: rgba(255, 255, 255, 0.7);
+      color: rgba(255, 255, 255, 0.95);
       margin-bottom: 80px;
       font-style: italic;
       letter-spacing: 0.5px;
@@ -310,6 +286,7 @@
       min-height: 60px;
       font-weight: 300;
       max-width: 500px;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
     }
 
     .v2-display-section {
@@ -324,25 +301,27 @@
       line-height: 0.85;
       margin: 0;
       font-family: 'Courier New', monospace;
-      text-shadow: 0 4px 30px rgba(216, 133, 159, 0.3);
+      text-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
     }
 
     .v2-subsecond {
       font-size: 80px;
-      color: rgba(255, 255, 255, 0.6);
+      color: rgba(255, 255, 255, 0.9);
       margin-top: 5px;
       letter-spacing: -2px;
       font-family: 'Courier New', monospace;
       font-weight: 300;
+      text-shadow: 0 2px 15px rgba(0, 0, 0, 0.5);
     }
 
     .v2-mode-display {
       font-size: 14px;
-      color: rgba(255, 255, 255, 0.5);
+      color: rgba(255, 255, 255, 0.85);
       letter-spacing: 3px;
       margin-top: 25px;
       text-transform: uppercase;
       font-weight: 600;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
     }
 
     .v2-button-group {
@@ -357,16 +336,17 @@
       padding: 18px 60px;
       border: none;
       border-radius: 60px;
-      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      background: rgba(99, 102, 241, 0.85);
       color: #ffffff;
       font-size: 18px;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       letter-spacing: 1.5px;
-      box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
       position: relative;
       overflow: hidden;
+      backdrop-filter: blur(10px);
     }
 
     .v2-main-btn::before {
@@ -382,7 +362,7 @@
 
     .v2-main-btn:hover {
       transform: translateY(-4px);
-      box-shadow: 0 15px 45px rgba(99, 102, 241, 0.5);
+      box-shadow: 0 15px 45px rgba(0, 0, 0, 0.4);
     }
 
     .v2-main-btn:hover::before {
@@ -399,9 +379,9 @@
 
     .v2-secondary-btn {
       padding: 16px 50px;
-      border: 2px solid rgba(255, 255, 255, 0.3);
+      border: 2px solid rgba(255, 255, 255, 0.4);
       border-radius: 60px;
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(255, 255, 255, 0.1);
       color: #ffffff;
       font-size: 18px;
       font-weight: 600;
@@ -409,13 +389,14 @@
       transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       letter-spacing: 1.5px;
       backdrop-filter: blur(10px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
     }
 
     .v2-secondary-btn:hover {
-      background: rgba(255, 255, 255, 0.1);
-      border-color: rgba(255, 255, 255, 0.5);
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.6);
       transform: translateY(-4px);
-      box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     }
 
     .v2-secondary-btn:active {
@@ -436,9 +417,9 @@
     .v2-icon-btn {
       width: 70px;
       height: 70px;
-      border: 2px solid rgba(255, 255, 255, 0.3);
+      border: 2px solid rgba(255, 255, 255, 0.4);
       border-radius: 50%;
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(255, 255, 255, 0.1);
       color: #ffffff;
       font-size: 28px;
       cursor: pointer;
@@ -448,13 +429,14 @@
       transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       backdrop-filter: blur(10px);
       font-weight: 500;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
     }
 
     .v2-icon-btn:hover:not(.disabled) {
-      background: rgba(255, 255, 255, 0.15);
-      border-color: rgba(255, 255, 255, 0.6);
+      background: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.7);
       transform: scale(1.1);
-      box-shadow: 0 8px 25px rgba(255, 255, 255, 0.1);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
     }
 
     .v2-icon-btn:active:not(.disabled) {
@@ -464,24 +446,24 @@
     .v2-icon-btn.disabled {
       opacity: 0.4;
       cursor: not-allowed;
-      border-color: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.15);
     }
 
     .v2-laps {
       width: 100%;
       max-width: 450px;
       margin-top: 40px;
-      background: rgba(255, 255, 255, 0.03);
+      background: rgba(0, 0, 0, 0.3);
       backdrop-filter: blur(10px);
       border-radius: 20px;
       padding: 30px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.15);
     }
 
     .v2-laps-title {
       font-size: 14px;
       letter-spacing: 2px;
-      color: rgba(255, 255, 255, 0.6);
+      color: rgba(255, 255, 255, 0.85);
       text-transform: uppercase;
       margin-bottom: 25px;
       font-weight: 600;
@@ -491,8 +473,8 @@
       display: flex;
       justify-content: space-between;
       padding: 15px 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      color: rgba(255, 255, 255, 0.8);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      color: rgba(255, 255, 255, 0.9);
       font-size: 15px;
       font-family: 'Courier New', monospace;
       font-weight: 400;
@@ -501,7 +483,7 @@
 
     .v2-lap-item:hover {
       color: #ffffff;
-      background: rgba(255, 255, 255, 0.03);
+      background: rgba(255, 255, 255, 0.05);
       margin: 0 -10px;
       padding-left: 10px;
       padding-right: 10px;
@@ -513,7 +495,7 @@
     }
 
     .v2-lap-number {
-      color: rgba(255, 255, 255, 0.5);
+      color: rgba(255, 255, 255, 0.75);
       min-width: 70px;
       text-align: left;
       font-weight: 500;
@@ -528,7 +510,7 @@
 
     /* Theme Backgrounds */
     .v2-theme-1 {
-      background: linear-gradient(135deg, #0a0e27 0%, #1a0f2e 50%, #2d1a3d 100%);
+      background: linear-gradient(180deg, #1a3a52 0%, #2d5873 25%, #ff7a5c 45%, #ffb380 65%, #ffe6cc 100%);
     }
 
     .v2-theme-2 {
@@ -710,7 +692,7 @@
     <div class="v2-top-controls">
       <div class="v2-title">FOCUS</div>
       <div class="theme-selector" id="themeSelector">
-        <div class="theme-dot active" data-theme="1" style="background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);"></div>
+        <div class="theme-dot active" data-theme="1" style="background: linear-gradient(135deg, #ff7a5c 0%, #ffb380 100%);"></div>
         <div class="theme-dot" data-theme="2" style="background: linear-gradient(135deg, #10b981 0%, #34d399 100%);"></div>
         <div class="theme-dot" data-theme="3" style="background: linear-gradient(135deg, #f97316 0%, #fb923c 100%);"></div>
         <div class="theme-dot" data-theme="4" style="background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);"></div>
