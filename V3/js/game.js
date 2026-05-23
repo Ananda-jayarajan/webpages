@@ -906,17 +906,48 @@ function drawFallbackPlayer() {
 
 function drawObstacles() {
   for (const obstacle of obstacles) {
-    const pulse = Math.sin(elapsed * 6 + obstacle.pulse) * 0.08 + 1;
-
     ctx.save();
-    ctx.translate(obstacle.x + obstacle.width / 2, obstacle.y + obstacle.height / 2);
-    ctx.scale(pulse, pulse);
-    ctx.translate(-obstacle.width / 2, -obstacle.height / 2);
 
-    ctx.fillStyle = obstacle.color;
+    ctx.translate(
+      obstacle.x + obstacle.width / 2,
+      obstacle.y + obstacle.height / 2
+    );
+
+    ctx.translate(
+      -obstacle.width / 2,
+      -obstacle.height / 2
+    );
+
+    if (obstacle.image) {
+      if (!obstacleImages[obstacle.image]) {
+        obstacleImages[obstacle.image] = new Image();
+        obstacleImages[obstacle.image].src = obstacle.image;
+      }
+
+      const img = obstacleImages[obstacle.image];
+
+      if (img.complete && img.naturalWidth > 0) {
+        ctx.shadowColor = "rgba(0, 0, 0, 0.35)";
+        ctx.shadowBlur = 12;
+        ctx.shadowOffsetY = 6;
+
+        ctx.drawImage(
+          img,
+          0,
+          0,
+          obstacle.width,
+          obstacle.height
+        );
+
+        ctx.restore();
+        continue;
+      }
+    }
+
+    ctx.fillStyle = obstacle.color || "#e84d5b";
     ctx.strokeStyle = "rgba(255,255,255,0.88)";
     ctx.lineWidth = 3;
-    ctx.shadowColor = obstacle.color;
+    ctx.shadowColor = obstacle.color || "#e84d5b";
     ctx.shadowBlur = 18;
 
     ctx.beginPath();
@@ -925,16 +956,15 @@ function drawObstacles() {
     ctx.stroke();
 
     ctx.shadowBlur = 0;
-    ctx.fillStyle = "rgba(255,255,255,0.9)";
-    ctx.beginPath();
-    ctx.roundRect(10, 10, obstacle.width - 20, obstacle.height - 20, 10);
-    ctx.fill();
-
     ctx.fillStyle = "#111";
-    ctx.font = "900 13px Arial";
+    ctx.font = "900 18px Arial";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillText(obstacle.label, obstacle.width / 2, obstacle.height / 2);
+    ctx.fillText(
+      obstacle.label || "OBS",
+      obstacle.width / 2,
+      obstacle.height / 2
+    );
 
     ctx.restore();
   }
