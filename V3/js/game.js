@@ -70,7 +70,12 @@ const finalText = document.getElementById("finalText");
 const startScreen = document.getElementById("startScreen");
 const pauseScreen = document.getElementById("pauseScreen");
 const gameOverScreen = document.getElementById("gameOverScreen");
-
+const startBtn = document.getElementById("startBtn");
+const restartBtn = document.getElementById("restartBtn");
+const resumeBtn = document.getElementById("resumeBtn");
+const jumpBtn = document.getElementById("jumpBtn");
+const slideBtn = document.getElementById("slideBtn");
+const musicBtn = document.getElementById("musicBtn");
 
 function fastButton(button, action) {
   button.addEventListener("pointerdown", event => {
@@ -1082,13 +1087,6 @@ function initGame() {
   setupAudio();
   resetGame();
   render();
-
-  startBtn.addEventListener("click", startGame);
-  restartBtn.addEventListener("click", restartGame);
-  resumeBtn.addEventListener("click", togglePause);
-  jumpBtn.addEventListener("click", jump);
-  slideBtn.addEventListener("click", slide);
-  musicBtn.addEventListener("click", toggleMusic);
 
   window.addEventListener("resize", () => {
     resizeCanvas();
