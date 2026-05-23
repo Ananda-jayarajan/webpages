@@ -529,6 +529,307 @@
       background: linear-gradient(135deg, #0f0a1f 0%, #1f0a2d 50%, #2a1a3d 100%);
     }
 
+    /* ===== VERSION 3 STYLES (Clean Minimal) ===== */
+    .page-v3 {
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      background: #0f0f0f;
+      position: relative;
+      padding: 40px 20px;
+    }
+
+    .v3-header {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      right: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .v3-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #ffffff;
+      letter-spacing: 2px;
+    }
+
+    .dropdown-menu {
+      position: relative;
+    }
+
+    .dropdown-toggle {
+      width: 40px;
+      height: 40px;
+      border: none;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .dropdown-toggle:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 50px;
+      background: rgba(20, 20, 20, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      min-width: 200px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+      z-index: 1001;
+      overflow: hidden;
+    }
+
+    .dropdown-content.active {
+      display: block;
+    }
+
+    .dropdown-item {
+      padding: 12px 16px;
+      color: #ffffff;
+      border: none;
+      background: none;
+      cursor: pointer;
+      width: 100%;
+      text-align: left;
+      font-size: 14px;
+      transition: all 0.2s ease;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .dropdown-item:last-child {
+      border-bottom: none;
+    }
+
+    .dropdown-item:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .v3-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-top: 40px;
+      flex: 1;
+    }
+
+    .v3-display {
+      font-size: 120px;
+      font-weight: 300;
+      color: #ffffff;
+      font-family: 'Courier New', monospace;
+      letter-spacing: -3px;
+      margin-bottom: 40px;
+      text-shadow: 0 2px 20px rgba(255, 255, 255, 0.1);
+    }
+
+    .v3-controls {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      margin-bottom: 30px;
+    }
+
+    .v3-btn {
+      padding: 15px 40px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50px;
+      background: transparent;
+      color: #ffffff;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      letter-spacing: 1px;
+    }
+
+    .v3-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.6);
+    }
+
+    .v3-btn-primary {
+      border-color: #4ade80;
+      color: #4ade80;
+    }
+
+    .v3-btn-primary:hover {
+      background: rgba(74, 222, 128, 0.1);
+      border-color: #86efac;
+    }
+
+    .v3-lap-list {
+      width: 100%;
+      max-width: 400px;
+      margin-top: 30px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 20px;
+      max-height: 300px;
+      overflow-y: auto;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .v3-lap-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      color: rgba(255, 255, 255, 0.9);
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+    }
+
+    .v3-lap-item:last-child {
+      border-bottom: none;
+    }
+
+    /* ===== VERSION 4 STYLES (Digital / Retro) ===== */
+    .page-v4 {
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      background: radial-gradient(ellipse at center, #1a1a2e 0%, #0f0f1e 100%);
+      position: relative;
+      padding: 40px 20px;
+    }
+
+    .v4-header {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      right: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .v4-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #00ff00;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      font-family: 'Courier New', monospace;
+    }
+
+    .v4-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-top: 40px;
+      flex: 1;
+    }
+
+    .v4-display {
+      font-size: 140px;
+      font-weight: 700;
+      color: #00ff00;
+      font-family: 'Courier New', monospace;
+      letter-spacing: -5px;
+      margin-bottom: 50px;
+      text-shadow: 0 0 20px #00ff00, 0 0 40px rgba(0, 255, 0, 0.3);
+      animation: v4-glow 2s ease-in-out infinite;
+    }
+
+    @keyframes v4-glow {
+      0%, 100% {
+        text-shadow: 0 0 20px #00ff00, 0 0 40px rgba(0, 255, 0, 0.3);
+      }
+      50% {
+        text-shadow: 0 0 30px #00ff00, 0 0 60px rgba(0, 255, 0, 0.5);
+      }
+    }
+
+    .v4-subseconds {
+      font-size: 50px;
+      color: #00ff00;
+      font-family: 'Courier New', monospace;
+      letter-spacing: -2px;
+      margin-bottom: 60px;
+      opacity: 0.8;
+    }
+
+    .v4-controls {
+      display: flex;
+      gap: 30px;
+      justify-content: center;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+    }
+
+    .v4-btn {
+      padding: 12px 35px;
+      border: 2px solid #00ff00;
+      border-radius: 4px;
+      background: transparent;
+      color: #00ff00;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      letter-spacing: 1px;
+      font-family: 'Courier New', monospace;
+      text-transform: uppercase;
+    }
+
+    .v4-btn:hover {
+      background: #00ff00;
+      color: #000000;
+      text-shadow: 0 0 10px #00ff00;
+    }
+
+    .v4-btn:active {
+      transform: scale(0.98);
+    }
+
+    .v4-lap-list {
+      width: 100%;
+      max-width: 400px;
+      margin-top: 40px;
+      background: rgba(0, 255, 0, 0.05);
+      border: 2px solid rgba(0, 255, 0, 0.3);
+      border-radius: 4px;
+      padding: 20px;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .v4-lap-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(0, 255, 0, 0.2);
+      color: #00ff00;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .v4-lap-item:last-child {
+      border-bottom: none;
+    }
+
     /* Responsive */
     @media (max-width: 768px) {
       .v2-main-time {
@@ -575,6 +876,18 @@
       .v2-button-group {
         gap: 15px;
         margin-bottom: 40px;
+      }
+
+      .v3-display {
+        font-size: 80px;
+      }
+
+      .v4-display {
+        font-size: 100px;
+      }
+
+      .v4-subseconds {
+        font-size: 35px;
       }
     }
 
@@ -633,6 +946,32 @@
       .v2-title {
         font-size: 16px;
       }
+
+      .v3-display {
+        font-size: 60px;
+      }
+
+      .v3-controls {
+        gap: 10px;
+      }
+
+      .v3-btn {
+        padding: 12px 30px;
+        font-size: 14px;
+      }
+
+      .v4-display {
+        font-size: 70px;
+      }
+
+      .v4-subseconds {
+        font-size: 25px;
+      }
+
+      .v4-btn {
+        padding: 10px 25px;
+        font-size: 12px;
+      }
     }
   </style>
 </head>
@@ -643,6 +982,8 @@
   <div class="page-switcher">
     <button class="switcher-btn active" data-version="v1">V1</button>
     <button class="switcher-btn" data-version="v2">V2</button>
+    <button class="switcher-btn" data-version="v3">V3</button>
+    <button class="switcher-btn" data-version="v4">V4</button>
   </div>
 
   <!-- VERSION 1 -->
@@ -728,6 +1069,65 @@
     </div>
   </div>
 
+  <!-- VERSION 3 (Clean Minimal) -->
+  <div class="page page-v3" id="page-v3">
+    <div class="v3-header">
+      <div class="v3-title">STOPWATCH</div>
+      <div class="dropdown-menu">
+        <button class="dropdown-toggle" id="dropdownToggle-v3">⋮</button>
+        <div class="dropdown-content" id="dropdownContent-v3">
+          <button class="dropdown-item" onclick="resetTimer_v3()">Reset</button>
+          <button class="dropdown-item" onclick="clearLaps_v3()">Clear Laps</button>
+          <button class="dropdown-item" onclick="exportLaps_v3()">Export</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="v3-container">
+      <div class="v3-display" id="display-v3">00:00.00</div>
+
+      <div class="v3-controls">
+        <button class="v3-btn v3-btn-primary" id="startBtn-v3">Start</button>
+        <button class="v3-btn" id="pauseBtn-v3" style="display: none;">Pause</button>
+        <button class="v3-btn" id="lapBtn-v3" style="display: none;">Lap</button>
+      </div>
+
+      <div class="v3-lap-list" id="lapList-v3" style="display: none;">
+        <div id="lapsContainer-v3"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VERSION 4 (Digital/Retro) -->
+  <div class="page page-v4" id="page-v4">
+    <div class="v4-header">
+      <div class="v4-title">⏱ CHRONO</div>
+      <div class="dropdown-menu">
+        <button class="dropdown-toggle" id="dropdownToggle-v4">⋮</button>
+        <div class="dropdown-content" id="dropdownContent-v4">
+          <button class="dropdown-item" onclick="resetTimer_v4()">Reset</button>
+          <button class="dropdown-item" onclick="clearLaps_v4()">Clear Laps</button>
+          <button class="dropdown-item" onclick="exportLaps_v4()">Export</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="v4-container">
+      <div class="v4-display" id="display-v4">00:00</div>
+      <div class="v4-subseconds" id="subsecond-v4">.00</div>
+
+      <div class="v4-controls">
+        <button class="v4-btn" id="startBtn-v4">Start</button>
+        <button class="v4-btn" id="pauseBtn-v4" style="display: none;">Pause</button>
+        <button class="v4-btn" id="lapBtn-v4" style="display: none;">Lap</button>
+      </div>
+
+      <div class="v4-lap-list" id="lapList-v4" style="display: none;">
+        <div id="lapsContainer-v4"></div>
+      </div>
+    </div>
+  </div>
+
   <script>
     const quotes = [
       "\"The only way to do great work is to love what you do.\" — Steve Jobs",
@@ -750,7 +1150,28 @@
         
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById(`page-${version}`).classList.add('active');
+        
+        // Close dropdowns
+        document.querySelectorAll('.dropdown-content').forEach(d => d.classList.remove('active'));
       });
+    });
+
+    // ===== DROPDOWN MENU =====
+    document.querySelectorAll('.dropdown-toggle').forEach(toggle => {
+      toggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const dropdown = toggle.nextElementSibling;
+        document.querySelectorAll('.dropdown-content').forEach(d => {
+          if (d !== dropdown) d.classList.remove('active');
+        });
+        dropdown.classList.toggle('active');
+      });
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.dropdown-menu')) {
+        document.querySelectorAll('.dropdown-content').forEach(d => d.classList.remove('active'));
+      }
     });
 
     // ===== THEME SELECTOR =====
@@ -772,21 +1193,9 @@
       document.getElementById('quoteDisplay').textContent = randomQuote;
     }
 
-    // Update quote on page load
     updateQuote();
 
-    // ===== VERSION 1 STOPWATCH =====
-    const display_v1 = document.getElementById("display-v1");
-    const startBtn_v1 = document.getElementById("startBtn-v1");
-    const controls_v1 = document.getElementById("controls-v1");
-    const resetBtn_v1 = document.getElementById("resetBtn-v1");
-    const pauseBtn_v1 = document.getElementById("pauseBtn-v1");
-
-    let startTime_v1 = 0;
-    let elapsedTime_v1 = 0;
-    let timer_v1 = null;
-    let running_v1 = false;
-
+    // ===== FORMATTER FUNCTIONS =====
     function formatTime(ms) {
       const totalCentiseconds = Math.floor(ms / 10);
       const centiseconds = totalCentiseconds % 100;
@@ -800,6 +1209,37 @@
         String(centiseconds).padStart(2, "0")
       );
     }
+
+    function formatTimeWithoutCentiseconds(ms) {
+      const totalCentiseconds = Math.floor(ms / 10);
+      const totalSeconds = Math.floor(totalCentiseconds / 100);
+      const seconds = totalSeconds % 60;
+      const minutes = Math.floor(totalSeconds / 60);
+      const hours = Math.floor(minutes / 60);
+
+      if (hours > 0) {
+        return String(hours).padStart(2, "0") + ":" + String(minutes % 60).padStart(2, "0") + ":" + String(seconds).padStart(2, "0");
+      }
+      return String(minutes).padStart(2, "0") + ":" + String(seconds).padStart(2, "0");
+    }
+
+    function formatCentiseconds(ms) {
+      const totalCentiseconds = Math.floor(ms / 10);
+      const centiseconds = totalCentiseconds % 100;
+      return String(centiseconds).padStart(2, "0");
+    }
+
+    // ===== VERSION 1 STOPWATCH =====
+    const display_v1 = document.getElementById("display-v1");
+    const startBtn_v1 = document.getElementById("startBtn-v1");
+    const controls_v1 = document.getElementById("controls-v1");
+    const resetBtn_v1 = document.getElementById("resetBtn-v1");
+    const pauseBtn_v1 = document.getElementById("pauseBtn-v1");
+
+    let startTime_v1 = 0;
+    let elapsedTime_v1 = 0;
+    let timer_v1 = null;
+    let running_v1 = false;
 
     function updateDisplay_v1() {
       const currentTime = Date.now();
@@ -846,7 +1286,7 @@
     });
     resetBtn_v1.addEventListener("click", resetTimer_v1);
 
-    // ===== VERSION 2 AESTHETIC STOPWATCH =====
+    // ===== VERSION 2 STOPWATCH =====
     const display_v2 = document.getElementById("display-v2");
     const subsecond_v2 = document.getElementById("subsecond-v2");
     const startBtn_v2 = document.getElementById("startBtn-v2");
@@ -863,30 +1303,10 @@
     let laps_v2 = [];
     let lastLapTime_v2 = 0;
 
-    function formatTimeV2(ms) {
-      const totalCentiseconds = Math.floor(ms / 10);
-      const centiseconds = totalCentiseconds % 100;
-      const totalSeconds = Math.floor(totalCentiseconds / 100);
-      const seconds = totalSeconds % 60;
-      const minutes = Math.floor(totalSeconds / 60);
-      const hours = Math.floor(minutes / 60);
-
-      if (hours > 0) {
-        return String(hours).padStart(2, "0") + ":" + String(minutes % 60).padStart(2, "0") + ":" + String(seconds).padStart(2, "0");
-      }
-      return String(minutes).padStart(2, "0") + ":" + String(seconds).padStart(2, "0");
-    }
-
-    function formatCentiseconds(ms) {
-      const totalCentiseconds = Math.floor(ms / 10);
-      const centiseconds = totalCentiseconds % 100;
-      return String(centiseconds).padStart(2, "0");
-    }
-
     function updateDisplay_v2() {
       const currentTime = Date.now();
       elapsedTime_v2 = currentTime - startTime_v2;
-      display_v2.textContent = formatTimeV2(elapsedTime_v2);
+      display_v2.textContent = formatTimeWithoutCentiseconds(elapsedTime_v2);
       subsecond_v2.textContent = "." + formatCentiseconds(elapsedTime_v2);
     }
 
@@ -924,15 +1344,15 @@
         lastLapTime_v2 = elapsedTime_v2;
         
         lapsTitle.style.display = 'block';
-        renderLaps();
+        renderLaps_v2();
       }
     }
 
-    function renderLaps() {
+    function renderLaps_v2() {
       lapsList.innerHTML = laps_v2.map((lap, idx) => `
         <div class="v2-lap-item">
           <span class="v2-lap-number">Lap ${lap.number}</span>
-          <span class="v2-lap-time">${formatTimeV2(lap.time)}</span>
+          <span class="v2-lap-time">${formatTimeWithoutCentiseconds(lap.time)}</span>
         </div>
       `).join('');
     }
@@ -965,8 +1385,232 @@
     lapBtn_v2.addEventListener("click", recordLap_v2);
     resetBtn_v2.addEventListener("click", resetTimer_v2);
 
-    // Set initial lap button state
     lapBtn_v2.classList.add('disabled');
+
+    // ===== VERSION 3 STOPWATCH =====
+    const display_v3 = document.getElementById("display-v3");
+    const startBtn_v3 = document.getElementById("startBtn-v3");
+    const pauseBtn_v3 = document.getElementById("pauseBtn-v3");
+    const lapBtn_v3 = document.getElementById("lapBtn-v3");
+    const lapList_v3 = document.getElementById("lapList-v3");
+    const lapsContainer_v3 = document.getElementById("lapsContainer-v3");
+
+    let startTime_v3 = 0;
+    let elapsedTime_v3 = 0;
+    let timer_v3 = null;
+    let running_v3 = false;
+    let laps_v3 = [];
+    let lastLapTime_v3 = 0;
+
+    function updateDisplay_v3() {
+      const currentTime = Date.now();
+      elapsedTime_v3 = currentTime - startTime_v3;
+      display_v3.textContent = formatTime(elapsedTime_v3);
+    }
+
+    function startTimer_v3() {
+      startTime_v3 = Date.now() - elapsedTime_v3;
+      timer_v3 = setInterval(updateDisplay_v3, 10);
+      running_v3 = true;
+
+      startBtn_v3.style.display = "none";
+      pauseBtn_v3.style.display = "inline-block";
+      lapBtn_v3.style.display = "inline-block";
+      lapList_v3.style.display = "block";
+    }
+
+    function pauseTimer_v3() {
+      clearInterval(timer_v3);
+      running_v3 = false;
+      pauseBtn_v3.textContent = "Resume";
+    }
+
+    function resumeTimer_v3() {
+      startTime_v3 = Date.now() - elapsedTime_v3;
+      timer_v3 = setInterval(updateDisplay_v3, 10);
+      running_v3 = true;
+      pauseBtn_v3.textContent = "Pause";
+    }
+
+    function recordLap_v3() {
+      if (running_v3) {
+        const lapTime = elapsedTime_v3 - lastLapTime_v3;
+        laps_v3.unshift({
+          number: laps_v3.length + 1,
+          time: lapTime
+        });
+        lastLapTime_v3 = elapsedTime_v3;
+        renderLaps_v3();
+      }
+    }
+
+    function renderLaps_v3() {
+      lapsContainer_v3.innerHTML = laps_v3.map((lap, idx) => `
+        <div class="v3-lap-item">
+          <span>Lap ${lap.number}</span>
+          <span>${formatTime(lap.time)}</span>
+        </div>
+      `).join('');
+    }
+
+    function resetTimer_v3() {
+      clearInterval(timer_v3);
+      elapsedTime_v3 = 0;
+      running_v3 = false;
+      laps_v3 = [];
+      lastLapTime_v3 = 0;
+      
+      display_v3.textContent = "00:00.00";
+      startBtn_v3.style.display = "inline-block";
+      pauseBtn_v3.style.display = "none";
+      lapBtn_v3.style.display = "none";
+      lapList_v3.style.display = "none";
+      lapsContainer_v3.innerHTML = '';
+      pauseBtn_v3.textContent = "Pause";
+    }
+
+    function clearLaps_v3() {
+      laps_v3 = [];
+      lastLapTime_v3 = elapsedTime_v3;
+      lapsContainer_v3.innerHTML = '';
+    }
+
+    function exportLaps_v3() {
+      if (laps_v3.length === 0) {
+        alert("No laps to export");
+        return;
+      }
+      let data = "LAP DATA\n";
+      laps_v3.forEach(lap => {
+        data += `Lap ${lap.number}: ${formatTime(lap.time)}\n`;
+      });
+      const blob = new Blob([data], { type: 'text/plain' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'stopwatch-laps.txt';
+      a.click();
+    }
+
+    startBtn_v3.addEventListener("click", startTimer_v3);
+    pauseBtn_v3.addEventListener("click", () => {
+      running_v3 ? pauseTimer_v3() : resumeTimer_v3();
+    });
+    lapBtn_v3.addEventListener("click", recordLap_v3);
+
+    // ===== VERSION 4 STOPWATCH =====
+    const display_v4 = document.getElementById("display-v4");
+    const subsecond_v4 = document.getElementById("subsecond-v4");
+    const startBtn_v4 = document.getElementById("startBtn-v4");
+    const pauseBtn_v4 = document.getElementById("pauseBtn-v4");
+    const lapBtn_v4 = document.getElementById("lapBtn-v4");
+    const lapList_v4 = document.getElementById("lapList-v4");
+    const lapsContainer_v4 = document.getElementById("lapsContainer-v4");
+
+    let startTime_v4 = 0;
+    let elapsedTime_v4 = 0;
+    let timer_v4 = null;
+    let running_v4 = false;
+    let laps_v4 = [];
+    let lastLapTime_v4 = 0;
+
+    function updateDisplay_v4() {
+      const currentTime = Date.now();
+      elapsedTime_v4 = currentTime - startTime_v4;
+      display_v4.textContent = formatTimeWithoutCentiseconds(elapsedTime_v4);
+      subsecond_v4.textContent = "." + formatCentiseconds(elapsedTime_v4);
+    }
+
+    function startTimer_v4() {
+      startTime_v4 = Date.now() - elapsedTime_v4;
+      timer_v4 = setInterval(updateDisplay_v4, 10);
+      running_v4 = true;
+
+      startBtn_v4.style.display = "none";
+      pauseBtn_v4.style.display = "inline-block";
+      lapBtn_v4.style.display = "inline-block";
+      lapList_v4.style.display = "block";
+    }
+
+    function pauseTimer_v4() {
+      clearInterval(timer_v4);
+      running_v4 = false;
+      pauseBtn_v4.textContent = "RESUME";
+    }
+
+    function resumeTimer_v4() {
+      startTime_v4 = Date.now() - elapsedTime_v4;
+      timer_v4 = setInterval(updateDisplay_v4, 10);
+      running_v4 = true;
+      pauseBtn_v4.textContent = "PAUSE";
+    }
+
+    function recordLap_v4() {
+      if (running_v4) {
+        const lapTime = elapsedTime_v4 - lastLapTime_v4;
+        laps_v4.unshift({
+          number: laps_v4.length + 1,
+          time: lapTime
+        });
+        lastLapTime_v4 = elapsedTime_v4;
+        renderLaps_v4();
+      }
+    }
+
+    function renderLaps_v4() {
+      lapsContainer_v4.innerHTML = laps_v4.map((lap, idx) => `
+        <div class="v4-lap-item">
+          <span>LAP ${lap.number}</span>
+          <span>${formatTimeWithoutCentiseconds(lap.time)}</span>
+        </div>
+      `).join('');
+    }
+
+    function resetTimer_v4() {
+      clearInterval(timer_v4);
+      elapsedTime_v4 = 0;
+      running_v4 = false;
+      laps_v4 = [];
+      lastLapTime_v4 = 0;
+      
+      display_v4.textContent = "00:00";
+      subsecond_v4.textContent = ".00";
+      startBtn_v4.style.display = "inline-block";
+      pauseBtn_v4.style.display = "none";
+      lapBtn_v4.style.display = "none";
+      lapList_v4.style.display = "none";
+      lapsContainer_v4.innerHTML = '';
+      pauseBtn_v4.textContent = "PAUSE";
+    }
+
+    function clearLaps_v4() {
+      laps_v4 = [];
+      lastLapTime_v4 = elapsedTime_v4;
+      lapsContainer_v4.innerHTML = '';
+    }
+
+    function exportLaps_v4() {
+      if (laps_v4.length === 0) {
+        alert("No laps to export");
+        return;
+      }
+      let data = "CHRONO LAP DATA\n";
+      laps_v4.forEach(lap => {
+        data += `LAP ${lap.number}: ${formatTimeWithoutCentiseconds(lap.time)}\n`;
+      });
+      const blob = new Blob([data], { type: 'text/plain' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'chrono-laps.txt';
+      a.click();
+    }
+
+    startBtn_v4.addEventListener("click", startTimer_v4);
+    pauseBtn_v4.addEventListener("click", () => {
+      running_v4 ? pauseTimer_v4() : resumeTimer_v4();
+    });
+    lapBtn_v4.addEventListener("click", recordLap_v4);
   </script>
 
 </body>
