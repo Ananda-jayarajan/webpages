@@ -49,13 +49,20 @@ physics: {
     scarf: "#f4d35e"
   },
 
-  obstacles: [
-    { name: "Barricade", type: "ground", width: 72, height: 78, color: "#e84d5b", label: "STOP" },
-    { name: "Podium", type: "ground", width: 76, height: 86, color: "#7f5af0", label: "MIC" },
-    { name: "Flag Pole", type: "ground", width: 50, height: 112, color: "#2cb67d", label: "FLAG" },
-    { name: "Low Banner", type: "air", width: 116, height: 48, color: "#ff8906", label: "DUCK" },
-    { name: "Flying Poster", type: "air", width: 96, height: 58, color: "#f25f4c", label: "SLIDE" }
-  ],
+obstacles: Array.from({ length: 20 }, (_, i) => {
+  const n = i + 1;
+  const isAir = n % 5 === 0;
+
+  return {
+    name: `Obstacle ${n}`,
+    type: isAir ? "air" : "ground",
+    width: isAir ? 120 : 82,
+    height: isAir ? 58 : 82,
+    color: "#e84d5b",
+    label: String(n),
+    image: `assets/obstacles/${n}.png`
+  };
+}),
 
   collectible: {
     size: 34
