@@ -6,6 +6,7 @@
   <title>Stopwatch</title>
 
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@900&display=swap');
     * {
       box-sizing: border-box;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
@@ -831,6 +832,21 @@
     }
 
     /* Responsive */
+    /* ===== CLOCK FONT OVERRIDE ===== */
+.time,
+.v2-main-time,
+.v2-subsecond,
+.v2-lap-item,
+.v2-lap-number,
+.v2-lap-time,
+.v3-display,
+.v3-lap-item,
+.v4-display,
+.v4-subseconds,
+.v4-lap-item {
+  font-family: "Montserrat", sans-serif !important;
+  font-weight: 900 !important;
+}
     @media (max-width: 768px) {
       .v2-main-time {
         font-size: 130px;
