@@ -1,0 +1,381 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  overflow: hidden;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #080812;
+  color: #fff;
+}
+
+button {
+  font-family: inherit;
+}
+
+#app {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 72% 18%, rgba(255, 232, 171, 0.32), transparent 11%),
+    linear-gradient(#171030 0%, #32205a 38%, #c76d61 70%, #f7d794 100%);
+}
+
+#gameCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.hud {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  right: 18px;
+  z-index: 20;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  pointer-events: none;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-shadow: 0 3px 8px rgba(0, 0, 0, 0.55);
+}
+
+.brand-mark {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 16px;
+  background: rgba(255, 215, 106, 0.96);
+  color: #111;
+  box-shadow: 0 0 30px rgba(255, 215, 106, 0.42);
+  font-size: 22px;
+  font-weight: 900;
+}
+
+.brand h1 {
+  margin: 0;
+  font-size: 22px;
+  line-height: 1.05;
+}
+
+.brand p {
+  margin: 5px 0 0;
+  font-size: 13px;
+  font-weight: 700;
+  opacity: 0.9;
+}
+
+.hud-right {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.hud-stats {
+  display: flex;
+  gap: 12px;
+}
+
+.stat {
+  min-width: 86px;
+  padding: 10px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 18px;
+  background: rgba(10, 10, 18, 0.36);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.16);
+  text-align: center;
+}
+
+.stat .label {
+  display: block;
+  margin-bottom: 3px;
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.75;
+}
+
+.stat span:last-child {
+  font-size: 20px;
+  font-weight: 900;
+}
+
+.audio-btn {
+  pointer-events: auto;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 999px;
+  padding: 11px 15px;
+  background: rgba(10, 10, 18, 0.42);
+  color: #fff;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+  font-size: 13px;
+  font-weight: 900;
+  cursor: pointer;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.45);
+}
+
+.audio-btn.off {
+  opacity: 0.74;
+}
+
+.screen {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 22px;
+  background:
+    radial-gradient(circle at center, rgba(255, 215, 106, 0.1), transparent 34%),
+    rgba(0, 0, 0, 0.48);
+  backdrop-filter: blur(8px);
+}
+
+.screen.visible {
+  display: flex;
+}
+
+.panel {
+  width: 520px;
+  max-width: 94vw;
+  padding: 30px;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.94);
+  color: #111;
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.42);
+  text-align: center;
+}
+
+.panel.small {
+  width: 380px;
+}
+
+.badge {
+  display: inline-flex;
+  padding: 7px 12px;
+  margin-bottom: 12px;
+  border-radius: 999px;
+  background: #102822;
+  color: #ffd76a;
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.badge.danger {
+  background: #8b1e1e;
+  color: #fff;
+}
+
+.panel h2 {
+  margin: 0 0 10px;
+  font-size: 38px;
+  line-height: 1.05;
+}
+
+.panel p {
+  margin: 0 auto 20px;
+  max-width: 430px;
+  font-size: 16px;
+  line-height: 1.55;
+  color: #333;
+}
+
+.panel strong {
+  color: #000;
+}
+
+.controls-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 11px;
+  margin: 18px 0 22px;
+}
+
+.controls-grid div {
+  padding: 12px 10px;
+  border-radius: 18px;
+  background: #f4f0df;
+}
+
+.controls-grid strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 14px;
+}
+
+.controls-grid span {
+  display: block;
+  font-size: 12px;
+  color: #555;
+}
+
+.primary-btn {
+  border: 0;
+  border-radius: 999px;
+  padding: 14px 30px;
+  background: #ffd76a;
+  color: #111;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
+  font-size: 17px;
+  font-weight: 900;
+  cursor: pointer;
+  transition: transform 0.16s ease, filter 0.16s ease;
+}
+
+.primary-btn:hover {
+  transform: translateY(-2px) scale(1.03);
+  filter: brightness(1.02);
+}
+
+.touch-controls {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 66px;
+  z-index: 25;
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  pointer-events: auto;
+}
+
+.touch-controls button {
+  width: 108px;
+  height: 58px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 215, 106, 0.88);
+  color: #111;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.22);
+  font-size: 16px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.hint {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 20px;
+  z-index: 25;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.92);
+  text-shadow: 0 3px 8px rgba(0, 0, 0, 0.62);
+  pointer-events: none;
+}
+
+.error-banner {
+  position: absolute;
+  left: 18px;
+  bottom: 98px;
+  z-index: 90;
+  display: none;
+  max-width: min(560px, calc(100vw - 36px));
+  padding: 12px 15px;
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.78);
+  color: #ffd76a;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.4;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.35);
+}
+
+.error-banner.visible {
+  display: block;
+}
+
+@media (max-width: 860px) {
+  .hud {
+    top: 12px;
+    left: 12px;
+    right: 12px;
+    align-items: flex-start;
+  }
+
+  .brand h1 {
+    font-size: 16px;
+  }
+
+  .brand p {
+    display: none;
+  }
+
+  .brand-mark {
+    width: 36px;
+    height: 36px;
+    border-radius: 13px;
+    font-size: 18px;
+  }
+
+  .hud-right,
+  .hud-stats {
+    gap: 6px;
+  }
+
+  .stat {
+    min-width: auto;
+    padding: 8px 9px;
+    border-radius: 14px;
+  }
+
+  .stat .label {
+    font-size: 9px;
+  }
+
+  .stat span:last-child {
+    font-size: 15px;
+  }
+
+  .audio-btn {
+    padding: 9px 10px;
+    font-size: 12px;
+  }
+
+  .panel {
+    padding: 24px 18px;
+  }
+
+  .panel h2 {
+    font-size: 30px;
+  }
+
+  .controls-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .touch-controls {
+    bottom: 58px;
+  }
+
+  .hint {
+    font-size: 12px;
+  }
+}
