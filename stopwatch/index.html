@@ -8,7 +8,7 @@
   <style>
     * {
       box-sizing: border-box;
-      font-family: "Segoe UI", sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
     }
 
     body {
@@ -32,6 +32,7 @@
       padding: 8px;
       border-radius: 20px;
       border: 1px solid #2e2633;
+      backdrop-filter: blur(10px);
     }
 
     .switcher-btn {
@@ -196,15 +197,54 @@
       justify-content: center;
       align-items: center;
       flex-direction: column;
-      background: linear-gradient(135deg, #1a1625 0%, #2d1f35 100%);
-      transition: background 0.5s ease;
+      background: linear-gradient(135deg, #0a0e27 0%, #1a0f2e 50%, #2d1a3d 100%);
+      transition: background 0.6s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Animated background elements */
+    .page-v2::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(216, 133, 159, 0.15) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+      animation: float 20s ease-in-out infinite;
+    }
+
+    .page-v2::after {
+      content: '';
+      position: absolute;
+      bottom: -30%;
+      left: -30%;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(127, 185, 127, 0.1) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+      animation: float-reverse 25s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(50px, -50px); }
+    }
+
+    @keyframes float-reverse {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(-50px, 50px); }
     }
 
     .v2-top-controls {
       position: absolute;
-      top: 20px;
-      left: 20px;
-      right: 20px;
+      top: 30px;
+      left: 30px;
+      right: 30px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -212,191 +252,260 @@
     }
 
     .v2-title {
-      font-size: 20px;
-      font-weight: 300;
-      letter-spacing: 1px;
-      color: #b89fbe;
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      color: #ffffff;
+      text-shadow: 0 2px 10px rgba(255, 255, 255, 0.1);
     }
 
     .theme-selector {
       display: flex;
-      gap: 8px;
+      gap: 10px;
     }
 
     .theme-dot {
-      width: 12px;
-      height: 12px;
+      width: 14px;
+      height: 14px;
       border-radius: 50%;
       cursor: pointer;
       border: 2px solid transparent;
       transition: all 0.3s ease;
       opacity: 0.6;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     }
 
     .theme-dot:hover {
       opacity: 1;
+      transform: scale(1.15);
     }
 
     .theme-dot.active {
-      border-color: #f1dff5;
+      border-color: #ffffff;
       opacity: 1;
+      box-shadow: 0 0 15px currentColor;
+      transform: scale(1.2);
     }
 
     .v2-container {
       width: 100%;
-      max-width: 600px;
+      max-width: 700px;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      padding: 40px 30px;
+      padding: 60px 40px;
       text-align: center;
+      position: relative;
+      z-index: 10;
     }
 
     .v2-quote {
-      font-size: 16px;
-      color: #b89fbe;
-      margin-bottom: 60px;
+      font-size: 18px;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 80px;
       font-style: italic;
-      letter-spacing: 0.3px;
-      line-height: 1.6;
-      min-height: 50px;
+      letter-spacing: 0.5px;
+      line-height: 1.7;
+      min-height: 60px;
+      font-weight: 300;
+      max-width: 500px;
     }
 
     .v2-display-section {
-      margin-bottom: 80px;
+      margin-bottom: 100px;
     }
 
     .v2-main-time {
-      font-size: 140px;
+      font-size: 180px;
       font-weight: 200;
       letter-spacing: -8px;
       color: #ffffff;
-      line-height: 0.9;
+      line-height: 0.85;
       margin: 0;
       font-family: 'Courier New', monospace;
+      text-shadow: 0 4px 30px rgba(216, 133, 159, 0.3);
     }
 
     .v2-subsecond {
-      font-size: 60px;
-      color: #b89fbe;
-      margin-top: 10px;
+      font-size: 80px;
+      color: rgba(255, 255, 255, 0.6);
+      margin-top: 5px;
       letter-spacing: -2px;
       font-family: 'Courier New', monospace;
+      font-weight: 300;
     }
 
     .v2-mode-display {
-      font-size: 13px;
-      color: #8b7598;
-      letter-spacing: 2px;
-      margin-top: 20px;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.5);
+      letter-spacing: 3px;
+      margin-top: 25px;
       text-transform: uppercase;
+      font-weight: 600;
     }
 
     .v2-button-group {
       display: flex;
-      gap: 16px;
+      gap: 20px;
       justify-content: center;
-      margin-bottom: 40px;
+      margin-bottom: 50px;
       flex-wrap: wrap;
     }
 
     .v2-main-btn {
-      padding: 16px 48px;
+      padding: 18px 60px;
       border: none;
-      border-radius: 50px;
-      background: linear-gradient(135deg, #d8859f 0%, #c46d7f 100%);
+      border-radius: 60px;
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
       color: #ffffff;
       font-size: 18px;
-      font-weight: 500;
+      font-weight: 600;
       cursor: pointer;
-      transition: all 0.4s ease;
-      letter-spacing: 1px;
-      box-shadow: 0 8px 25px rgba(118, 66, 72, 0.3);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      letter-spacing: 1.5px;
+      box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .v2-main-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s ease;
     }
 
     .v2-main-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 12px 35px rgba(118, 66, 72, 0.5);
+      transform: translateY(-4px);
+      box-shadow: 0 15px 45px rgba(99, 102, 241, 0.5);
+    }
+
+    .v2-main-btn:hover::before {
+      left: 100%;
     }
 
     .v2-main-btn:active {
-      transform: translateY(-1px);
+      transform: translateY(-2px);
+    }
+
+    .v2-main-btn.hidden {
+      display: none !important;
     }
 
     .v2-secondary-btn {
-      padding: 14px 32px;
-      border: 2px solid #b89fbe;
-      border-radius: 50px;
-      background: transparent;
-      color: #b89fbe;
-      font-size: 16px;
-      font-weight: 500;
+      padding: 16px 50px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 60px;
+      background: rgba(255, 255, 255, 0.05);
+      color: #ffffff;
+      font-size: 18px;
+      font-weight: 600;
       cursor: pointer;
-      transition: all 0.3s ease;
-      letter-spacing: 0.5px;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      letter-spacing: 1.5px;
+      backdrop-filter: blur(10px);
     }
 
     .v2-secondary-btn:hover {
-      background: rgba(184, 159, 190, 0.1);
-      color: #f1dff5;
-      border-color: #f1dff5;
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.5);
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
+    }
+
+    .v2-secondary-btn:active {
+      transform: translateY(-2px);
     }
 
     .v2-secondary-btn.hidden {
-      display: none;
+      display: none !important;
     }
 
     .v2-controls-row {
       display: flex;
-      gap: 12px;
+      gap: 20px;
       justify-content: center;
-      margin-bottom: 60px;
+      margin-bottom: 80px;
     }
 
     .v2-icon-btn {
-      width: 56px;
-      height: 56px;
-      border: 2px solid #b89fbe;
+      width: 70px;
+      height: 70px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
       border-radius: 50%;
-      background: transparent;
-      color: #b89fbe;
-      font-size: 24px;
+      background: rgba(255, 255, 255, 0.05);
+      color: #ffffff;
+      font-size: 28px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.3s ease;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      backdrop-filter: blur(10px);
+      font-weight: 500;
     }
 
-    .v2-icon-btn:hover {
-      background: rgba(184, 159, 190, 0.1);
-      color: #f1dff5;
-      border-color: #f1dff5;
+    .v2-icon-btn:hover:not(.disabled) {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.6);
+      transform: scale(1.1);
+      box-shadow: 0 8px 25px rgba(255, 255, 255, 0.1);
+    }
+
+    .v2-icon-btn:active:not(.disabled) {
+      transform: scale(0.98);
+    }
+
+    .v2-icon-btn.disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      border-color: rgba(255, 255, 255, 0.1);
     }
 
     .v2-laps {
       width: 100%;
-      max-width: 400px;
+      max-width: 450px;
       margin-top: 40px;
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .v2-laps-title {
-      font-size: 13px;
+      font-size: 14px;
       letter-spacing: 2px;
-      color: #8b7598;
+      color: rgba(255, 255, 255, 0.6);
       text-transform: uppercase;
-      margin-bottom: 20px;
+      margin-bottom: 25px;
+      font-weight: 600;
     }
 
     .v2-lap-item {
       display: flex;
       justify-content: space-between;
-      padding: 12px 16px;
-      border-bottom: 1px solid rgba(184, 159, 190, 0.2);
-      color: #b89fbe;
-      font-size: 14px;
+      padding: 15px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 15px;
       font-family: 'Courier New', monospace;
+      font-weight: 400;
+      transition: all 0.3s ease;
+    }
+
+    .v2-lap-item:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.03);
+      margin: 0 -10px;
+      padding-left: 10px;
+      padding-right: 10px;
+      border-radius: 8px;
     }
 
     .v2-lap-item:last-child {
@@ -404,39 +513,89 @@
     }
 
     .v2-lap-number {
-      color: #8b7598;
-      min-width: 60px;
+      color: rgba(255, 255, 255, 0.5);
+      min-width: 70px;
       text-align: left;
+      font-weight: 500;
     }
 
     .v2-lap-time {
-      color: #f1dff5;
+      color: #ffffff;
       min-width: 100px;
       text-align: right;
+      font-weight: 500;
     }
 
     /* Theme Backgrounds */
     .v2-theme-1 {
-      background: linear-gradient(135deg, #1a1625 0%, #2d1f35 100%);
+      background: linear-gradient(135deg, #0a0e27 0%, #1a0f2e 50%, #2d1a3d 100%);
     }
 
     .v2-theme-2 {
-      background: linear-gradient(135deg, #2a1f2e 0%, #1f2a28 100%);
+      background: linear-gradient(135deg, #0f1a1a 0%, #1a2a1a 50%, #2d2d1a 100%);
     }
 
     .v2-theme-3 {
-      background: linear-gradient(135deg, #2d1a1f 0%, #2d2529 100%);
+      background: linear-gradient(135deg, #1f0a0a 0%, #2a1a10 50%, #2d1a1a 100%);
     }
 
     .v2-theme-4 {
-      background: linear-gradient(135deg, #0f0f15 0%, #1a1525 100%);
+      background: linear-gradient(135deg, #0a0a1f 0%, #1a0f2d 50%, #2d1a2d 100%);
     }
 
     .v2-theme-5 {
-      background: linear-gradient(135deg, #1f1a28 0%, #2a1f32 100%);
+      background: linear-gradient(135deg, #0f0a1f 0%, #1f0a2d 50%, #2a1a3d 100%);
     }
 
     /* Responsive */
+    @media (max-width: 768px) {
+      .v2-main-time {
+        font-size: 130px;
+      }
+
+      .v2-subsecond {
+        font-size: 60px;
+      }
+
+      .v2-container {
+        padding: 40px 25px;
+      }
+
+      .v2-quote {
+        font-size: 16px;
+        margin-bottom: 60px;
+      }
+
+      .v2-display-section {
+        margin-bottom: 70px;
+      }
+
+      .v2-main-btn {
+        padding: 16px 50px;
+        font-size: 16px;
+      }
+
+      .v2-icon-btn {
+        width: 60px;
+        height: 60px;
+        font-size: 24px;
+      }
+
+      .v2-laps {
+        padding: 20px;
+      }
+
+      .v2-controls-row {
+        gap: 15px;
+        margin-bottom: 60px;
+      }
+
+      .v2-button-group {
+        gap: 15px;
+        margin-bottom: 40px;
+      }
+    }
+
     @media (max-width: 600px) {
       .v2-main-time {
         font-size: 100px;
@@ -452,7 +611,7 @@
 
       .v2-quote {
         font-size: 14px;
-        margin-bottom: 40px;
+        margin-bottom: 50px;
       }
 
       .v2-display-section {
@@ -461,6 +620,35 @@
 
       .v2-main-btn {
         padding: 14px 40px;
+        font-size: 15px;
+      }
+
+      .v2-secondary-btn {
+        padding: 14px 35px;
+        font-size: 15px;
+      }
+
+      .v2-icon-btn {
+        width: 55px;
+        height: 55px;
+        font-size: 22px;
+      }
+
+      .v2-laps {
+        max-width: 100%;
+      }
+
+      .v2-mode-display {
+        font-size: 12px;
+      }
+
+      .v2-top-controls {
+        left: 20px;
+        right: 20px;
+        top: 20px;
+      }
+
+      .v2-title {
         font-size: 16px;
       }
     }
@@ -522,11 +710,11 @@
     <div class="v2-top-controls">
       <div class="v2-title">FOCUS</div>
       <div class="theme-selector" id="themeSelector">
-        <div class="theme-dot active" data-theme="1" style="background: #d8859f;"></div>
-        <div class="theme-dot" data-theme="2" style="background: #7fb97f;"></div>
-        <div class="theme-dot" data-theme="3" style="background: #b89f8f;"></div>
-        <div class="theme-dot" data-theme="4" style="background: #8f9fb8;"></div>
-        <div class="theme-dot" data-theme="5" style="background: #b88fb9;"></div>
+        <div class="theme-dot active" data-theme="1" style="background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);"></div>
+        <div class="theme-dot" data-theme="2" style="background: linear-gradient(135deg, #10b981 0%, #34d399 100%);"></div>
+        <div class="theme-dot" data-theme="3" style="background: linear-gradient(135deg, #f97316 0%, #fb923c 100%);"></div>
+        <div class="theme-dot" data-theme="4" style="background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);"></div>
+        <div class="theme-dot" data-theme="5" style="background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);"></div>
       </div>
     </div>
 
@@ -547,7 +735,7 @@
       </div>
 
       <div class="v2-controls-row">
-        <button class="v2-icon-btn" id="lapBtn-v2" title="Record Lap">⏱</button>
+        <button class="v2-icon-btn disabled" id="lapBtn-v2" title="Record Lap">⏱</button>
         <button class="v2-icon-btn" id="resetBtn-v2" title="Reset">↻</button>
       </div>
 
@@ -602,7 +790,7 @@
       document.getElementById('quoteDisplay').textContent = randomQuote;
     }
 
-    // Update quote on page load and every 30 seconds during focus
+    // Update quote on page load
     updateQuote();
 
     // ===== VERSION 1 STOPWATCH =====
@@ -727,8 +915,7 @@
 
       startBtn_v2.classList.add('hidden');
       pauseBtn_v2.classList.remove('hidden');
-      lapBtn_v2.style.opacity = '1';
-      lapBtn_v2.style.pointerEvents = 'auto';
+      lapBtn_v2.classList.remove('disabled');
     }
 
     function pauseTimer_v2() {
@@ -781,8 +968,7 @@
       startBtn_v2.classList.remove('hidden');
       pauseBtn_v2.classList.add('hidden');
       pauseBtn_v2.textContent = "PAUSE";
-      lapBtn_v2.style.opacity = '0.5';
-      lapBtn_v2.style.pointerEvents = 'none';
+      lapBtn_v2.classList.add('disabled');
       
       lapsTitle.style.display = 'none';
       lapsList.innerHTML = '';
@@ -798,8 +984,7 @@
     resetBtn_v2.addEventListener("click", resetTimer_v2);
 
     // Set initial lap button state
-    lapBtn_v2.style.opacity = '0.5';
-    lapBtn_v2.style.pointerEvents = 'none';
+    lapBtn_v2.classList.add('disabled');
   </script>
 
 </body>
