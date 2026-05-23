@@ -71,12 +71,20 @@ const startScreen = document.getElementById("startScreen");
 const pauseScreen = document.getElementById("pauseScreen");
 const gameOverScreen = document.getElementById("gameOverScreen");
 
-const startBtn = document.getElementById("startBtn");
-const restartBtn = document.getElementById("restartBtn");
-const resumeBtn = document.getElementById("resumeBtn");
-const jumpBtn = document.getElementById("jumpBtn");
-const slideBtn = document.getElementById("slideBtn");
-const musicBtn = document.getElementById("musicBtn");
+
+function fastButton(button, action) {
+  button.addEventListener("pointerdown", event => {
+    event.preventDefault();
+    action();
+  });
+}
+
+fastButton(startBtn, startGame);
+fastButton(restartBtn, restartGame);
+fastButton(resumeBtn, togglePause);
+fastButton(jumpBtn, jump);
+fastButton(slideBtn, slide);
+fastButton(musicBtn, toggleMusic);
 const errorBanner = document.getElementById("errorBanner");
 
 let bgMusic = document.getElementById("bgMusic");
