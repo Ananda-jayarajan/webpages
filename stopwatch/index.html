@@ -60,6 +60,7 @@
     .page {
       display: none;
       width: 100%;
+      min-height: 100vh;
     }
 
     .page.active {
@@ -194,114 +195,172 @@
     .page-v2 {
       justify-content: center;
       align-items: center;
+      flex-direction: column;
+      background: linear-gradient(135deg, #1a1625 0%, #2d1f35 100%);
+      transition: background 0.5s ease;
+    }
+
+    .v2-top-controls {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      right: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .v2-title {
+      font-size: 20px;
+      font-weight: 300;
+      letter-spacing: 1px;
+      color: #b89fbe;
+    }
+
+    .theme-selector {
+      display: flex;
+      gap: 8px;
+    }
+
+    .theme-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: all 0.3s ease;
+      opacity: 0.6;
+    }
+
+    .theme-dot:hover {
+      opacity: 1;
+    }
+
+    .theme-dot.active {
+      border-color: #f1dff5;
+      opacity: 1;
     }
 
     .v2-container {
       width: 100%;
       max-width: 600px;
-      min-height: 100vh;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      padding: 40px 20px;
-      position: relative;
-    }
-
-    .v2-header {
-      margin-bottom: 60px;
+      padding: 40px 30px;
       text-align: center;
     }
 
-    .v2-logo {
-      font-size: 36px;
-      font-weight: 300;
-      letter-spacing: 2px;
-      color: #f1dff5;
-      margin: 0;
-    }
-
-    .v2-sublogo {
-      font-size: 12px;
-      letter-spacing: 1px;
+    .v2-quote {
+      font-size: 16px;
       color: #b89fbe;
-      margin-top: 4px;
-      font-weight: 400;
+      margin-bottom: 60px;
+      font-style: italic;
+      letter-spacing: 0.3px;
+      line-height: 1.6;
+      min-height: 50px;
     }
 
     .v2-display-section {
-      text-align: center;
-      margin-bottom: 60px;
+      margin-bottom: 80px;
     }
 
     .v2-main-time {
-      font-size: 120px;
-      font-weight: 300;
-      letter-spacing: -6px;
+      font-size: 140px;
+      font-weight: 200;
+      letter-spacing: -8px;
       color: #ffffff;
-      line-height: 1;
+      line-height: 0.9;
       margin: 0;
-      text-shadow: 0 0 40px rgba(118, 66, 72, 0.3);
+      font-family: 'Courier New', monospace;
     }
 
-    .v2-current-time {
-      font-size: 18px;
+    .v2-subsecond {
+      font-size: 60px;
       color: #b89fbe;
-      margin-top: 16px;
-      letter-spacing: 0.5px;
+      margin-top: 10px;
+      letter-spacing: -2px;
+      font-family: 'Courier New', monospace;
+    }
+
+    .v2-mode-display {
+      font-size: 13px;
+      color: #8b7598;
+      letter-spacing: 2px;
+      margin-top: 20px;
+      text-transform: uppercase;
     }
 
     .v2-button-group {
       display: flex;
-      gap: 12px;
+      gap: 16px;
       justify-content: center;
-      margin-bottom: 50px;
+      margin-bottom: 40px;
       flex-wrap: wrap;
     }
 
-    .v2-primary-btn {
-      padding: 14px 40px;
+    .v2-main-btn {
+      padding: 16px 48px;
       border: none;
-      border-radius: 25px;
-      background: linear-gradient(135deg, #6d28d9 0%, #5e22c1 100%);
+      border-radius: 50px;
+      background: linear-gradient(135deg, #d8859f 0%, #c46d7f 100%);
       color: #ffffff;
-      font-size: 16px;
-      font-weight: 600;
+      font-size: 18px;
+      font-weight: 500;
       cursor: pointer;
-      transition: all 0.3s ease;
-      letter-spacing: 0.5px;
+      transition: all 0.4s ease;
+      letter-spacing: 1px;
+      box-shadow: 0 8px 25px rgba(118, 66, 72, 0.3);
     }
 
-    .v2-primary-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(109, 40, 217, 0.4);
+    .v2-main-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 35px rgba(118, 66, 72, 0.5);
+    }
+
+    .v2-main-btn:active {
+      transform: translateY(-1px);
     }
 
     .v2-secondary-btn {
-      padding: 14px 30px;
-      border: 2px solid #764248;
-      border-radius: 25px;
+      padding: 14px 32px;
+      border: 2px solid #b89fbe;
+      border-radius: 50px;
       background: transparent;
-      color: #d8ccd9;
+      color: #b89fbe;
       font-size: 16px;
-      font-weight: 600;
+      font-weight: 500;
       cursor: pointer;
       transition: all 0.3s ease;
       letter-spacing: 0.5px;
     }
 
     .v2-secondary-btn:hover {
-      background: rgba(118, 66, 72, 0.2);
+      background: rgba(184, 159, 190, 0.1);
       color: #f1dff5;
+      border-color: #f1dff5;
+    }
+
+    .v2-secondary-btn.hidden {
+      display: none;
+    }
+
+    .v2-controls-row {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 60px;
     }
 
     .v2-icon-btn {
-      width: 50px;
-      height: 50px;
-      border: 2px solid #764248;
+      width: 56px;
+      height: 56px;
+      border: 2px solid #b89fbe;
       border-radius: 50%;
       background: transparent;
-      color: #d8ccd9;
+      color: #b89fbe;
       font-size: 24px;
       cursor: pointer;
       display: flex;
@@ -311,51 +370,98 @@
     }
 
     .v2-icon-btn:hover {
-      background: rgba(118, 66, 72, 0.2);
+      background: rgba(184, 159, 190, 0.1);
       color: #f1dff5;
+      border-color: #f1dff5;
     }
 
-    .v2-stats {
-      margin-top: 60px;
+    .v2-laps {
       width: 100%;
       max-width: 400px;
+      margin-top: 40px;
     }
 
-    .v2-stat-row {
+    .v2-laps-title {
+      font-size: 13px;
+      letter-spacing: 2px;
+      color: #8b7598;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .v2-lap-item {
       display: flex;
       justify-content: space-between;
-      padding: 12px 20px;
-      border-bottom: 1px solid #2e2633;
+      padding: 12px 16px;
+      border-bottom: 1px solid rgba(184, 159, 190, 0.2);
       color: #b89fbe;
       font-size: 14px;
+      font-family: 'Courier New', monospace;
     }
 
-    .v2-stat-row:last-child {
+    .v2-lap-item:last-child {
       border-bottom: none;
     }
 
-    .v2-stat-value {
+    .v2-lap-number {
+      color: #8b7598;
+      min-width: 60px;
+      text-align: left;
+    }
+
+    .v2-lap-time {
       color: #f1dff5;
-      font-weight: 500;
+      min-width: 100px;
+      text-align: right;
+    }
+
+    /* Theme Backgrounds */
+    .v2-theme-1 {
+      background: linear-gradient(135deg, #1a1625 0%, #2d1f35 100%);
+    }
+
+    .v2-theme-2 {
+      background: linear-gradient(135deg, #2a1f2e 0%, #1f2a28 100%);
+    }
+
+    .v2-theme-3 {
+      background: linear-gradient(135deg, #2d1a1f 0%, #2d2529 100%);
+    }
+
+    .v2-theme-4 {
+      background: linear-gradient(135deg, #0f0f15 0%, #1a1525 100%);
+    }
+
+    .v2-theme-5 {
+      background: linear-gradient(135deg, #1f1a28 0%, #2a1f32 100%);
     }
 
     /* Responsive */
-    @media (max-width: 420px) {
-      .time {
-        font-size: 72px;
+    @media (max-width: 600px) {
+      .v2-main-time {
+        font-size: 100px;
       }
 
-      .v2-main-time {
-        font-size: 90px;
+      .v2-subsecond {
+        font-size: 45px;
       }
 
       .v2-container {
-        padding: 30px 16px;
+        padding: 30px 20px;
       }
 
-      .page-switcher {
-        top: 16px;
-        right: 16px;
+      .v2-quote {
+        font-size: 14px;
+        margin-bottom: 40px;
+      }
+
+      .v2-display-section {
+        margin-bottom: 50px;
+      }
+
+      .v2-main-btn {
+        padding: 14px 40px;
+        font-size: 16px;
       }
     }
   </style>
@@ -412,65 +518,92 @@
   </div>
 
   <!-- VERSION 2 -->
-  <div class="page page-v2" id="page-v2">
+  <div class="page page-v2 v2-theme-1" id="page-v2">
+    <div class="v2-top-controls">
+      <div class="v2-title">FOCUS</div>
+      <div class="theme-selector" id="themeSelector">
+        <div class="theme-dot active" data-theme="1" style="background: #d8859f;"></div>
+        <div class="theme-dot" data-theme="2" style="background: #7fb97f;"></div>
+        <div class="theme-dot" data-theme="3" style="background: #b89f8f;"></div>
+        <div class="theme-dot" data-theme="4" style="background: #8f9fb8;"></div>
+        <div class="theme-dot" data-theme="5" style="background: #b88fb9;"></div>
+      </div>
+    </div>
+
     <div class="v2-container">
-      <div class="v2-header">
-        <h1 class="v2-logo">FLOCUS</h1>
-        <p class="v2-sublogo">BY GRIFI11</p>
+      <div class="v2-quote" id="quoteDisplay">
+        "The only way to do great work is to love what you do." — Steve Jobs
       </div>
 
       <div class="v2-display-section">
-        <div class="v2-main-time" id="display-v2">00:37.50</div>
-        <div class="v2-current-time">Current: <span id="current-time-v2">00:08.4</span></div>
+        <div class="v2-main-time" id="display-v2">00:00</div>
+        <div class="v2-subsecond" id="subsecond-v2">.00</div>
+        <div class="v2-mode-display" id="modeDisplay">STOPWATCH</div>
       </div>
 
       <div class="v2-button-group">
-        <button class="v2-primary-btn" id="startBtn-v2">Start</button>
-        <button class="v2-secondary-btn" id="lapBtn-v2" style="display: none;">Lap</button>
-        <button class="v2-icon-btn" id="refreshBtn-v2">↻</button>
-        <button class="v2-icon-btn" id="clockBtn-v2">🕐</button>
+        <button class="v2-main-btn" id="startBtn-v2">START</button>
+        <button class="v2-secondary-btn hidden" id="pauseBtn-v2">PAUSE</button>
       </div>
 
-      <div class="v2-stats">
-        <div class="v2-stat-row">
-          <span>Lap 10</span>
-          <span class="v2-stat-value">00:00.0</span>
-          <span class="v2-stat-value">00:29.0</span>
-        </div>
-        <div class="v2-stat-row">
-          <span>Lap 9</span>
-          <span class="v2-stat-value">00:00.1</span>
-          <span class="v2-stat-value">00:28.9</span>
-        </div>
-        <div class="v2-stat-row">
-          <span>Lap 8</span>
-          <span class="v2-stat-value">00:00.1</span>
-          <span class="v2-stat-value">00:28.7</span>
-        </div>
-        <div class="v2-stat-row">
-          <span>Lap 7</span>
-          <span class="v2-stat-value">00:00.0</span>
-          <span class="v2-stat-value">00:28.5</span>
-        </div>
+      <div class="v2-controls-row">
+        <button class="v2-icon-btn" id="lapBtn-v2" title="Record Lap">⏱</button>
+        <button class="v2-icon-btn" id="resetBtn-v2" title="Reset">↻</button>
+      </div>
+
+      <div class="v2-laps">
+        <div class="v2-laps-title" id="lapsTitle" style="display: none;">LAPS</div>
+        <div id="lapsList"></div>
       </div>
     </div>
   </div>
 
   <script>
+    const quotes = [
+      "\"The only way to do great work is to love what you do.\" — Steve Jobs",
+      "\"Success is not final, failure is not fatal.\" — Winston Churchill",
+      "\"Believe you can and you're halfway there.\" — Theodore Roosevelt",
+      "\"The future belongs to those who believe in the beauty of their dreams.\" — Eleanor Roosevelt",
+      "\"It does not matter how slowly you go as long as you do not stop.\" — Confucius",
+      "\"Everything you want is on the other side of fear.\" — George Addair",
+      "\"Believe in yourself. You are braver than you think, more talented than you know, and capable of more than you imagine.\" — Roy T. Bennett",
+      "\"I learned that courage was not the absence of fear, but the triumph over it.\" — Nelson Mandela"
+    ];
+
     // ===== PAGE SWITCHER =====
     document.querySelectorAll('.switcher-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
         const version = e.target.dataset.version;
         
-        // Update buttons
         document.querySelectorAll('.switcher-btn').forEach(b => b.classList.remove('active'));
         e.target.classList.add('active');
         
-        // Update pages
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById(`page-${version}`).classList.add('active');
       });
     });
+
+    // ===== THEME SELECTOR =====
+    document.querySelectorAll('.theme-dot').forEach(dot => {
+      dot.addEventListener('click', (e) => {
+        const theme = e.target.dataset.theme;
+        const pageV2 = document.getElementById('page-v2');
+        
+        document.querySelectorAll('.theme-dot').forEach(d => d.classList.remove('active'));
+        e.target.classList.add('active');
+        
+        pageV2.className = `page page-v2 v2-theme-${theme}`;
+      });
+    });
+
+    // ===== RANDOM QUOTE =====
+    function updateQuote() {
+      const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+      document.getElementById('quoteDisplay').textContent = randomQuote;
+    }
+
+    // Update quote on page load and every 30 seconds during focus
+    updateQuote();
 
     // ===== VERSION 1 STOPWATCH =====
     const display_v1 = document.getElementById("display-v1");
@@ -543,19 +676,22 @@
     });
     resetBtn_v1.addEventListener("click", resetTimer_v1);
 
-    // ===== VERSION 2 STOPWATCH =====
+    // ===== VERSION 2 AESTHETIC STOPWATCH =====
     const display_v2 = document.getElementById("display-v2");
-    const currentTime_v2 = document.getElementById("current-time-v2");
+    const subsecond_v2 = document.getElementById("subsecond-v2");
     const startBtn_v2 = document.getElementById("startBtn-v2");
+    const pauseBtn_v2 = document.getElementById("pauseBtn-v2");
     const lapBtn_v2 = document.getElementById("lapBtn-v2");
-    const refreshBtn_v2 = document.getElementById("refreshBtn-v2");
+    const resetBtn_v2 = document.getElementById("resetBtn-v2");
+    const lapsList = document.getElementById("lapsList");
+    const lapsTitle = document.getElementById("lapsTitle");
 
     let startTime_v2 = 0;
     let elapsedTime_v2 = 0;
     let timer_v2 = null;
     let running_v2 = false;
-    let lapTime_v2 = 0;
     let laps_v2 = [];
+    let lastLapTime_v2 = 0;
 
     function formatTimeV2(ms) {
       const totalCentiseconds = Math.floor(ms / 10);
@@ -563,42 +699,73 @@
       const totalSeconds = Math.floor(totalCentiseconds / 100);
       const seconds = totalSeconds % 60;
       const minutes = Math.floor(totalSeconds / 60);
+      const hours = Math.floor(minutes / 60);
 
-      return (
-        String(minutes).padStart(2, "0") + ":" +
-        String(seconds).padStart(2, "0") + "." +
-        String(centiseconds).padStart(2, "0")
-      );
+      if (hours > 0) {
+        return String(hours).padStart(2, "0") + ":" + String(minutes % 60).padStart(2, "0") + ":" + String(seconds).padStart(2, "0");
+      }
+      return String(minutes).padStart(2, "0") + ":" + String(seconds).padStart(2, "0");
+    }
+
+    function formatCentiseconds(ms) {
+      const totalCentiseconds = Math.floor(ms / 10);
+      const centiseconds = totalCentiseconds % 100;
+      return String(centiseconds).padStart(2, "0");
     }
 
     function updateDisplay_v2() {
       const currentTime = Date.now();
       elapsedTime_v2 = currentTime - startTime_v2;
       display_v2.textContent = formatTimeV2(elapsedTime_v2);
-      currentTime_v2.textContent = formatTimeV2(elapsedTime_v2);
+      subsecond_v2.textContent = "." + formatCentiseconds(elapsedTime_v2);
     }
 
     function startTimer_v2() {
       startTime_v2 = Date.now() - elapsedTime_v2;
       timer_v2 = setInterval(updateDisplay_v2, 10);
       running_v2 = true;
-      startBtn_v2.textContent = "Stop";
-      lapBtn_v2.style.display = "inline-block";
+
+      startBtn_v2.classList.add('hidden');
+      pauseBtn_v2.classList.remove('hidden');
+      lapBtn_v2.style.opacity = '1';
+      lapBtn_v2.style.pointerEvents = 'auto';
     }
 
-    function stopTimer_v2() {
+    function pauseTimer_v2() {
       clearInterval(timer_v2);
       running_v2 = false;
-      startBtn_v2.textContent = "Resume";
-      lapBtn_v2.style.display = "none";
+      pauseBtn_v2.textContent = "RESUME";
     }
 
     function resumeTimer_v2() {
       startTime_v2 = Date.now() - elapsedTime_v2;
       timer_v2 = setInterval(updateDisplay_v2, 10);
       running_v2 = true;
-      startBtn_v2.textContent = "Stop";
-      lapBtn_v2.style.display = "inline-block";
+      pauseBtn_v2.textContent = "PAUSE";
+    }
+
+    function recordLap_v2() {
+      if (running_v2) {
+        const lapTime = elapsedTime_v2 - lastLapTime_v2;
+        laps_v2.unshift({
+          number: laps_v2.length + 1,
+          time: lapTime,
+          total: elapsedTime_v2
+        });
+        lastLapTime_v2 = elapsedTime_v2;
+        
+        lapsTitle.style.display = 'block';
+        renderLaps();
+      }
+    }
+
+    function renderLaps() {
+      lapsList.innerHTML = laps_v2.map((lap, idx) => `
+        <div class="v2-lap-item">
+          <span class="v2-lap-number">Lap ${lap.number}</span>
+          <span class="v2-lap-time">${formatTimeV2(lap.time)}</span>
+        </div>
+      `).join('');
     }
 
     function resetTimer_v2() {
@@ -606,32 +773,33 @@
       elapsedTime_v2 = 0;
       running_v2 = false;
       laps_v2 = [];
-      display_v2.textContent = "00:00.00";
-      currentTime_v2.textContent = "00:00.0";
-      startBtn_v2.textContent = "Start";
-      lapBtn_v2.style.display = "none";
+      lastLapTime_v2 = 0;
+      
+      display_v2.textContent = "00:00";
+      subsecond_v2.textContent = ".00";
+      
+      startBtn_v2.classList.remove('hidden');
+      pauseBtn_v2.classList.add('hidden');
+      pauseBtn_v2.textContent = "PAUSE";
+      lapBtn_v2.style.opacity = '0.5';
+      lapBtn_v2.style.pointerEvents = 'none';
+      
+      lapsTitle.style.display = 'none';
+      lapsList.innerHTML = '';
+      
+      updateQuote();
     }
 
-    function recordLap_v2() {
-      if (running_v2) {
-        const lapTime = elapsedTime_v2 - lapTime_v2;
-        laps_v2.push(lapTime);
-        lapTime_v2 = elapsedTime_v2;
-      }
-    }
-
-    startBtn_v2.addEventListener("click", () => {
-      if (!running_v2 && elapsedTime_v2 === 0) {
-        startTimer_v2();
-      } else if (running_v2) {
-        stopTimer_v2();
-      } else {
-        resumeTimer_v2();
-      }
+    startBtn_v2.addEventListener("click", startTimer_v2);
+    pauseBtn_v2.addEventListener("click", () => {
+      running_v2 ? pauseTimer_v2() : resumeTimer_v2();
     });
-
     lapBtn_v2.addEventListener("click", recordLap_v2);
-    refreshBtn_v2.addEventListener("click", resetTimer_v2);
+    resetBtn_v2.addEventListener("click", resetTimer_v2);
+
+    // Set initial lap button state
+    lapBtn_v2.style.opacity = '0.5';
+    lapBtn_v2.style.pointerEvents = 'none';
   </script>
 
 </body>
