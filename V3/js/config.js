@@ -1,11 +1,11 @@
 window.GAME_CONFIG = {
   title: "The Villupuram Run Pro",
 
-  physics: {
-    gravity: 2350,
-    jumpVelocity: -940,
-    slideDuration: 0.62
-  },
+physics: {
+  gravity: 2250,
+  jumpVelocity: -1000,
+  slideDuration: 0.62
+},
 
   difficulty: {
     startSpeed: 420,
