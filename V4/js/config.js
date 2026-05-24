@@ -1,6 +1,5 @@
 window.GAME_CONFIG = {
-  title: "The Villupuram Run Platformer",
-
+  title: "Thalapathy Run",
   physics: {
     gravity: 2250,
     jumpVelocity: -1050,
