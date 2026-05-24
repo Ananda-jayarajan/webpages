@@ -11,15 +11,15 @@ window.GAME_CONFIG = {
   },
 
   level: {
-    worldWidth: 7200,
+    worldWidth: 12000,
     startX: 140,
-    finishX: 6900,
+    finishX: 11400,
 
     // Fewer obstacles + even slots = easier and fairer gameplay
-    obstacleCount: 10,
+    obstacleCount: 14,
 
-    voteCount: 30,
-    minObstacleGap: 420
+    voteCount: 46,
+    minObstacleGap: 650
   },
 
   player: {
