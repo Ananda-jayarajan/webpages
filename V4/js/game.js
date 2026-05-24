@@ -1,4 +1,4 @@
-console.log("The Villupuram Run Platformer: quiz version loaded");
+console.log("The Villupuram Run Platformer: Millionaire Quiz Version loaded");
 
 const DEFAULT_CONFIG = {
   physics: {
@@ -277,6 +277,26 @@ const QUIZ_QUESTIONS = [
       "Add dramatic BGM"
     ],
     answer: 1
+  },
+  {
+    question: "In election memes, what does 'ground report' usually mean?",
+    options: [
+      "Actual local-level political mood",
+      "Soil test report",
+      "Cricket pitch report",
+      "Road repair estimate"
+    ],
+    answer: 0
+  },
+  {
+    question: "What is the most common reason parties debate seat-sharing?",
+    options: [
+      "Each party wants winnable constituencies",
+      "They are choosing movie seats",
+      "They are buying bus tickets",
+      "They are designing shoes"
+    ],
+    answer: 0
   }
 ];
 
@@ -313,22 +333,34 @@ if (!bgMusic) {
   document.body.appendChild(bgMusic);
 }
 
-/* -------------------- QUIZ UI -------------------- */
+/* -------------------- MILLIONAIRE QUIZ UI -------------------- */
 
 let quizOverlay = document.getElementById("quizOverlay");
 
 if (!quizOverlay) {
   quizOverlay = document.createElement("section");
   quizOverlay.id = "quizOverlay";
-  quizOverlay.className = "quiz-overlay";
+  quizOverlay.className = "millionaire-overlay";
 
   quizOverlay.innerHTML = `
-    <div class="quiz-panel">
-      <div class="quiz-badge">Obstacle Escape Quiz</div>
-      <h2>Obstacle Hit!</h2>
-      <p id="quizQuestionText">Question appears here</p>
-      <div id="quizOptions" class="quiz-options"></div>
-      <p id="quizFeedback" class="quiz-feedback"></p>
+    <div class="millionaire-stage">
+      <div class="millionaire-top">
+        <div class="lifeline">50:50</div>
+        <div class="lifeline">ASK</div>
+        <div class="lifeline">POLL</div>
+      </div>
+
+      <div class="millionaire-title">Obstacle Escape Question</div>
+
+      <div class="millionaire-question-wrap">
+        <div id="quizQuestionText" class="millionaire-question">
+          Question appears here
+        </div>
+      </div>
+
+      <div id="quizOptions" class="millionaire-options"></div>
+
+      <div id="quizFeedback" class="millionaire-feedback"></div>
     </div>
   `;
 
@@ -338,90 +370,186 @@ if (!quizOverlay) {
 const quizStyle = document.createElement("style");
 
 quizStyle.textContent = `
-  .quiz-overlay {
+  .millionaire-overlay {
     position: absolute;
     inset: 0;
-    z-index: 999;
+    z-index: 9999;
     display: none;
     align-items: center;
     justify-content: center;
-    padding: 22px;
-    background: rgba(0, 0, 0, 0.58);
+    padding: 20px;
+    background:
+      radial-gradient(circle at center, rgba(30, 45, 140, 0.52), transparent 38%),
+      linear-gradient(180deg, rgba(0, 0, 0, 0.82), rgba(0, 0, 0, 0.92));
     backdrop-filter: blur(7px);
   }
 
-  .quiz-overlay.visible {
+  .millionaire-overlay.visible {
     display: flex;
   }
 
-  .quiz-panel {
-    width: 620px;
-    max-width: 94vw;
-    padding: 28px;
-    border-radius: 28px;
-    background: rgba(255, 255, 255, 0.97);
-    color: #111;
+  .millionaire-stage {
+    width: min(980px, 96vw);
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
     text-align: center;
-    box-shadow: 0 30px 90px rgba(0, 0, 0, 0.45);
   }
 
-  .quiz-badge {
-    display: inline-flex;
-    padding: 7px 12px;
-    margin-bottom: 12px;
+  .millionaire-top {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    margin-bottom: 26px;
+  }
+
+  .lifeline {
+    width: 82px;
+    height: 42px;
     border-radius: 999px;
-    background: #102822;
-    color: #ffd76a;
-    font-size: 12px;
+    display: grid;
+    place-items: center;
+    background: radial-gradient(circle at center, #1737a8, #06144f);
+    border: 2px solid #d8b35c;
+    color: #f8d77a;
+    font-size: 13px;
+    font-weight: 900;
+    box-shadow: 0 0 18px rgba(80, 120, 255, 0.45);
+  }
+
+  .millionaire-title {
+    display: inline-block;
+    margin-bottom: 22px;
+    padding: 8px 20px;
+    border-radius: 999px;
+    background: #050b2e;
+    border: 2px solid #d8b35c;
+    color: #f8d77a;
+    font-size: 14px;
     font-weight: 900;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.12em;
   }
 
-  .quiz-panel h2 {
-    margin: 0 0 10px;
-    font-size: 32px;
+  .millionaire-question-wrap {
+    position: relative;
+    margin: 0 auto 18px;
+    max-width: 900px;
   }
 
-  .quiz-panel p {
-    font-size: 18px;
-    line-height: 1.45;
+  .millionaire-question {
+    position: relative;
+    padding: 20px 34px;
+    min-height: 76px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(180deg, #112e91, #061455);
+    border: 3px solid #b7c7ff;
+    border-radius: 18px;
+    box-shadow:
+      inset 0 0 18px rgba(255, 255, 255, 0.16),
+      0 0 22px rgba(30, 70, 255, 0.45);
+    font-size: clamp(17px, 2.2vw, 25px);
+    font-weight: 800;
+    line-height: 1.35;
+    color: #ffffff;
   }
 
-  .quiz-options {
+  .millionaire-question::before,
+  .millionaire-question::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 140px;
+    height: 3px;
+    background: #b7c7ff;
+  }
+
+  .millionaire-question::before {
+    right: 100%;
+  }
+
+  .millionaire-question::after {
+    left: 100%;
+  }
+
+  .millionaire-options {
     display: grid;
-    gap: 10px;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px 22px;
     margin-top: 18px;
   }
 
-  .quiz-options button {
-    border: 0;
-    border-radius: 16px;
-    padding: 13px 16px;
-    background: #f3edcf;
-    color: #111;
-    font-size: 16px;
-    font-weight: 900;
-    cursor: pointer;
+  .millionaire-option {
+    position: relative;
+    min-height: 58px;
+    padding: 12px 18px 12px 58px;
+    border-radius: 999px;
+    border: 2px solid #7f9dff;
+    background: linear-gradient(180deg, #12349f, #06124c);
+    color: white;
     text-align: left;
+    font-size: clamp(15px, 1.8vw, 20px);
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow:
+      inset 0 0 14px rgba(255, 255, 255, 0.12),
+      0 0 14px rgba(30, 70, 255, 0.35);
   }
 
-  .quiz-options button:hover {
-    filter: brightness(0.95);
+  .millionaire-option:hover {
+    background: linear-gradient(180deg, #2046c9, #071a68);
   }
 
-  .quiz-feedback {
-    min-height: 24px;
-    margin-top: 14px;
+  .millionaire-option:disabled {
+    cursor: not-allowed;
+    opacity: 0.88;
+  }
+
+  .millionaire-letter {
+    position: absolute;
+    left: 21px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #f8c24e;
     font-weight: 900;
   }
 
-  .quiz-feedback.good {
-    color: #177a2d;
+  .millionaire-option.correct {
+    background: linear-gradient(180deg, #13a538, #08641f);
+    border-color: #b9ffcc;
   }
 
-  .quiz-feedback.bad {
-    color: #a11616;
+  .millionaire-option.wrong {
+    background: linear-gradient(180deg, #b21d2a, #6a0b13);
+    border-color: #ffb3b3;
+  }
+
+  .millionaire-feedback {
+    min-height: 32px;
+    margin-top: 18px;
+    font-size: 18px;
+    font-weight: 900;
+    color: #f8d77a;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.8);
+  }
+
+  @media (max-width: 700px) {
+    .millionaire-options {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .millionaire-question::before,
+    .millionaire-question::after {
+      display: none;
+    }
+
+    .lifeline {
+      width: 66px;
+      height: 36px;
+      font-size: 11px;
+    }
   }
 `;
 
@@ -528,6 +656,7 @@ function loadPlayerAnimations() {
 
     for (const src of animation.frames) {
       totalFrames++;
+
       const img = new Image();
 
       img.onload = () => {
@@ -717,8 +846,11 @@ function resetGame() {
   votes = 0;
   farthestX = CONFIG.level.startX;
   levelFinished = false;
+
   quizActive = false;
   activeQuizObstacle = null;
+  quizOverlay.classList.remove("visible");
+
   cameraX = 0;
 
   obstacles = buildRandomObstacles();
@@ -743,7 +875,6 @@ function resetGame() {
     alpha: 0.16 + Math.random() * 0.18
   }));
 
-  quizOverlay.classList.remove("visible");
   updateHud();
 }
 
@@ -866,14 +997,14 @@ function finishLevel() {
 
 function endGame(finished = false) {
   state = "over";
+
   quizActive = false;
   activeQuizObstacle = null;
+  quizOverlay.classList.remove("visible");
 
   keys.left = false;
   keys.right = false;
   keys.down = false;
-
-  quizOverlay.classList.remove("visible");
 
   if (!CONFIG.audio.continueAfterGameOver) {
     pauseMusic();
@@ -906,13 +1037,15 @@ function updateHud() {
 /* -------------------- MAIN LOOP -------------------- */
 
 function loop(now) {
-  if (state !== "running") return;
+  if (state === "start" || state === "paused" || state === "over") return;
 
-  if (quizActive) {
+  if (state === "quiz") {
     render();
     animationFrameId = requestAnimationFrame(loop);
     return;
   }
+
+  if (state !== "running") return;
 
   const dt = Math.min(0.033, (now - lastTime) / 1000 || 0);
   lastTime = now;
@@ -1113,6 +1246,7 @@ function triggerQuiz(obstacle) {
 
   quizActive = true;
   activeQuizObstacle = obstacle;
+  state = "quiz";
 
   keys.left = false;
   keys.right = false;
@@ -1159,16 +1293,16 @@ function showQuizQuestion() {
   questionText.textContent = question.question;
   optionsBox.innerHTML = "";
   feedback.textContent = "";
-  feedback.className = "quiz-feedback";
 
   question.options.forEach((option, index) => {
     const button = document.createElement("button");
     button.type = "button";
-    button.textContent = `${String.fromCharCode(65 + index)}. ${option}`;
+    button.className = "millionaire-option";
+    button.innerHTML = `<span class="millionaire-letter">${String.fromCharCode(65 + index)}:</span> ${option}`;
 
     button.addEventListener("pointerdown", event => {
       event.preventDefault();
-      answerQuiz(index, question);
+      answerQuiz(index, question, button);
     });
 
     optionsBox.appendChild(button);
@@ -1177,34 +1311,38 @@ function showQuizQuestion() {
   quizOverlay.classList.add("visible");
 }
 
-function answerQuiz(selectedIndex, question) {
+function answerQuiz(selectedIndex, question, selectedButton) {
   const feedback = document.getElementById("quizFeedback");
   const optionsBox = document.getElementById("quizOptions");
-
-  const correct = selectedIndex === question.answer;
-
   const buttons = optionsBox.querySelectorAll("button");
+
   buttons.forEach(button => {
     button.disabled = true;
   });
 
+  const correct = selectedIndex === question.answer;
+
+  buttons[question.answer].classList.add("correct");
+
+  if (!correct) {
+    selectedButton.classList.add("wrong");
+  }
+
   if (correct) {
     feedback.textContent = "Correct! Vijay escapes and continues.";
-    feedback.className = "quiz-feedback good";
 
     setTimeout(() => {
       continueAfterQuiz();
-    }, 700);
+    }, 850);
   } else {
     feedback.textContent = `Wrong! Correct answer: ${question.options[question.answer]}`;
-    feedback.className = "quiz-feedback bad";
 
     setTimeout(() => {
       quizOverlay.classList.remove("visible");
       quizActive = false;
       activeQuizObstacle = null;
       endGame(false);
-    }, 1200);
+    }, 1500);
   }
 }
 
@@ -1216,7 +1354,7 @@ function continueAfterQuiz() {
     activeQuizObstacle.cleared = true;
   }
 
-  player.x -= 110 * player.facing;
+  player.x -= 120 * player.facing;
   player.x = clamp(player.x, 20, CONFIG.level.worldWidth - player.width - 20);
 
   player.y = groundY - player.normalHeight;
@@ -1235,6 +1373,7 @@ function continueAfterQuiz() {
 
   quizActive = false;
   activeQuizObstacle = null;
+  state = "running";
 
   if (CONFIG.audio.pauseWhenPaused) {
     startMusic();
@@ -1814,7 +1953,10 @@ function setButtonHeld(button, keyName) {
 
   const hold = event => {
     event.preventDefault();
-    if (!quizActive) keys[keyName] = true;
+
+    if (!quizActive && state === "running") {
+      keys[keyName] = true;
+    }
   };
 
   const release = event => {
@@ -1850,7 +1992,7 @@ function initGame() {
   fastTap(jumpBtn, jump);
 
   fastTap(slideBtn, () => {
-    if (quizActive) return;
+    if (quizActive || state !== "running") return;
 
     keys.down = true;
 
@@ -1920,7 +2062,7 @@ function initGame() {
     }
   });
 
-  console.log("The Villupuram Run Platformer: quiz version ready");
+  console.log("The Villupuram Run Platformer: Millionaire quiz version ready");
 }
 
 initGame();
