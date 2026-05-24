@@ -48,16 +48,21 @@
 
         <div class="intro-video-wrap">
           <video
+            id="introVideo"
             class="intro-video"
             autoplay
             muted
             loop
             playsinline
-            preload="metadata"
+            preload="auto"
           >
             <source src="assets/intro.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
+        
+          <button id="introSoundBtn" class="intro-sound-btn" type="button">
+            🔊 Play Intro Sound
+          </button>
         </div>
 
         <button id="startBtn" class="primary-btn" type="button">Start Game</button>
@@ -99,5 +104,48 @@
 
   <script src="js/config.js"></script>
   <script src="js/game.js"></script>
+<script>
+  const introVideo = document.getElementById("introVideo");
+  const introSoundBtn = document.getElementById("introSoundBtn");
+  const startBtnForIntro = document.getElementById("startBtn");
+
+  introSoundBtn.addEventListener("click", async () => {
+    try {
+      introVideo.muted = false;
+      introVideo.volume = 1.0;
+      await introVideo.play();
+
+      introSoundBtn.textContent = "🔊 Intro Sound Playing";
+      introSoundBtn.classList.add("playing");
+    } catch (error) {
+      introSoundBtn.textContent = "Tap video to enable sound";
+      console.warn("Intro video sound could not start:", error);
+    }
+  });
+
+  introVideo.addEventListener("click", async () => {
+    try {
+      introVideo.muted = !introVideo.muted;
+
+      if (!introVideo.muted) {
+        introVideo.volume = 1.0;
+        await introVideo.play();
+        introSoundBtn.textContent = "🔊 Intro Sound Playing";
+        introSoundBtn.classList.add("playing");
+      } else {
+        introSoundBtn.textContent = "🔊 Play Intro Sound";
+        introSoundBtn.classList.remove("playing");
+      }
+    } catch (error) {
+      console.warn("Video click sound toggle failed:", error);
+    }
+  });
+
+  startBtnForIntro.addEventListener("pointerdown", () => {
+    introVideo.pause();
+    introVideo.muted = true;
+  });
+</script>
+  
 </body>
 </html>
