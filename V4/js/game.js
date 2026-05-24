@@ -35,17 +35,17 @@ const DEFAULT_CONFIG = {
   },
 
   level: {
-    worldWidth: 7200,
+    worldWidth: 12000,
     startX: 140,
-    finishX: 6900,
+    finishX: 11400,
 
     // Fewer obstacles + evenly spaced placement = easier gameplay
-    obstacleCount: 10,
+    obstacleCount: 14,
 
-    voteCount: 30,
+    voteCount: 46,
 
     // Used as a minimum safety distance in level design
-    minObstacleGap: 420
+    minObstacleGap: 650
   },
 
   player: {
@@ -180,6 +180,107 @@ const PLAYER_ANIMATIONS = {
   }
 };
 
+/*
+  QUIZ QUESTION BANK
+
+  These are game-style Tamil Nadu politics/cinema-politics trivia questions.
+  Keep them playful and editable. You can change the wording/options anytime.
+  The code randomly picks one when Vijay hits an obstacle.
+*/
+const QUIZ_QUESTIONS = [
+  {
+    question: "Which symbol is most famously associated with DMK?",
+    options: ["Rising Sun", "Two Leaves", "Lotus", "Pressure Cooker"],
+    answer: 0
+  },
+  {
+    question: "Which symbol is most famously associated with AIADMK?",
+    options: ["Hand", "Two Leaves", "Rising Sun", "Star"],
+    answer: 1
+  },
+  {
+    question: "Which symbol became strongly linked with AMMK in recent Tamil Nadu politics?",
+    options: ["Mango", "Pressure Cooker", "Cycle", "Umbrella"],
+    answer: 1
+  },
+  {
+    question: "Which Tamil phrase best captures a mass political entry hype?",
+    options: ["Vandhachu da update", "Form 16 ready", "Silent mode on", "Attendance closed"],
+    answer: 0
+  },
+  {
+    question: "In Tamil Nadu political memes, what does 'alliance arithmetic' usually mean?",
+    options: ["Only counting booth agents", "How parties combine vote shares", "Counting cinema tickets", "Checking petrol price"],
+    answer: 1
+  },
+  {
+    question: "Which topic usually becomes the hottest pre-election debate?",
+    options: ["Alliance choice", "Best biryani shop", "Cricket toss", "Monsoon cloud shape"],
+    answer: 0
+  },
+  {
+    question: "Which word is often used for switching political sides?",
+    options: ["Jumping", "Merging", "Crossover", "All of these"],
+    answer: 3
+  },
+  {
+    question: "What does a party usually want from a strong booth-level network?",
+    options: ["Ground mobilization", "Movie reviews", "Weather update", "Bus timing"],
+    answer: 0
+  },
+  {
+    question: "What is the safest answer when a political rumor goes viral?",
+    options: ["Forward it instantly", "Check credible sources first", "Add fire emoji", "Make a fake poster"],
+    answer: 1
+  },
+  {
+    question: "What is the classic Tamil Nadu election-season question?",
+    options: ["Who is aligning with whom?", "Who won the toss?", "Who made sambar?", "Who bought new shoes?"],
+    answer: 0
+  },
+  {
+    question: "Which term means a party fighting without alliance partners?",
+    options: ["Solo contest", "Night show", "Interval block", "Trailer launch"],
+    answer: 0
+  },
+  {
+    question: "In campaign language, what does 'wave' usually mean?",
+    options: ["A beach wave", "A strong public mood", "A hand signal only", "A dance step"],
+    answer: 1
+  },
+  {
+    question: "What does 'cadre strength' refer to?",
+    options: ["Gym power", "Grassroots party workers", "Cinema fans only", "College marks"],
+    answer: 1
+  },
+  {
+    question: "Which one is usually a campaign promise category?",
+    options: ["Welfare scheme", "Video game cheat code", "Movie climax", "Phone wallpaper"],
+    answer: 0
+  },
+  {
+    question: "In Tamil Nadu politics, cinema fan clubs often become important because they can provide what?",
+    options: ["Ground-level mobilization", "Only popcorn", "Only movie ratings", "Only traffic signals"],
+    answer: 0
+  },
+  {
+    question: "What is a 'swing voter'?",
+    options: ["A voter who may change preference", "A voter on a playground swing", "A drummer", "A camera operator"],
+    answer: 0
+  },
+  {
+    question: "What is the most common reason parties avoid some alliances?",
+    options: ["Ideology, vote transfer, and public image", "Font size", "Poster color only", "Tea temperature"],
+    answer: 0
+  },
+  {
+    question: "Which is a better quiz answer style for political rumors?",
+    options: ["Allegedly / reported / verify", "Definitely true always", "No need to check", "Trust every meme"],
+    answer: 0
+  }
+];
+
+
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
@@ -210,6 +311,115 @@ if (!bgMusic) {
   bgMusic.loop = true;
   document.body.appendChild(bgMusic);
 }
+
+/* -------------------- QUIZ UI -------------------- */
+
+const quizOverlay = document.createElement("section");
+quizOverlay.id = "quizOverlay";
+quizOverlay.className = "quiz-overlay";
+
+quizOverlay.innerHTML = `
+  <div class="quiz-panel">
+    <div class="quiz-badge">Political Escape Quiz</div>
+    <h2>Obstacle Hit!</h2>
+    <p id="quizQuestionText">Question appears here</p>
+    <div id="quizOptions" class="quiz-options"></div>
+    <p id="quizFeedback" class="quiz-feedback"></p>
+  </div>
+`;
+
+document.getElementById("app").appendChild(quizOverlay);
+
+const quizStyle = document.createElement("style");
+quizStyle.textContent = `
+  .quiz-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 85;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 22px;
+    background: rgba(0, 0, 0, 0.56);
+    backdrop-filter: blur(7px);
+  }
+
+  .quiz-overlay.visible {
+    display: flex;
+  }
+
+  .quiz-panel {
+    width: 620px;
+    max-width: 94vw;
+    padding: 28px;
+    border-radius: 28px;
+    background: rgba(255, 255, 255, 0.96);
+    color: #111;
+    text-align: center;
+    box-shadow: 0 30px 90px rgba(0, 0, 0, 0.45);
+  }
+
+  .quiz-badge {
+    display: inline-flex;
+    padding: 7px 12px;
+    margin-bottom: 12px;
+    border-radius: 999px;
+    background: #102822;
+    color: #ffd76a;
+    font-size: 12px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .quiz-panel h2 {
+    margin: 0 0 10px;
+    font-size: 32px;
+  }
+
+  .quiz-panel p {
+    font-size: 18px;
+    line-height: 1.45;
+  }
+
+  .quiz-options {
+    display: grid;
+    gap: 10px;
+    margin-top: 18px;
+  }
+
+  .quiz-options button {
+    border: 0;
+    border-radius: 16px;
+    padding: 13px 16px;
+    background: #f3edcf;
+    color: #111;
+    font-size: 16px;
+    font-weight: 900;
+    cursor: pointer;
+    text-align: left;
+  }
+
+  .quiz-options button:hover {
+    filter: brightness(0.96);
+  }
+
+  .quiz-feedback {
+    min-height: 24px;
+    margin-top: 14px;
+    font-weight: 900;
+  }
+
+  .quiz-feedback.good {
+    color: #177a2d;
+  }
+
+  .quiz-feedback.bad {
+    color: #a11616;
+  }
+`;
+document.head.appendChild(quizStyle);
+
 
 const assets = {
   playerAnimations: {},
@@ -243,6 +453,12 @@ let votes = 0;
 let best = Number(localStorage.getItem("villupuramRunBestPlatformer") || 0);
 let farthestX = 0;
 let levelFinished = false;
+
+// Quiz state: when Vijay hits an obstacle, the game pauses and asks a MCQ.
+let quizActive = false;
+let activeQuizObstacle = null;
+let lastQuizQuestionIndex = -1;
+let quizStreak = 0;
 
 let obstacles = [];
 let collectibles = [];
@@ -497,6 +713,8 @@ function resetGame() {
   votes = 0;
   farthestX = CONFIG.level.startX || CONFIG.player.x || 140;
   levelFinished = false;
+  quizActive = false;
+  activeQuizObstacle = null;
   cameraX = 0;
 
   obstacles = buildRandomObstacles();
@@ -528,21 +746,15 @@ function buildRandomObstacles() {
   const result = [];
 
   /*
-    EVEN + WIDE OBSTACLE SPACING
+    LONGER GAME + WIDER EVEN SPACING
 
-    The level is divided into equal slots.
-    Each slot gets one obstacle.
-    The obstacle image/type is still random, but spacing is now controlled and fair.
+    The level is now longer and obstacles are placed in equal slots.
+    Type/image is random, but spacing is controlled.
   */
 
   const count = CONFIG.level.obstacleCount;
-
-  // Start later so the player has time to move.
-  const startX = 1000;
-
-  // Stop earlier so the finish area is clean.
-  const endX = CONFIG.level.finishX - 700;
-
+  const startX = 1200;
+  const endX = CONFIG.level.finishX - 900;
   const spacing = (endX - startX) / Math.max(1, count - 1);
 
   for (let i = 0; i < count; i++) {
@@ -551,14 +763,16 @@ function buildRandomObstacles() {
     const x = startX + i * spacing;
 
     const y = template.type === "air"
-      ? groundY - player.normalHeight + 12
+      // Lift air obstacles higher so slide/crouch can pass under them.
+      ? groundY - player.normalHeight - 24
       : groundY - template.height;
 
     result.push({
       ...template,
       x,
       y,
-      cleared: false
+      cleared: false,
+      disabled: false
     });
   }
 
@@ -609,6 +823,8 @@ function restartGame() {
 }
 
 function togglePause() {
+  if (quizActive) return;
+
   if (state === "running") {
     state = "paused";
     pauseScreen.classList.add("visible");
@@ -777,9 +993,10 @@ function updatePlayer(dt) {
   choosePlayerState();
 
   for (const obstacle of obstacles) {
+    if (obstacle.disabled) continue;
+
     if (rectsOverlap(getPlayerHitbox(), getObstacleHitbox(obstacle))) {
-      spawnBurst(player.x + player.width / 2, player.y + player.height / 2, "#ff4d6d", 24);
-      endGame(false);
+      triggerQuiz(obstacle);
       return;
     }
   }
@@ -1345,6 +1562,8 @@ function drawFallbackPlayer(screenX) {
 
 function drawObstacles() {
   for (const obstacle of obstacles) {
+    if (obstacle.disabled) continue;
+
     const screenX = obstacle.x - cameraX;
 
     if (screenX < -220 || screenX > width + 220) continue;
@@ -1464,6 +1683,8 @@ function drawHitboxes() {
   ctx.strokeStyle = "red";
 
   for (const obstacle of obstacles) {
+    if (obstacle.disabled) continue;
+
     const box = getObstacleHitbox(obstacle);
     ctx.strokeRect(box.x - cameraX, box.y, box.width, box.height);
   }
