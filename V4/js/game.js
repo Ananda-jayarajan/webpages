@@ -148,8 +148,6 @@ const QUIZ_QUESTIONS = [
     ],
     answer: 1
   },
-  
-[
   {
     question: "Why did everyone suddenly become a constitutional expert after TVK got 108 seats?",
     options: [
@@ -449,8 +447,7 @@ const QUIZ_QUESTIONS = [
       "Because all of the above"
     ],
     answer: 3
-  }
-]
+  },
   {
     question: "What is the most common reason parties debate seat-sharing?",
     options: [
@@ -462,7 +459,6 @@ const QUIZ_QUESTIONS = [
     answer: 0
   }
 ];
-
 /* -------------------- DOM -------------------- */
 
 const canvas = document.getElementById("gameCanvas");
