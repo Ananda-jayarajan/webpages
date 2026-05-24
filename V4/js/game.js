@@ -148,146 +148,309 @@ const QUIZ_QUESTIONS = [
     ],
     answer: 1
   },
+  
+[
   {
-    question: "What is the classic election-season question in Tamil Nadu?",
+    question: "Why did everyone suddenly become a constitutional expert after TVK got 108 seats?",
     options: [
-      "Who is aligning with whom?",
-      "Who won the cricket toss?",
-      "Who made sambar?",
-      "Who bought new shoes?"
+      "Because 108-ku 118 varaikkum only law, not mass opening",
+      "Because Governor became the new election commissioner",
+      "Because Vijay forgot to release Part 2 manifesto",
+      "Because ADMK gave free calculator to all anchors"
     ],
     answer: 0
   },
   {
-    question: "Which symbol is famously associated with DMK?",
+    question: "Why did Congress with 5 seats suddenly get main character energy?",
     options: [
-      "Rising Sun",
-      "Two Leaves",
-      "Lotus",
-      "Pressure Cooker"
+      "Because hung assembly-la even small party becomes WiFi password",
+      "Because Rahul Gandhi personally counted every MLA",
+      "Because DMK forgot to renew alliance subscription",
+      "Because 5 seats is bigger than 108 emotionally"
     ],
     answer: 0
   },
   {
-    question: "Which symbol is famously associated with AIADMK?",
+    question: "Why did Anbumani say TVK victory is not a tsunami?",
     options: [
-      "Hand",
-      "Two Leaves",
-      "Rising Sun",
-      "Star"
-    ],
-    answer: 1
-  },
-  {
-    question: "Which symbol became strongly linked with AMMK?",
-    options: [
-      "Mango",
-      "Pressure Cooker",
-      "Cycle",
-      "Umbrella"
-    ],
-    answer: 1
-  },
-  {
-    question: "When a political rumor goes viral, what is the smartest move?",
-    options: [
-      "Forward it instantly",
-      "Check credible sources first",
-      "Add fire emoji",
-      "Make a fake poster"
-    ],
-    answer: 1
-  },
-  {
-    question: "In Tamil Nadu political memes, what does 'wave' usually mean?",
-    options: [
-      "A beach wave",
-      "A strong public mood",
-      "A hand signal only",
-      "A dance step"
-    ],
-    answer: 1
-  },
-  {
-    question: "What is a 'swing voter'?",
-    options: [
-      "A voter who may change preference",
-      "A voter on a playground swing",
-      "A drummer",
-      "A camera operator"
+      "Because tsunami-na 160 seats venum, 108 is only beach breeze",
+      "Because PMK got 4 seats and wanted weather department credit",
+      "Because eight districts said 'Vijay sir, next film paapom'",
+      "Because 1991 and 1996 are still his favourite examples"
     ],
     answer: 0
   },
   {
-    question: "What does 'cadre strength' mean?",
+    question: "Why did Kolathur become the most paused YouTube thumbnail after results?",
     options: [
-      "Gym power",
-      "Grassroots party workers",
-      "Movie fans only",
-      "College marks"
-    ],
-    answer: 1
-  },
-  {
-    question: "Why might a new party avoid a major alliance?",
-    options: [
-      "To protect independent image and vote identity",
-      "Because posters are expensive",
-      "Because microphones are heavy",
-      "Because rallies need chairs"
+      "Because Stalin targeted +75,000 but result gave -8,795 plot twist",
+      "Because TVK candidate had better booth BGM",
+      "Because Kolathur voters skipped manifesto and watched Shorts",
+      "Because DMK forgot the constituency password"
     ],
     answer: 0
   },
   {
-    question: "If someone says 'Vijay is Illuminati' online, what is the safest interpretation?",
+    question: "Why did Udhayanidhi's Chepauk result feel like a last-ball single?",
     options: [
-      "Verified official fact",
-      "Unverified internet rumor or meme",
-      "Election Commission rule",
-      "Official manifesto point"
-    ],
-    answer: 1
-  },
-  {
-    question: "Why do cinema fan clubs matter in Tamil Nadu politics?",
-    options: [
-      "They can become ground-level mobilization networks",
-      "They only sell popcorn",
-      "They control weather",
-      "They print exam marksheets"
+      "He retained the seat, but margin became humble mode",
+      "Because Chepauk always needs cricket reference",
+      "Because TVK nearly turned it into interval block",
+      "Because DMK saved one family subscription there"
     ],
     answer: 0
   },
   {
-    question: "What does 'solo contest' mean?",
+    question: "Why did Perambur become TVK fans' favourite booth-level screenshot?",
     options: [
-      "A party contests without alliance partners",
-      "A singer performs alone",
-      "A single-player video game",
-      "A one-person cricket team"
+      "Because Vijay won there with proper theatre opening margin",
+      "Because North Chennai became fan club headquarters",
+      "Because Perambur accepted both manifesto and mass intro",
+      "Because all of the above"
+    ],
+    answer: 3
+  },
+  {
+    question: "Why did Vijay vacate Trichy East after winning two seats?",
+    options: [
+      "Because MLA dual role-ku Representation of People Act allow pannaadhu",
+      "Because Perambur had better first-day collection",
+      "Because Trichy East was only political cameo",
+      "Because Cabinet needed sequel space"
     ],
     answer: 0
   },
   {
-    question: "What is the safest answer to a viral claim like 'X secretly met Y for alliance'?",
+    question: "Why did AIADMK people still say 'we are not finished' after 47 seats?",
     options: [
-      "Believe every caption",
-      "Wait for verified reporting or official statement",
-      "Trust only WhatsApp forwards",
-      "Add dramatic BGM"
-    ],
-    answer: 1
-  },
-  {
-    question: "In election memes, what does 'ground report' usually mean?",
-    options: [
-      "Actual local-level political mood",
-      "Soil test report",
-      "Cricket pitch report",
-      "Road repair estimate"
+      "Because Edappadi still had fortress energy",
+      "Because opposition status also has EMI",
+      "Because third place in Chennai is character development",
+      "Because BJP-ku one seat irukku, so comparison helps"
     ],
     answer: 0
   },
+  {
+    question: "Why did BJP's TN review meeting have Udhagamandalam emotional value?",
+    options: [
+      "Because one seat means every chair in meeting has symbolism",
+      "Because hill station result was the only cool news",
+      "Because alliance arithmetic melted in plains",
+      "Because Lotus needed climate advantage"
+    ],
+    answer: 0
+  },
+  {
+    question: "Why did NTK supporters talk more about vote share than seats?",
+    options: [
+      "Because 4% vote share is the new moral victory certificate",
+      "Because zero seats-la philosophy romba easy",
+      "Because Seeman speech can convert loss into civilization lecture",
+      "Because all of the above"
+    ],
+    answer: 3
+  },
+  {
+    question: "Why did political YouTubers keep saying 'silent wave' after TVK won?",
+    options: [
+      "Because nobody predicted it loudly before counting",
+      "Because exit poll miss-aana dignity save panna phrase venum",
+      "Because fan clubs became booth committees without giving trailer",
+      "Because all of the above"
+    ],
+    answer: 3
+  },
+  {
+    question: "Why did DMK suddenly discover Instagram after losing power?",
+    options: [
+      "Because Stalin said kids and social media influenced voters",
+      "Because Reels became new branch secretary",
+      "Because Kalaignar clips needed algorithm protection",
+      "Because TV debate uncle audience shifted to phone screen"
+    ],
+    answer: 0
+  },
+  {
+    question: "Why did every Thanthi-style debate repeat 'hung assembly' 47 times?",
+    options: [
+      "Because 108 is victory, but 118 is government",
+      "Because anchors love suspense more than voters",
+      "Because support letters became climax paper",
+      "Because Raj Bhavan became box office counter"
+    ],
+    answer: 0
+  },
+  {
+    question: "Why did DMK cadre say 'movement will bounce back' after results?",
+    options: [
+      "Because party letter needed motivational gym quote",
+      "Because 59 seats is not defeat, it is opposition internship",
+      "Because Kalaignar birthday content calendar was ready",
+      "Because all of the above"
+    ],
+    answer: 3
+  },
+  {
+    question: "Why did Chennai result hurt DMK more than regular anti-incumbency?",
+    options: [
+      "Because TVK broke into what used to feel like DMK comfort zone",
+      "Because AIADMK slipped to third in many city seats",
+      "Because urban youth voters voted like comments section",
+      "Because all of the above"
+    ],
+    answer: 3
+  },
+  {
+    question: "Why did Rajini meeting Stalin become bigger than some constituency results?",
+    options: [
+      "Because Poes Garden visit means YouTube thumbnails for 3 days",
+      "Because friendship was interpreted as alliance screenplay",
+      "Because Stalin losing Kolathur gave the meeting emotional weight",
+      "Because all of the above"
+    ],
+    answer: 3
+  },
+  {
+    question: "Why did Vijay visiting leaders after victory confuse everyone?",
+    options: [
+      "Because TN politics expects either alliance or insult, not courtesy",
+      "Because every handshake became government-formation theory",
+      "Because YouTube needs 'secret message decoded' content",
+      "Because all of the above"
+    ],
+    answer: 3
+  },
+  {
+    question: "Why did ADMK-DMK alliance rumour trend for 15 minutes?",
+    options: [
+      "Because stopping Vijay sounded more believable than both admitting defeat",
+      "Because Dravidian rivalry briefly became Avengers crossover",
+      "Because 108 seats created panic math",
+      "Because all of the above"
+    ],
+    answer: 3
+  },
+  {
+    question: "Why did Congress joining Vijay cabinet feel extra spicy?",
+    options: [
+      "Because they contested with DMK and then helped TVK rule",
+      "Because 5 MLAs got coalition premium pricing",
+      "Because TN Congress finally found relevance after result day",
+      "Because all of the above"
+    ],
+    answer: 3
+  },
+  {
+    question: "Why did VCK, CPI, CPM and IUML become YouTube panel keywords after results?",
+    options: [
+      "Because outside support became more powerful than manifesto pages",
+      "Because every 2-seat party became breaking news",
+      "Because majority math needed side characters",
+      "Because all of the above"
+    ],
+    answer: 3
+  },
+  {
+    question: "Why did 'TVK did not win in 8 districts' become opposition comfort food?",
+    options: [
+      "Because 108 seats sounded too dangerous without a footnote",
+      "Because losing parties need district-wise painkiller",
+      "Because tsunami debate needed geography",
+      "Because all of the above"
+    ],
+    answer: 3
+  },
+  {
+    question: "Why did DMK blame incomplete civic works in Trichy after the defeat?",
+    options: [
+      "Because underground drainage became overground election issue",
+      "Because streetlights failed both literally and politically",
+      "Because councillors needed local reason for state-level shock",
+      "Because all of the above"
+    ],
+    answer: 3
+  },
+  {
+    question: "Why did KN Nehru retaining his seat become a separate mini-headline?",
+    options: [
+      "Because in Trichy, survival itself became victory speech material",
+      "Because DMK needed at least one 'strongman still strong' example",
+      "Because local body blame game needed one exception",
+      "Because all of the above"
+    ],
+    answer: 3
+  },
+  {
+    question: "Why did AIADMK losing official opposition status sting extra?",
+    options: [
+      "Because DMK lost power but still got opposition chair",
+      "Because 47 seats made EPS strong locally but weak structurally",
+      "Because TVK took ruling side and DMK took opposition side",
+      "Because all of the above"
+    ],
+    answer: 3
+  },
+  {
+    question: "Why did exit poll people suddenly say 'last-minute swing'?",
+    options: [
+      "Because 'we missed the election' sounds less professional",
+      "Because polling-day voters became mysterious cinema twist",
+      "Because TVK wave was easier to explain after counting",
+      "Because all of the above"
+    ],
+    answer: 3
+  },
+  {
+    question: "Why did 'digital campaign' become the post-result magic word?",
+    options: [
+      "Because nobody wanted to say fan clubs did booth work better",
+      "Because Instagram became unofficial booth agent",
+      "Because WhatsApp family groups became mini campaign offices",
+      "Because all of the above"
+    ],
+    answer: 3
+  },
+  {
+    question: "Why did old Dravidian duopoly discourse return after TVK's win?",
+    options: [
+      "Because for the first time in decades, DMK-AIADMK rotation broke",
+      "Because Vijay turned 'third front' from joke into government file",
+      "Because MGR comparisons were waiting in every studio",
+      "Because all of the above"
+    ],
+    answer: 3
+  },
+  {
+    question: "Why did ADMK cadres suddenly respect vote-share graphics?",
+    options: [
+      "Because seat count was giving emotional damage",
+      "Because alliance vote share looked better than Chennai result map",
+      "Because bar chart is cheaper than introspection",
+      "Because all of the above"
+    ],
+    answer: 3
+  },
+  {
+    question: "Why did every Tamil political channel put 'secret support letter' in thumbnail?",
+    options: [
+      "Because 108 seats needed 10 more episodes",
+      "Because Governor scenes gave thriller angle",
+      "Because coalition math is better content than manifesto analysis",
+      "Because all of the above"
+    ],
+    answer: 3
+  },
+  {
+    question: "Why did Vijay's win get compared to MGR instead of normal actor-politician hype?",
+    options: [
+      "Because debut party becoming single largest is not regular fan service",
+      "Because TN politics loves cinema-to-CM parallels",
+      "Because Dravidian two-party rhythm got interrupted",
+      "Because all of the above"
+    ],
+    answer: 3
+  }
+]
   {
     question: "What is the most common reason parties debate seat-sharing?",
     options: [
