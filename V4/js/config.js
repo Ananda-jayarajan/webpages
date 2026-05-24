@@ -16,7 +16,7 @@ window.GAME_CONFIG = {
     finishX: 6900,
 
     // Fewer obstacles + even slots = easier and fairer gameplay
-    obstacleCount: 15,
+    obstacleCount: 10,
 
     voteCount: 30,
     minObstacleGap: 420
@@ -32,12 +32,12 @@ window.GAME_CONFIG = {
 
     // Increase this if Vijay still looks floating.
     // Try 28 or 32 if needed.
-    visualOffsetY: 24,
+    visualOffsetY: 38,
 
     // Smaller player hitbox = fairer collision
-    hitboxPaddingX: 38,
-    hitboxPaddingTop: 34,
-    hitboxPaddingBottom: 28
+    hitboxPaddingX: 42,
+    hitboxPaddingTop: 38,
+    hitboxPaddingBottom: 32
   },
 
   audio: {
@@ -72,8 +72,8 @@ window.GAME_CONFIG = {
       type: isAir ? "air" : "ground",
 
       // Smaller obstacle image size
-      width: isAir ? 132 : 92,
-      height: isAir ? 64 : 92,
+      width: 120,
+      height: isAir ? 82 : 120,
 
       color: "#e84d5b",
       label: String(n),
