@@ -14,15 +14,22 @@ window.GAME_CONFIG = {
     worldWidth: 7200,
     startX: 140,
     finishX: 6900,
-    obstacleCount: 26,
-    voteCount: 34,
-    minObstacleGap: 230
+    obstacleCount: 18,
+    voteCount: 30,
+    minObstacleGap: 260
   },
 
   player: {
-    image: "assets/characters/vijay.png",
     width: 120,
     height: 155,
+    slideHeight: 92,
+
+    // fallback image only if animation frames are missing
+    image: "assets/characters/vijay.png",
+
+    // visual adjustment so Vijay sits a bit lower on the floor
+    visualOffsetY: 12,
+
     hitboxPaddingX: 28,
     hitboxPaddingTop: 20,
     hitboxPaddingBottom: 12
