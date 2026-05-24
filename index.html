@@ -1,158 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
-  <title>Thalapathy Run</title>
-  <link rel="stylesheet" href="css/styles.css" />
+  <meta charset="UTF-8">
+  <title>Project Hub</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
-  <main id="app">
-    <canvas id="gameCanvas" aria-label="Thalapathy Run game canvas"></canvas>
 
-    <section id="hud" class="hud">
-      <div class="brand">
-        <span class="brand-mark">★</span>
-        <div>
-          <h1>Thalapathy Run</h1>
-          <p id="phaseHudText">Phase 1 • Cinema Career</p>
-        </div>
-      </div>
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="logo">WEB HUB</div>
+  <ul>
+    <li><a href="#">Projects</a></li>
+    <li><a href="./Personal-Portfolio-Website/">Portfolio</a></li>
+  </ul>
+</nav>
 
-      <div class="hud-right">
-        <div class="settings-wrap">
-          <button id="settingsBtn" class="settings-btn" type="button" aria-label="Settings">
-            ⚙
-          </button>
+<!-- HERO -->
+<section class="hero">
+  <h1>Anand's website</h1>
+  <p>Explore my projects like a hero ⚡</p>
 
-          <div id="settingsPanel" class="settings-panel">
-            <div class="settings-title">Audio Settings</div>
+  <!-- Floating Icons -->
+  <div class="floating-icons">
+    <div class="icon">🧪</div>
+    <div class="icon">🌍</div>
+    <div class="icon">⏱️</div>
+    <div class="icon">📐</div>
+    <div class="icon">⚡</div>
+  </div>
+</section>
 
-            <button id="musicBtn" class="settings-option" type="button">
-              🔊 Music
-            </button>
+<!-- PROJECT PANELS -->
+<section class="panels">
 
-            <button id="nextSongBtn" class="settings-option" type="button">
-              ⏭ Next Song
-            </button>
+  <a href="./Scientific-Calculator/" class="panel">
+    <h2>Scientific Calculator</h2>
+  </a>
 
-            <div id="songNameText" class="song-name">
-              Song: Theme
-            </div>
-          </div>
-        </div>
+  <a href="./Molarity-calculator/" class="panel">
+    <h2>Molarity Calculator</h2>
+  </a>
 
-        <div class="hud-stats">
-          <div class="stat">
-            <span class="label">Score</span>
-            <span id="scoreText">0</span>
-          </div>
-          <div class="stat">
-            <span class="label">Tokens</span>
-            <span id="votesText">0</span>
-          </div>
-          <div class="stat">
-            <span class="label">Best</span>
-            <span id="bestText">0</span>
-          </div>
-        </div>
-      </div>
-    </section>
+  <a href="./Unit-conversion/" class="panel">
+    <h2>Unit Converter</h2>
+  </a>
 
-    <section id="phaseBanner" class="phase-banner">
-      <div class="phase-banner-card">
-        <div id="phaseBannerLabel" class="phase-banner-label">Phase 1</div>
-        <h2 id="phaseBannerTitle">Cinema Career</h2>
-        <p id="phaseBannerSubtitle">Survive fame, fan wars, media heat, and cinema politics.</p>
-      </div>
-    </section>
+  <a href="./Quiz%20map%20and%20flag/" class="panel">
+    <h2>Countries Quiz/</h2>
+  </a>
 
-    <section id="startScreen" class="screen visible">
-      <div class="panel start-panel">
-        <div class="badge">Platformer Story Mode</div>
+  <a href="./time-zone/" class="panel">
+    <h2>Time Zone</h2>
+  </a>
 
-        <h2>Thalapathy Run</h2>
+  <a href="./Reference-electrode/" class="panel">
+    <h2>Reference Electrode</h2>
+  </a>
 
-        <div class="intro-video-wrap">
-          <video
-            id="introVideo"
-            class="intro-video"
-            autoplay
-            muted
-            loop
-            playsinline
-            preload="auto"
-          >
-            <source src="assets/intro.mp4" type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
+    <a href="./recipe-website/" class="panel">
+    <h2>Recipe Website</h2>
+  </a>
 
-          <button id="introSoundBtn" class="intro-sound-btn" type="button">
-            🔊 Play Intro Sound
-          </button>
-        </div>
+     <a href="./local-video-player/" class="panel">
+    <h2> Video Player </h2>
+  </a>
 
-        <button id="startBtn" class="primary-btn" type="button">Start Game</button>
-      </div>
-    </section>
+     <a href="./to-do/" class="panel">
+    <h2> To-Do list </h2>
+  </a>
 
-    <section id="pauseScreen" class="screen">
-      <div class="panel small">
-        <h2>Paused</h2>
-        <p>Press <strong>P</strong> or tap resume to continue.</p>
-        <button id="resumeBtn" class="primary-btn" type="button">Resume</button>
-      </div>
-    </section>
+       <a href="./stopwatch/" class="panel">
+    <h2> stopwatch </h2>
+  </a>
 
-    <section id="gameOverScreen" class="screen">
-      <div class="panel finish-panel">
-        <div id="gameOverBadge" class="badge danger">Game Over</div>
+         <a href="./V3/" class="panel">
+         <a href="./V4/" class="panel">
+    <h2> vj run </h2>
+  </a>
 
-        <h2 id="gameOverTitle">Run Complete</h2>
 
-        <div id="outroMediaBox" class="outro-media-box">
-          <video
-            id="outroVideo"
-            class="outro-video"
-            preload="auto"
-            playsinline
-          >
-            <source src="assets/outro.mp4" type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
+</section>
 
-          <img
-            id="outroImage"
-            class="outro-image"
-            src="assets/outro.jpg"
-            alt="Outro image"
-          />
-        </div>
+<footer>
+  <p>© 2026 Anand </p>
+</footer>
 
-        <p id="finalText">Score: 0</p>
-
-        <button id="restartBtn" class="primary-btn" type="button">Restart</button>
-      </div>
-    </section>
-
-    <div id="errorBanner" class="error-banner"></div>
-
-    <div class="touch-controls" aria-label="Mobile controls">
-      <button id="leftBtn" type="button">←</button>
-      <button id="slideBtn" type="button">Slide</button>
-      <button id="jumpBtn" type="button">Jump</button>
-      <button id="rightBtn" type="button">→</button>
-    </div>
-
-    <div class="hint">
-      A/D or ←/→ = Move &nbsp; • &nbsp; Space/W/↑ = Jump &nbsp; • &nbsp; S/↓ = Slide &nbsp; • &nbsp; Q = Test Quiz
-    </div>
-
-    <audio id="bgMusic" preload="auto" loop></audio>
-  </main>
-
-  <script src="js/config.js"></script>
-  <script src="js/game.js"></script>
 </body>
 </html>
