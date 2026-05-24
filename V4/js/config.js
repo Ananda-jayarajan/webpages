@@ -26,10 +26,8 @@ window.GAME_CONFIG = {
 
     image: "assets/characters/vijay.png",
 
-    // Increase to 42 or 46 if Vijay still looks floating.
     visualOffsetY: 38,
 
-    // Smaller hitbox so game over happens only when he really hits.
     hitboxPaddingX: 42,
     hitboxPaddingTop: 38,
     hitboxPaddingBottom: 32
