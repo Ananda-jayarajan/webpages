@@ -1,28 +1,4 @@
-console.log("The Villupuram Run Platformer: animated player game.js loaded");
-
-/*
-  PLAYER ANIMATION FILES
-
-  Place your animation images here:
-
-  assets/player/idle/idle1.png
-  assets/player/idle/idle2.png
-
-  assets/player/run/run1.png
-  assets/player/run/run2.png
-  assets/player/run/run3.png
-  assets/player/run/run4.png
-
-  assets/player/jump/jump1.png
-
-  assets/player/fall/fall1.png
-
-  assets/player/slide/slide1.png
-  assets/player/slide/slide2.png
-
-  Keep the character facing RIGHT in all images.
-  The code automatically flips the image when the player faces LEFT.
-*/
+console.log("The Villupuram Run Platformer: quiz version loaded");
 
 const DEFAULT_CONFIG = {
   physics: {
@@ -38,13 +14,8 @@ const DEFAULT_CONFIG = {
     worldWidth: 12000,
     startX: 140,
     finishX: 11400,
-
-    // Fewer obstacles + evenly spaced placement = easier gameplay
     obstacleCount: 14,
-
     voteCount: 46,
-
-    // Used as a minimum safety distance in level design
     minObstacleGap: 650
   },
 
@@ -52,12 +23,8 @@ const DEFAULT_CONFIG = {
     width: 120,
     height: 155,
     slideHeight: 92,
-
-    // Draw Vijay a little lower so his feet touch the floor visually.
-    // This only changes drawing, not physics.
+    image: "assets/characters/vijay.png",
     visualOffsetY: 38,
-
-    // Smaller/fairer player collision box.
     hitboxPaddingX: 42,
     hitboxPaddingTop: 38,
     hitboxPaddingBottom: 32
@@ -93,7 +60,6 @@ const DEFAULT_CONFIG = {
     return {
       name: `Obstacle ${n}`,
       type: isAir ? "air" : "ground",
-      // Smaller obstacle images than before
       width: 120,
       height: isAir ? 82 : 120,
       color: "#e84d5b",
@@ -124,15 +90,6 @@ const CONFIG = {
   debug: { ...DEFAULT_CONFIG.debug, ...(window.GAME_CONFIG?.debug || {}) }
 };
 
-/*
-  Animation setup.
-
-  fps = animation speed.
-  loop = true means the animation repeats.
-  loop = false means it stays on the last frame.
-
-  You can add more frames later by adding paths to each frames array.
-*/
 const PLAYER_ANIMATIONS = {
   idle: {
     fps: 3,
@@ -180,106 +137,150 @@ const PLAYER_ANIMATIONS = {
   }
 };
 
-/*
-  QUIZ QUESTION BANK
-
-  These are game-style Tamil Nadu politics/cinema-politics trivia questions.
-  Keep them playful and editable. You can change the wording/options anytime.
-  The code randomly picks one when Vijay hits an obstacle.
-*/
 const QUIZ_QUESTIONS = [
   {
-    question: "Which symbol is most famously associated with DMK?",
-    options: ["Rising Sun", "Two Leaves", "Lotus", "Pressure Cooker"],
-    answer: 0
-  },
-  {
-    question: "Which symbol is most famously associated with AIADMK?",
-    options: ["Hand", "Two Leaves", "Rising Sun", "Star"],
+    question: "In Tamil Nadu politics, what does 'alliance arithmetic' usually mean?",
+    options: [
+      "Counting cinema tickets",
+      "Combining vote shares and support bases",
+      "Checking petrol price",
+      "Counting memes"
+    ],
     answer: 1
   },
   {
-    question: "Which symbol became strongly linked with AMMK in recent Tamil Nadu politics?",
-    options: ["Mango", "Pressure Cooker", "Cycle", "Umbrella"],
+    question: "What is the classic election-season question in Tamil Nadu?",
+    options: [
+      "Who is aligning with whom?",
+      "Who won the cricket toss?",
+      "Who made sambar?",
+      "Who bought new shoes?"
+    ],
+    answer: 0
+  },
+  {
+    question: "Which symbol is famously associated with DMK?",
+    options: [
+      "Rising Sun",
+      "Two Leaves",
+      "Lotus",
+      "Pressure Cooker"
+    ],
+    answer: 0
+  },
+  {
+    question: "Which symbol is famously associated with AIADMK?",
+    options: [
+      "Hand",
+      "Two Leaves",
+      "Rising Sun",
+      "Star"
+    ],
     answer: 1
   },
   {
-    question: "Which Tamil phrase best captures a mass political entry hype?",
-    options: ["Vandhachu da update", "Form 16 ready", "Silent mode on", "Attendance closed"],
-    answer: 0
-  },
-  {
-    question: "In Tamil Nadu political memes, what does 'alliance arithmetic' usually mean?",
-    options: ["Only counting booth agents", "How parties combine vote shares", "Counting cinema tickets", "Checking petrol price"],
+    question: "Which symbol became strongly linked with AMMK?",
+    options: [
+      "Mango",
+      "Pressure Cooker",
+      "Cycle",
+      "Umbrella"
+    ],
     answer: 1
   },
   {
-    question: "Which topic usually becomes the hottest pre-election debate?",
-    options: ["Alliance choice", "Best biryani shop", "Cricket toss", "Monsoon cloud shape"],
-    answer: 0
-  },
-  {
-    question: "Which word is often used for switching political sides?",
-    options: ["Jumping", "Merging", "Crossover", "All of these"],
-    answer: 3
-  },
-  {
-    question: "What does a party usually want from a strong booth-level network?",
-    options: ["Ground mobilization", "Movie reviews", "Weather update", "Bus timing"],
-    answer: 0
-  },
-  {
-    question: "What is the safest answer when a political rumor goes viral?",
-    options: ["Forward it instantly", "Check credible sources first", "Add fire emoji", "Make a fake poster"],
+    question: "When a political rumor goes viral, what is the smartest move?",
+    options: [
+      "Forward it instantly",
+      "Check credible sources first",
+      "Add fire emoji",
+      "Make a fake poster"
+    ],
     answer: 1
   },
   {
-    question: "What is the classic Tamil Nadu election-season question?",
-    options: ["Who is aligning with whom?", "Who won the toss?", "Who made sambar?", "Who bought new shoes?"],
-    answer: 0
-  },
-  {
-    question: "Which term means a party fighting without alliance partners?",
-    options: ["Solo contest", "Night show", "Interval block", "Trailer launch"],
-    answer: 0
-  },
-  {
-    question: "In campaign language, what does 'wave' usually mean?",
-    options: ["A beach wave", "A strong public mood", "A hand signal only", "A dance step"],
+    question: "In Tamil Nadu political memes, what does 'wave' usually mean?",
+    options: [
+      "A beach wave",
+      "A strong public mood",
+      "A hand signal only",
+      "A dance step"
+    ],
     answer: 1
-  },
-  {
-    question: "What does 'cadre strength' refer to?",
-    options: ["Gym power", "Grassroots party workers", "Cinema fans only", "College marks"],
-    answer: 1
-  },
-  {
-    question: "Which one is usually a campaign promise category?",
-    options: ["Welfare scheme", "Video game cheat code", "Movie climax", "Phone wallpaper"],
-    answer: 0
-  },
-  {
-    question: "In Tamil Nadu politics, cinema fan clubs often become important because they can provide what?",
-    options: ["Ground-level mobilization", "Only popcorn", "Only movie ratings", "Only traffic signals"],
-    answer: 0
   },
   {
     question: "What is a 'swing voter'?",
-    options: ["A voter who may change preference", "A voter on a playground swing", "A drummer", "A camera operator"],
+    options: [
+      "A voter who may change preference",
+      "A voter on a playground swing",
+      "A drummer",
+      "A camera operator"
+    ],
     answer: 0
   },
   {
-    question: "What is the most common reason parties avoid some alliances?",
-    options: ["Ideology, vote transfer, and public image", "Font size", "Poster color only", "Tea temperature"],
+    question: "What does 'cadre strength' mean?",
+    options: [
+      "Gym power",
+      "Grassroots party workers",
+      "Movie fans only",
+      "College marks"
+    ],
+    answer: 1
+  },
+  {
+    question: "Why might a new party avoid a major alliance?",
+    options: [
+      "To protect independent image and vote identity",
+      "Because posters are expensive",
+      "Because microphones are heavy",
+      "Because rallies need chairs"
+    ],
     answer: 0
   },
   {
-    question: "Which is a better quiz answer style for political rumors?",
-    options: ["Allegedly / reported / verify", "Definitely true always", "No need to check", "Trust every meme"],
+    question: "If someone says 'Vijay is Illuminati' online, what is the safest interpretation?",
+    options: [
+      "Verified official fact",
+      "Unverified internet rumor or meme",
+      "Election Commission rule",
+      "Official manifesto point"
+    ],
+    answer: 1
+  },
+  {
+    question: "Why do cinema fan clubs matter in Tamil Nadu politics?",
+    options: [
+      "They can become ground-level mobilization networks",
+      "They only sell popcorn",
+      "They control weather",
+      "They print exam marksheets"
+    ],
     answer: 0
+  },
+  {
+    question: "What does 'solo contest' mean?",
+    options: [
+      "A party contests without alliance partners",
+      "A singer performs alone",
+      "A single-player video game",
+      "A one-person cricket team"
+    ],
+    answer: 0
+  },
+  {
+    question: "What is the safest answer to a viral claim like 'X secretly met Y for alliance'?",
+    options: [
+      "Believe every caption",
+      "Wait for verified reporting or official statement",
+      "Trust only WhatsApp forwards",
+      "Add dramatic BGM"
+    ],
+    answer: 1
   }
 ];
 
+/* -------------------- DOM -------------------- */
 
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
@@ -314,33 +315,38 @@ if (!bgMusic) {
 
 /* -------------------- QUIZ UI -------------------- */
 
-const quizOverlay = document.createElement("section");
-quizOverlay.id = "quizOverlay";
-quizOverlay.className = "quiz-overlay";
+let quizOverlay = document.getElementById("quizOverlay");
 
-quizOverlay.innerHTML = `
-  <div class="quiz-panel">
-    <div class="quiz-badge">Political Escape Quiz</div>
-    <h2>Obstacle Hit!</h2>
-    <p id="quizQuestionText">Question appears here</p>
-    <div id="quizOptions" class="quiz-options"></div>
-    <p id="quizFeedback" class="quiz-feedback"></p>
-  </div>
-`;
+if (!quizOverlay) {
+  quizOverlay = document.createElement("section");
+  quizOverlay.id = "quizOverlay";
+  quizOverlay.className = "quiz-overlay";
 
-document.getElementById("app").appendChild(quizOverlay);
+  quizOverlay.innerHTML = `
+    <div class="quiz-panel">
+      <div class="quiz-badge">Obstacle Escape Quiz</div>
+      <h2>Obstacle Hit!</h2>
+      <p id="quizQuestionText">Question appears here</p>
+      <div id="quizOptions" class="quiz-options"></div>
+      <p id="quizFeedback" class="quiz-feedback"></p>
+    </div>
+  `;
+
+  document.getElementById("app").appendChild(quizOverlay);
+}
 
 const quizStyle = document.createElement("style");
+
 quizStyle.textContent = `
   .quiz-overlay {
     position: absolute;
     inset: 0;
-    z-index: 85;
+    z-index: 999;
     display: none;
     align-items: center;
     justify-content: center;
     padding: 22px;
-    background: rgba(0, 0, 0, 0.56);
+    background: rgba(0, 0, 0, 0.58);
     backdrop-filter: blur(7px);
   }
 
@@ -353,7 +359,7 @@ quizStyle.textContent = `
     max-width: 94vw;
     padding: 28px;
     border-radius: 28px;
-    background: rgba(255, 255, 255, 0.96);
+    background: rgba(255, 255, 255, 0.97);
     color: #111;
     text-align: center;
     box-shadow: 0 30px 90px rgba(0, 0, 0, 0.45);
@@ -401,7 +407,7 @@ quizStyle.textContent = `
   }
 
   .quiz-options button:hover {
-    filter: brightness(0.96);
+    filter: brightness(0.95);
   }
 
   .quiz-feedback {
@@ -418,8 +424,10 @@ quizStyle.textContent = `
     color: #a11616;
   }
 `;
+
 document.head.appendChild(quizStyle);
 
+/* -------------------- ASSETS -------------------- */
 
 const assets = {
   playerAnimations: {},
@@ -428,16 +436,17 @@ const assets = {
 
 const obstacleImages = {};
 
+let fallbackPlayerLoaded = false;
+let musicEnabled = localStorage.getItem("villupuramRunMusic") !== "off";
+let musicLoadFailed = false;
+
+/* -------------------- GAME STATE -------------------- */
+
 const keys = {
   left: false,
   right: false,
   down: false
 };
-
-let playerAnimationReady = false;
-let fallbackPlayerLoaded = false;
-let musicEnabled = localStorage.getItem("villupuramRunMusic") !== "off";
-let musicLoadFailed = false;
 
 let width = 0;
 let height = 0;
@@ -454,11 +463,9 @@ let best = Number(localStorage.getItem("villupuramRunBestPlatformer") || 0);
 let farthestX = 0;
 let levelFinished = false;
 
-// Quiz state: when Vijay hits an obstacle, the game pauses and asks a MCQ.
 let quizActive = false;
 let activeQuizObstacle = null;
 let lastQuizQuestionIndex = -1;
-let quizStreak = 0;
 
 let obstacles = [];
 let collectibles = [];
@@ -468,28 +475,23 @@ let clouds = [];
 let animationFrameId = null;
 
 const player = {
-  x: CONFIG.level.startX || CONFIG.player.x || 140,
+  x: CONFIG.level.startX,
   y: 0,
-
   vx: 0,
   vy: 0,
-
   width: CONFIG.player.width,
   height: CONFIG.player.height,
   normalHeight: CONFIG.player.height,
   slideHeight: CONFIG.player.slideHeight,
-
   grounded: true,
-
-  // 1 = facing right, -1 = facing left
   facing: 1,
-
-  // animation state machine values
   state: "idle",
   previousState: "idle",
   animationTimer: 0,
   animationFrameIndex: 0
 };
+
+/* -------------------- HELPERS -------------------- */
 
 function showMessage(message) {
   if (!errorBanner) return;
@@ -503,6 +505,12 @@ function showMessage(message) {
     errorBanner.classList.remove("visible");
   }, 5000);
 }
+
+function clamp(value, min, max) {
+  return Math.max(min, Math.min(max, value));
+}
+
+/* -------------------- LOAD ASSETS -------------------- */
 
 function loadAssets() {
   loadPlayerAnimations();
@@ -520,19 +528,14 @@ function loadPlayerAnimations() {
 
     for (const src of animation.frames) {
       totalFrames++;
-
       const img = new Image();
 
       img.onload = () => {
         loadedFrames++;
 
-        if (loadedFrames > 0) {
-          playerAnimationReady = true;
-        }
-
         if (loadedFrames + failedFrames === totalFrames) {
           if (failedFrames > 0) {
-            showMessage("Some player animation images are missing. Check assets/player folders.");
+            showMessage("Some player animation frames are missing. Check assets/player folders.");
           }
 
           render();
@@ -545,9 +548,9 @@ function loadPlayerAnimations() {
 
         if (loadedFrames + failedFrames === totalFrames) {
           if (loadedFrames === 0) {
-            showMessage("No player animation frames found. Using fallback player.");
+            showMessage("No animation frames found. Using fallback vijay.png.");
           } else {
-            showMessage("Some player animation images are missing. Check assets/player folders.");
+            showMessage("Some player animation frames are missing. Check assets/player folders.");
           }
 
           render();
@@ -555,15 +558,12 @@ function loadPlayerAnimations() {
       };
 
       img.src = src;
-
       assets.playerAnimations[stateName].push(img);
     }
   }
 }
 
 function loadFallbackPlayer() {
-  const fallbackPath = CONFIG.player.image || "assets/characters/vijay.png";
-
   assets.fallbackPlayer.onload = () => {
     fallbackPlayerLoaded = true;
     render();
@@ -573,7 +573,7 @@ function loadFallbackPlayer() {
     fallbackPlayerLoaded = false;
   };
 
-  assets.fallbackPlayer.src = fallbackPath;
+  assets.fallbackPlayer.src = CONFIG.player.image;
 }
 
 function loadObstacleImages() {
@@ -594,6 +594,8 @@ function loadObstacleImages() {
     obstacleImages[obstacle.image] = img;
   }
 }
+
+/* -------------------- AUDIO -------------------- */
 
 function setupAudio() {
   if (!CONFIG.audio.enabled) {
@@ -690,6 +692,8 @@ function updateMusicButton(customText) {
   }
 }
 
+/* -------------------- SETUP -------------------- */
+
 function resizeCanvas() {
   dpr = Math.max(1, Math.min(window.devicePixelRatio || 1, 2));
   width = window.innerWidth;
@@ -711,7 +715,7 @@ function resetGame() {
   elapsed = 0;
   score = 0;
   votes = 0;
-  farthestX = CONFIG.level.startX || CONFIG.player.x || 140;
+  farthestX = CONFIG.level.startX;
   levelFinished = false;
   quizActive = false;
   activeQuizObstacle = null;
@@ -722,7 +726,7 @@ function resetGame() {
   particles = [];
   floatingTexts = [];
 
-  player.x = CONFIG.level.startX || CONFIG.player.x || 140;
+  player.x = CONFIG.level.startX;
   player.y = groundY - player.normalHeight;
   player.vx = 0;
   player.vy = 0;
@@ -739,18 +743,12 @@ function resetGame() {
     alpha: 0.16 + Math.random() * 0.18
   }));
 
+  quizOverlay.classList.remove("visible");
   updateHud();
 }
 
 function buildRandomObstacles() {
   const result = [];
-
-  /*
-    LONGER GAME + WIDER EVEN SPACING
-
-    The level is now longer and obstacles are placed in equal slots.
-    Type/image is random, but spacing is controlled.
-  */
 
   const count = CONFIG.level.obstacleCount;
   const startX = 1200;
@@ -759,11 +757,9 @@ function buildRandomObstacles() {
 
   for (let i = 0; i < count; i++) {
     const template = CONFIG.obstacles[Math.floor(Math.random() * CONFIG.obstacles.length)];
-
     const x = startX + i * spacing;
 
     const y = template.type === "air"
-      // Lift air obstacles higher so slide/crouch can pass under them.
       ? groundY - player.normalHeight - 24
       : groundY - template.height;
 
@@ -799,6 +795,8 @@ function buildRandomVotes() {
 
   return result;
 }
+
+/* -------------------- START / PAUSE / END -------------------- */
 
 function startGame() {
   if (animationFrameId) {
@@ -868,9 +866,14 @@ function finishLevel() {
 
 function endGame(finished = false) {
   state = "over";
+  quizActive = false;
+  activeQuizObstacle = null;
+
   keys.left = false;
   keys.right = false;
   keys.down = false;
+
+  quizOverlay.classList.remove("visible");
 
   if (!CONFIG.audio.continueAfterGameOver) {
     pauseMusic();
@@ -900,8 +903,16 @@ function updateHud() {
   bestText.textContent = best;
 }
 
+/* -------------------- MAIN LOOP -------------------- */
+
 function loop(now) {
   if (state !== "running") return;
+
+  if (quizActive) {
+    render();
+    animationFrameId = requestAnimationFrame(loop);
+    return;
+  }
 
   const dt = Math.min(0.033, (now - lastTime) / 1000 || 0);
   lastTime = now;
@@ -932,6 +943,8 @@ function update(dt) {
   updateMusicButton();
 }
 
+/* -------------------- PLAYER -------------------- */
+
 function updatePlayer(dt) {
   const movingLeft = keys.left && !keys.right;
   const movingRight = keys.right && !keys.left;
@@ -960,12 +973,6 @@ function updatePlayer(dt) {
   const wantsSlide = keys.down && player.grounded;
 
   if (wantsSlide) {
-    /*
-      Slide visual fix:
-      Do NOT shrink the player image height.
-      The animation state will switch to "slide",
-      so the game displays only images from assets/player/slide/.
-    */
     player.height = player.normalHeight;
     player.vx *= 0.94;
   } else {
@@ -1002,18 +1009,6 @@ function updatePlayer(dt) {
   }
 }
 
-/*
-  PLAYER STATE MACHINE
-
-  This decides what state the player should be in.
-
-  Priority order:
-  1. slide/crouch if Down/S is held and player is on ground
-  2. jump if moving upward
-  3. fall if moving downward
-  4. run if moving left/right
-  5. idle if nothing else is happening
-*/
 function choosePlayerState() {
   const speedX = Math.abs(player.vx);
 
@@ -1102,6 +1097,7 @@ function jump() {
   }
 
   if (state !== "running") return;
+  if (quizActive) return;
   if (!player.grounded) return;
 
   player.vy = CONFIG.physics.jumpVelocity;
@@ -1110,6 +1106,145 @@ function jump() {
   spawnDust(player.x + 12, groundY, 8);
 }
 
+/* -------------------- QUIZ SYSTEM -------------------- */
+
+function triggerQuiz(obstacle) {
+  if (quizActive || state !== "running") return;
+
+  quizActive = true;
+  activeQuizObstacle = obstacle;
+
+  keys.left = false;
+  keys.right = false;
+  keys.down = false;
+
+  player.vx = 0;
+  player.vy = 0;
+
+  pauseMusic();
+
+  spawnBurst(
+    player.x + player.width / 2,
+    player.y + player.height / 2,
+    "#ffd76a",
+    18
+  );
+
+  showQuizQuestion();
+}
+
+function getRandomQuizQuestion() {
+  if (QUIZ_QUESTIONS.length === 1) {
+    lastQuizQuestionIndex = 0;
+    return QUIZ_QUESTIONS[0];
+  }
+
+  let index = Math.floor(Math.random() * QUIZ_QUESTIONS.length);
+
+  while (index === lastQuizQuestionIndex) {
+    index = Math.floor(Math.random() * QUIZ_QUESTIONS.length);
+  }
+
+  lastQuizQuestionIndex = index;
+  return QUIZ_QUESTIONS[index];
+}
+
+function showQuizQuestion() {
+  const question = getRandomQuizQuestion();
+
+  const questionText = document.getElementById("quizQuestionText");
+  const optionsBox = document.getElementById("quizOptions");
+  const feedback = document.getElementById("quizFeedback");
+
+  questionText.textContent = question.question;
+  optionsBox.innerHTML = "";
+  feedback.textContent = "";
+  feedback.className = "quiz-feedback";
+
+  question.options.forEach((option, index) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = `${String.fromCharCode(65 + index)}. ${option}`;
+
+    button.addEventListener("pointerdown", event => {
+      event.preventDefault();
+      answerQuiz(index, question);
+    });
+
+    optionsBox.appendChild(button);
+  });
+
+  quizOverlay.classList.add("visible");
+}
+
+function answerQuiz(selectedIndex, question) {
+  const feedback = document.getElementById("quizFeedback");
+  const optionsBox = document.getElementById("quizOptions");
+
+  const correct = selectedIndex === question.answer;
+
+  const buttons = optionsBox.querySelectorAll("button");
+  buttons.forEach(button => {
+    button.disabled = true;
+  });
+
+  if (correct) {
+    feedback.textContent = "Correct! Vijay escapes and continues.";
+    feedback.className = "quiz-feedback good";
+
+    setTimeout(() => {
+      continueAfterQuiz();
+    }, 700);
+  } else {
+    feedback.textContent = `Wrong! Correct answer: ${question.options[question.answer]}`;
+    feedback.className = "quiz-feedback bad";
+
+    setTimeout(() => {
+      quizOverlay.classList.remove("visible");
+      quizActive = false;
+      activeQuizObstacle = null;
+      endGame(false);
+    }, 1200);
+  }
+}
+
+function continueAfterQuiz() {
+  quizOverlay.classList.remove("visible");
+
+  if (activeQuizObstacle) {
+    activeQuizObstacle.disabled = true;
+    activeQuizObstacle.cleared = true;
+  }
+
+  player.x -= 110 * player.facing;
+  player.x = clamp(player.x, 20, CONFIG.level.worldWidth - player.width - 20);
+
+  player.y = groundY - player.normalHeight;
+  player.height = player.normalHeight;
+  player.vx = 0;
+  player.vy = 0;
+  player.grounded = true;
+
+  floatingTexts.push({
+    text: "+Quiz Save",
+    x: player.x + 20,
+    y: player.y - 18,
+    vy: -50,
+    life: 0.95
+  });
+
+  quizActive = false;
+  activeQuizObstacle = null;
+
+  if (CONFIG.audio.pauseWhenPaused) {
+    startMusic();
+  }
+
+  lastTime = performance.now();
+}
+
+/* -------------------- COLLECTIBLES / PARTICLES -------------------- */
+
 function updateCollectibles(dt) {
   for (const item of collectibles) {
     item.spin += dt * 8;
@@ -1117,6 +1252,7 @@ function updateCollectibles(dt) {
     if (!item.collected && circleRectOverlap(item, getPlayerHitbox())) {
       item.collected = true;
       votes += 1;
+
       spawnBurst(item.x, item.y, CONFIG.colors.gold, 20);
 
       floatingTexts.push({
@@ -1146,69 +1282,6 @@ function updateParticles(dt) {
 
   particles = particles.filter(p => p.life > 0 && p.size > 0.5);
   floatingTexts = floatingTexts.filter(text => text.life > 0);
-}
-
-function updateCamera() {
-  const target = player.x - width * 0.35;
-
-  cameraX += (target - cameraX) * 0.16;
-  cameraX = clamp(cameraX, 0, Math.max(0, CONFIG.level.worldWidth - width));
-}
-
-function getPlayerHitbox() {
-  /*
-    Smaller player hitbox:
-    Vijay image can visually overlap an obstacle a tiny bit,
-    but game over happens only when the body actually hits.
-  */
-  return {
-    x: player.x + CONFIG.player.hitboxPaddingX,
-    y: player.y + CONFIG.player.hitboxPaddingTop,
-    width: player.width - CONFIG.player.hitboxPaddingX * 2,
-    height: player.height - CONFIG.player.hitboxPaddingTop - CONFIG.player.hitboxPaddingBottom
-  };
-}
-
-function getObstacleHitbox(obstacle) {
-  /*
-    Small/fair obstacle hitbox:
-    The obstacle image can be visually large,
-    but collision happens only near the center/core.
-  */
-
-  const padX = obstacle.width * 0.40;
-  const padTop = obstacle.height * 0.34;
-  const padBottom = obstacle.height * 0.38;
-
-  return {
-    x: obstacle.x + padX,
-    y: obstacle.y + padTop,
-    width: obstacle.width - padX * 2,
-    height: obstacle.height - padTop - padBottom
-  };
-}
-
-function rectsOverlap(a, b) {
-  return (
-    a.x < b.x + b.width &&
-    a.x + a.width > b.x &&
-    a.y < b.y + b.height &&
-    a.y + a.height > b.y
-  );
-}
-
-function circleRectOverlap(circle, rect) {
-  const radius = circle.size / 2;
-  const closestX = clamp(circle.x, rect.x, rect.x + rect.width);
-  const closestY = clamp(circle.y, rect.y, rect.y + rect.height);
-  const dx = circle.x - closestX;
-  const dy = circle.y - closestY;
-
-  return dx * dx + dy * dy < radius * radius;
-}
-
-function clamp(value, min, max) {
-  return Math.max(min, Math.min(max, value));
 }
 
 function spawnBurst(x, y, color, count) {
@@ -1241,6 +1314,59 @@ function spawnDust(x, y, count) {
     });
   }
 }
+
+/* -------------------- CAMERA -------------------- */
+
+function updateCamera() {
+  const target = player.x - width * 0.35;
+  cameraX += (target - cameraX) * 0.16;
+  cameraX = clamp(cameraX, 0, Math.max(0, CONFIG.level.worldWidth - width));
+}
+
+/* -------------------- COLLISION -------------------- */
+
+function getPlayerHitbox() {
+  return {
+    x: player.x + CONFIG.player.hitboxPaddingX,
+    y: player.y + CONFIG.player.hitboxPaddingTop,
+    width: player.width - CONFIG.player.hitboxPaddingX * 2,
+    height: player.height - CONFIG.player.hitboxPaddingTop - CONFIG.player.hitboxPaddingBottom
+  };
+}
+
+function getObstacleHitbox(obstacle) {
+  const padX = obstacle.width * 0.40;
+  const padTop = obstacle.height * 0.34;
+  const padBottom = obstacle.height * 0.38;
+
+  return {
+    x: obstacle.x + padX,
+    y: obstacle.y + padTop,
+    width: obstacle.width - padX * 2,
+    height: obstacle.height - padTop - padBottom
+  };
+}
+
+function rectsOverlap(a, b) {
+  return (
+    a.x < b.x + b.width &&
+    a.x + a.width > b.x &&
+    a.y < b.y + b.height &&
+    a.y + a.height > b.y
+  );
+}
+
+function circleRectOverlap(circle, rect) {
+  const radius = circle.size / 2;
+  const closestX = clamp(circle.x, rect.x, rect.x + rect.width);
+  const closestY = clamp(circle.y, rect.y, rect.y + rect.height);
+  const dx = circle.x - closestX;
+  const dy = circle.y - closestY;
+
+  return dx * dx + dy * dy < radius * radius;
+}
+
+/* -------------------- RENDER -------------------- */
 
 function render() {
   ctx.save();
@@ -1300,12 +1426,10 @@ function drawParallax() {
   drawClouds();
 
   const mountainOffset = -(cameraX * 0.22) % width;
-
   drawMountains(mountainOffset, groundY - 250, "#211839", 0.72);
   drawMountains(mountainOffset + width, groundY - 250, "#211839", 0.72);
 
   const hillOffset = -(cameraX * 0.45) % width;
-
   drawHills(hillOffset, groundY - 120, "#18332e", 0.96);
   drawHills(hillOffset + width, groundY - 120, "#18332e", 0.96);
 }
@@ -1369,35 +1493,22 @@ function drawHills(offset, y, color, alpha) {
 }
 
 function drawGround() {
-  /*
-    MARIO-LIKE GRASS FLOOR
-
-    Top layer: bright green grass
-    Lower layer: brown dirt blocks
-    The pattern scrolls with the camera so it feels like a real level.
-  */
-
   const grassTopHeight = 26;
   const soilY = groundY + grassTopHeight;
   const scrollX = cameraX % 48;
 
-  // main dirt base
   ctx.fillStyle = "#8b5a2b";
   ctx.fillRect(0, groundY, width, height - groundY);
 
-  // darker lower dirt
   ctx.fillStyle = "#6b3f1f";
   ctx.fillRect(0, soilY + 28, width, height - soilY - 28);
 
-  // grass body
   ctx.fillStyle = "#2fa53a";
   ctx.fillRect(0, groundY, width, grassTopHeight);
 
-  // bright top highlight
   ctx.fillStyle = "#7ee35d";
   ctx.fillRect(0, groundY, width, 7);
 
-  // jagged grass edge
   ctx.fillStyle = "#1f7d2d";
   for (let x = -24 - scrollX; x < width + 48; x += 24) {
     ctx.beginPath();
@@ -1408,7 +1519,6 @@ function drawGround() {
     ctx.fill();
   }
 
-  // dirt block separators
   ctx.strokeStyle = "rgba(72, 39, 17, 0.45)";
   ctx.lineWidth = 2;
 
@@ -1426,7 +1536,6 @@ function drawGround() {
     ctx.stroke();
   }
 
-  // wavy lighter soil lines
   ctx.strokeStyle = "#c78943";
   ctx.lineWidth = 3;
 
@@ -1484,24 +1593,17 @@ function drawPlayer() {
 }
 
 function drawPlayerImage(img, screenX) {
-  // Lower the image slightly so Vijay's feet touch the floor.
   const drawY = player.y + (CONFIG.player.visualOffsetY || 0);
 
   ctx.save();
 
-  /*
-    This is how left/right direction works.
-
-    All image files should face RIGHT.
-    If player.facing is -1, canvas flips the image horizontally.
-  */
   ctx.translate(screenX + player.width / 2, drawY + player.height / 2);
   ctx.scale(player.facing, 1);
   ctx.translate(-player.width / 2, -player.height / 2);
 
-  ctx.shadowColor = "rgba(0, 0, 0, 0.35)";
-  ctx.shadowBlur = 10;
-  ctx.shadowOffsetY = 6;
+  ctx.shadowColor = "rgba(0, 0, 0, 0.30)";
+  ctx.shadowBlur = 8;
+  ctx.shadowOffsetY = 4;
 
   ctx.drawImage(img, 0, 0, player.width, player.height);
 
@@ -1510,14 +1612,11 @@ function drawPlayerImage(img, screenX) {
 
 function drawCharacterShadow(screenX, y) {
   ctx.save();
-
-  ctx.globalAlpha = 0.24;
+  ctx.globalAlpha = 0.20;
   ctx.fillStyle = "#000";
-
   ctx.beginPath();
-  ctx.ellipse(screenX + player.width / 2, y + 8, 50, 10, 0, 0, Math.PI * 2);
+  ctx.ellipse(screenX + player.width / 2, y + 4, 44, 8, 0, 0, Math.PI * 2);
   ctx.fill();
-
   ctx.restore();
 }
 
@@ -1597,7 +1696,11 @@ function drawObstacles() {
     ctx.font = "900 20px Arial";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillText(obstacle.label || "OBS", screenX + obstacle.width / 2, obstacle.y + obstacle.height / 2);
+    ctx.fillText(
+      obstacle.label || "OBS",
+      screenX + obstacle.width / 2,
+      obstacle.y + obstacle.height / 2
+    );
 
     ctx.restore();
   }
@@ -1643,30 +1746,24 @@ function drawCollectibles() {
 function drawParticles() {
   for (const p of particles) {
     ctx.save();
-
     ctx.globalAlpha = Math.max(0, p.life);
     ctx.fillStyle = p.color;
-
     ctx.beginPath();
     ctx.arc(p.x - cameraX, p.y, p.size, 0, Math.PI * 2);
     ctx.fill();
-
     ctx.restore();
   }
 
   for (const text of floatingTexts) {
     ctx.save();
-
     ctx.globalAlpha = clamp(text.life, 0, 1);
     ctx.fillStyle = "#fff";
     ctx.strokeStyle = "#111";
     ctx.lineWidth = 4;
     ctx.font = "900 18px Arial";
     ctx.textAlign = "center";
-
     ctx.strokeText(text.text, text.x - cameraX, text.y);
     ctx.fillText(text.text, text.x - cameraX, text.y);
-
     ctx.restore();
   }
 }
@@ -1692,6 +1789,8 @@ function drawHitboxes() {
   ctx.restore();
 }
 
+/* -------------------- ROUND RECT FALLBACK -------------------- */
+
 if (!CanvasRenderingContext2D.prototype.roundRect) {
   CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, r) {
     const radius = Math.min(r, Math.abs(w) / 2, Math.abs(h) / 2);
@@ -1708,12 +1807,14 @@ if (!CanvasRenderingContext2D.prototype.roundRect) {
   };
 }
 
+/* -------------------- INPUT -------------------- */
+
 function setButtonHeld(button, keyName) {
   if (!button) return;
 
   const hold = event => {
     event.preventDefault();
-    keys[keyName] = true;
+    if (!quizActive) keys[keyName] = true;
   };
 
   const release = event => {
@@ -1747,12 +1848,17 @@ function initGame() {
   fastTap(restartBtn, restartGame);
   fastTap(resumeBtn, togglePause);
   fastTap(jumpBtn, jump);
+
   fastTap(slideBtn, () => {
+    if (quizActive) return;
+
     keys.down = true;
+
     setTimeout(() => {
       keys.down = false;
     }, 300);
   });
+
   fastTap(musicBtn, toggleMusic);
 
   setButtonHeld(leftBtn, "left");
@@ -1764,6 +1870,8 @@ function initGame() {
   });
 
   document.addEventListener("keydown", event => {
+    if (quizActive) return;
+
     if (event.code === "ArrowLeft" || event.code === "KeyA") {
       event.preventDefault();
       keys.left = true;
@@ -1812,7 +1920,7 @@ function initGame() {
     }
   });
 
-  console.log("The Villupuram Run Platformer: animated player ready");
+  console.log("The Villupuram Run Platformer: quiz version ready");
 }
 
 initGame();
