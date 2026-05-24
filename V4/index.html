@@ -97,14 +97,36 @@
       </div>
     </section>
 
-    <section id="gameOverScreen" class="screen">
-      <div class="panel">
-        <div class="badge danger">Game Over</div>
-        <h2>Run Complete</h2>
-        <p id="finalText">Score: 0</p>
-        <button id="restartBtn" class="primary-btn" type="button">Restart</button>
-      </div>
-    </section>
+<section id="gameOverScreen" class="screen">
+  <div class="panel finish-panel">
+    <div id="gameOverBadge" class="badge danger">Game Over</div>
+
+    <h2 id="gameOverTitle">Run Complete</h2>
+
+    <div id="outroMediaBox" class="outro-media-box">
+      <video
+        id="outroVideo"
+        class="outro-video"
+        preload="auto"
+        playsinline
+      >
+        <source src="assets/outro.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+
+      <img
+        id="outroImage"
+        class="outro-image"
+        src="assets/outro.jpg"
+        alt="Outro image"
+      />
+    </div>
+
+    <p id="finalText">Score: 0</p>
+
+    <button id="restartBtn" class="primary-btn" type="button">Restart</button>
+  </div>
+</section>
 
     <div id="errorBanner" class="error-banner"></div>
 
