@@ -3,28 +3,39 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
-  <title>The Villupuram Run Platformer</title>
+  <title>Thalapathy Run</title>
   <link rel="stylesheet" href="css/styles.css" />
 </head>
+
 <body>
   <main id="app">
-    <canvas id="gameCanvas" aria-label="The Villupuram Run Platformer game canvas"></canvas>
+    <canvas id="gameCanvas" aria-label="Thalapathy Run game canvas"></canvas>
 
     <section id="hud" class="hud">
       <div class="brand">
         <span class="brand-mark">★</span>
         <div>
-          <h1>The Villupuram Run Platformer</h1>
-          <p>Move freely • Jump • Collect votes</p>
+          <h1>Thalapathy Run</h1>
+          <p>Move • Jump • Quiz Save</p>
         </div>
       </div>
 
       <div class="hud-right">
         <button id="musicBtn" class="audio-btn" type="button">🔊 Music</button>
+
         <div class="hud-stats">
-          <div class="stat"><span class="label">Score</span><span id="scoreText">0</span></div>
-          <div class="stat"><span class="label">Votes</span><span id="votesText">0</span></div>
-          <div class="stat"><span class="label">Best</span><span id="bestText">0</span></div>
+          <div class="stat">
+            <span class="label">Score</span>
+            <span id="scoreText">0</span>
+          </div>
+          <div class="stat">
+            <span class="label">Votes</span>
+            <span id="votesText">0</span>
+          </div>
+          <div class="stat">
+            <span class="label">Best</span>
+            <span id="bestText">0</span>
+          </div>
         </div>
       </div>
     </section>
@@ -32,16 +43,23 @@
     <section id="startScreen" class="screen visible">
       <div class="panel">
         <div class="badge">Platformer v1</div>
-        <h2>The Villupuram Run Platformer</h2>
-        <p>
-          This version is no longer auto-run. Move left and right like a Mario-style platform game.
-          Obstacles are bigger and randomly placed across the level.
-        </p>
-        <div class="controls-grid">
-          <div><strong>Move</strong><span>A/D or ←/→</span></div>
-          <div><strong>Jump</strong><span>Space / ↑</span></div>
-          <div><strong>Music</strong><span>M / Music button</span></div>
+
+        <h2>Thalapathy Run</h2>
+
+        <div class="intro-video-wrap">
+          <video
+            class="intro-video"
+            autoplay
+            muted
+            loop
+            playsinline
+            preload="metadata"
+          >
+            <source src="assets/intro.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
         </div>
+
         <button id="startBtn" class="primary-btn" type="button">Start Game</button>
       </div>
     </section>
@@ -65,14 +83,15 @@
 
     <div id="errorBanner" class="error-banner"></div>
 
-    <div class="touch-controls platform-controls" aria-label="Mobile controls">
+    <div class="touch-controls" aria-label="Mobile controls">
       <button id="leftBtn" type="button">←</button>
+      <button id="slideBtn" type="button">Slide</button>
       <button id="jumpBtn" type="button">Jump</button>
       <button id="rightBtn" type="button">→</button>
     </div>
 
     <div class="hint">
-      A/D or ←/→ = Move &nbsp; • &nbsp; Space / ↑ = Jump &nbsp; • &nbsp; P = Pause &nbsp; • &nbsp; M = Music
+      A/D or ←/→ = Move &nbsp; • &nbsp; Space/W/↑ = Jump &nbsp; • &nbsp; S/↓ = Slide &nbsp; • &nbsp; Q = Test Quiz
     </div>
 
     <audio id="bgMusic" preload="auto" loop></audio>
