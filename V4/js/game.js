@@ -483,6 +483,11 @@ const leftBtn = document.getElementById("leftBtn");
 const rightBtn = document.getElementById("rightBtn");
 const musicBtn = document.getElementById("musicBtn");
 
+const settingsBtn = document.getElementById("settingsBtn");
+const settingsPanel = document.getElementById("settingsPanel");
+const nextSongBtn = document.getElementById("nextSongBtn");
+const songNameText = document.getElementById("songNameText");
+
 let bgMusic = document.getElementById("bgMusic");
 
 if (!bgMusic) {
@@ -727,6 +732,22 @@ let fallbackPlayerLoaded = false;
 let musicEnabled = localStorage.getItem("villupuramRunMusic") !== "off";
 let musicLoadFailed = false;
 
+const audioPlaylist =
+  Array.isArray(CONFIG.audio.playlist) && CONFIG.audio.playlist.length > 0
+    ? CONFIG.audio.playlist
+    : [
+        {
+          name: "Theme",
+          src: CONFIG.audio.src || "assets/audio/theme.mp3"
+        }
+      ];
+
+let currentSongIndex = Number(localStorage.getItem("villupuramRunSongIndex") || 0);
+
+if (currentSongIndex < 0 || currentSongIndex >= audioPlaylist.length) {
+  currentSongIndex = 0;
+}
+
 /* -------------------- GAME STATE -------------------- */
 
 const keys = {
@@ -885,10 +906,6 @@ function loadObstacleImages() {
 
 /* -------------------- AUDIO -------------------- */
 
-function setupAudio() {
-  if (!CONFIG.audio.enabled) {
-    musicEnabled = false;
-  }
 
   bgMusic.src = CONFIG.audio.src;
   bgMusic.loop = CONFIG.audio.loop;
@@ -909,11 +926,7 @@ function setupAudio() {
   updateMusicButton();
 }
 
-function startMusic() {
-  if (!CONFIG.audio.enabled || !musicEnabled || musicLoadFailed) {
-    updateMusicButton();
-    return;
-  }
+
 
   bgMusic.volume = CONFIG.audio.volume;
   bgMusic.loop = CONFIG.audio.loop;
@@ -927,6 +940,89 @@ function startMusic() {
   updateMusicButton();
 }
 
+  musicEnabled = !musicEnabled;
+  localStorage.setItem("villupuramRunMusic", musicEnabled ? "on" : "off");
+
+  if (musicEnabled) {
+    startMusic();
+  } else {
+    pauseMusic();
+  }
+
+  updateMusicButton();
+}
+
+function getCurrentSong() {
+  return audioPlaylist[currentSongIndex];
+}
+
+function updateSongName() {
+  if (!songNameText) return;
+
+  const song = getCurrentSong();
+  songNameText.textContent = `Song: ${song.name}`;
+}
+
+function loadCurrentSong() {
+  const song = getCurrentSong();
+
+  musicLoadFailed = false;
+
+  bgMusic.src = song.src;
+  bgMusic.loop = CONFIG.audio.loop;
+  bgMusic.volume = CONFIG.audio.volume;
+  bgMusic.preload = "auto";
+
+  updateSongName();
+  updateMusicButton();
+}
+
+function setupAudio() {
+  if (!CONFIG.audio.enabled) {
+    musicEnabled = false;
+  }
+
+  bgMusic.addEventListener("error", () => {
+    musicLoadFailed = true;
+    updateMusicButton();
+    showMessage(`Song not found: ${getCurrentSong().src}`);
+  });
+
+  bgMusic.addEventListener("canplaythrough", () => {
+    musicLoadFailed = false;
+    updateMusicButton();
+  });
+
+  bgMusic.addEventListener("ended", () => {
+    if (!CONFIG.audio.loop) {
+      nextSong();
+    }
+  });
+
+  loadCurrentSong();
+  updateMusicButton();
+}
+
+function startMusic() {
+  if (!CONFIG.audio.enabled || !musicEnabled || musicLoadFailed) {
+    updateMusicButton();
+    return;
+  }
+
+  bgMusic.volume = CONFIG.audio.volume;
+  bgMusic.loop = CONFIG.audio.loop;
+
+  const playPromise = bgMusic.play();
+
+  if (playPromise && typeof playPromise.catch === "function") {
+    playPromise.catch(() => {
+      updateMusicButton("Tap to Play");
+    });
+  }
+
+  updateMusicButton();
+}
+
 function pauseMusic() {
   bgMusic.pause();
   updateMusicButton();
@@ -934,7 +1030,7 @@ function pauseMusic() {
 
 function toggleMusic() {
   if (!CONFIG.audio.enabled || musicLoadFailed) {
-    showMessage("No music loaded. Check assets/audio/theme.mp3");
+    showMessage("No music loaded. Check your assets/audio folder.");
     return;
   }
 
@@ -950,6 +1046,21 @@ function toggleMusic() {
   updateMusicButton();
 }
 
+function nextSong() {
+  currentSongIndex = (currentSongIndex + 1) % audioPlaylist.length;
+  localStorage.setItem("villupuramRunSongIndex", String(currentSongIndex));
+
+  const shouldPlay = musicEnabled && state !== "start" && state !== "over";
+
+  loadCurrentSong();
+
+  if (shouldPlay) {
+    startMusic();
+  }
+
+  showMessage(`Now playing: ${getCurrentSong().name}`);
+}
+
 function updateMusicButton(customText) {
   if (!musicBtn) return;
 
@@ -960,7 +1071,7 @@ function updateMusicButton(customText) {
   }
 
   if (musicLoadFailed) {
-    musicBtn.textContent = "⚠️ No Music";
+    musicBtn.textContent = "⚠️ Missing Song";
     musicBtn.classList.add("off");
     return;
   }
@@ -972,12 +1083,14 @@ function updateMusicButton(customText) {
   }
 
   if (musicEnabled) {
-    musicBtn.textContent = bgMusic.paused ? "🔊 Music" : "🔊 Playing";
+    musicBtn.textContent = bgMusic.paused ? "🔊 Unmuted" : "🔊 Playing";
     musicBtn.classList.remove("off");
   } else {
     musicBtn.textContent = "🔇 Muted";
     musicBtn.classList.add("off");
   }
+
+  updateSongName();
 }
 
 /* -------------------- SETUP -------------------- */
@@ -2138,6 +2251,18 @@ function fastTap(button, action) {
   });
 }
 
+function toggleSettingsPanel() {
+  if (!settingsPanel) return;
+
+  settingsPanel.classList.toggle("visible");
+}
+
+function closeSettingsPanel() {
+  if (!settingsPanel) return;
+
+  settingsPanel.classList.remove("visible");
+}
+
 function initGame() {
   loadAssets();
   resizeCanvas();
@@ -2162,6 +2287,20 @@ function initGame() {
 
   fastTap(musicBtn, toggleMusic);
 
+fastTap(settingsBtn, toggleSettingsPanel);
+fastTap(nextSongBtn, nextSong);
+
+document.addEventListener("pointerdown", event => {
+  if (!settingsPanel || !settingsBtn) return;
+
+  const clickedInsidePanel = settingsPanel.contains(event.target);
+  const clickedSettingsButton = settingsBtn.contains(event.target);
+
+  if (!clickedInsidePanel && !clickedSettingsButton) {
+    closeSettingsPanel();
+  }
+});
+  
   setButtonHeld(leftBtn, "left");
   setButtonHeld(rightBtn, "right");
 
