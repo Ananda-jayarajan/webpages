@@ -149,72 +149,72 @@ const QUIZ_QUESTIONS = [
     answer: 1
   },
   {
-    question: "Why did everyone suddenly become a constitutional expert after TVK got 108 seats?",
+    question: "Why did Rajini meet MKS after election result?",
     options: [
-      "Because 108-ku 118 varaikkum only law, not mass opening",
-      "Because Governor became the new election commissioner",
-      "Because Vijay forgot to release Part 2 manifesto",
-      "Because ADMK gave free calculator to all anchors"
+      "To offer his condolence",
+      "To broker DMK-ADMK aliance",
+      "To redicule him",
+      "To discuss Jailer 2 script"
+    ],
+    answer: 1
+  },
+  {
+    question: "what is the name of AMMK MLA who flipped sides?",
+    options: [
+      "EPS",
+      "S. Kamaraj",
+      "T. T. V",
+      "OPS"
+    ],
+    answer: 1
+  },
+  {
+    question: "Is Rajini jealous of Thalapathy Vijay?",
+    options: [
+      "Yes 100%",
+      "Illa light ah",
+      "No but yes",
+      "all the above"
     ],
     answer: 0
   },
   {
-    question: "Why did Congress with 5 seats suddenly get main character energy?",
+    question: "Who is the reason for MKS's loss in Kolathur?",
     options: [
-      "Because hung assembly-la even small party becomes WiFi password",
-      "Because Rahul Gandhi personally counted every MLA",
-      "Because DMK forgot to renew alliance subscription",
-      "Because 5 seats is bigger than 108 emotionally"
+      "S. Babu",
+      "MKS",
+      "Vijay Tsunami",
+      "anti incumbency"
     ],
     answer: 0
   },
   {
-    question: "Why did Anbumani say TVK victory is not a tsunami?",
+    question: "Who said Vijay is Illuminati ?",
     options: [
-      "Because tsunami-na 160 seats venum, 108 is only beach breeze",
-      "Because PMK got 4 seats and wanted weather department credit",
-      "Because eight districts said 'Vijay sir, next film paapom'",
-      "Because 1991 and 1996 are still his favourite examples"
+      "Pa Sa",
+      "Kevin Paul",
+      "Mukthar",
+      "Savukku Shankar"
     ],
     answer: 0
   },
   {
-    question: "Why did Kolathur become the most paused YouTube thumbnail after results?",
+    question: "what are vijay fans called?",
     options: [
-      "Because Stalin targeted +75,000 but result gave -8,795 plot twist",
-      "Because TVK candidate had better booth BGM",
-      "Because Kolathur voters skipped manifesto and watched Shorts",
-      "Because DMK forgot the constituency password"
+      "Anils",
+      "Rs. 200 UPs",
+      "Sangi",
+      "Thambis"
     ],
     answer: 0
   },
   {
-    question: "Why did Udhayanidhi's Chepauk result feel like a last-ball single?",
+    question: "Who said Vijay and Seeman as Ba Ja Ka's child?",
     options: [
-      "He retained the seat, but margin became humble mode",
-      "Because Chepauk always needs cricket reference",
-      "Because TVK nearly turned it into interval block",
-      "Because DMK saved one family subscription there"
-    ],
-    answer: 0
-  },
-  {
-    question: "Why did Perambur become TVK fans' favourite booth-level screenshot?",
-    options: [
-      "Because Vijay won there with proper theatre opening margin",
-      "Because North Chennai became fan club headquarters",
-      "Because Perambur accepted both manifesto and mass intro",
-      "Because all of the above"
-    ],
-    answer: 3
-  },
-  {
-    question: "Why did Vijay vacate Trichy East after winning two seats?",
-    options: [
-      "Because MLA dual role-ku Representation of People Act allow pannaadhu",
-      "Because Perambur had better first-day collection",
-      "Because Trichy East was only political cameo",
-      "Because Cabinet needed sequel space"
+      "Thol. Thirumavalavan",
+      "OPS",
+      "EPS",
+      "MKS Jr."
     ],
     answer: 0
   },
