@@ -39,19 +39,17 @@ const DEFAULT_CONFIG = {
     worldWidth: 7200,
     startX: 140,
     finishX: 6900,
-    obstacleCount: 26,
-    voteCount: 34,
-    minObstacleGap: 230
+    obstacleCount: 18,
+    voteCount: 30,
+    minObstacleGap: 260
   },
 
   player: {
     width: 120,
     height: 155,
     slideHeight: 92,
-
-    // fallback image only if animation frames are missing
     image: "assets/characters/vijay.png",
-
+    visualOffsetY: 12,
     hitboxPaddingX: 28,
     hitboxPaddingTop: 20,
     hitboxPaddingBottom: 12
@@ -117,12 +115,6 @@ const CONFIG = {
   debug: { ...DEFAULT_CONFIG.debug, ...(window.GAME_CONFIG?.debug || {}) }
 };
 
-/*
-  PLAYER ANIMATION SETUP
-
-  fps = animation speed.
-  loop = whether the animation repeats.
-*/
 const PLAYER_ANIMATIONS = {
   idle: {
     fps: 3,
@@ -249,21 +241,14 @@ let animationFrameId = null;
 const player = {
   x: CONFIG.level.startX,
   y: 0,
-
   vx: 0,
   vy: 0,
-
   width: CONFIG.player.width,
   height: CONFIG.player.height,
   normalHeight: CONFIG.player.height,
   slideHeight: CONFIG.player.slideHeight,
-
   grounded: true,
-
-  // 1 = facing right, -1 = facing left
   facing: 1,
-
-  // State machine animation variables
   state: "idle",
   previousState: "idle",
   animationTimer: 0,
@@ -303,7 +288,6 @@ function loadPlayerAnimations() {
 
     for (const src of animation.frames) {
       totalFrames++;
-
       const img = new Image();
 
       img.onload = () => {
@@ -313,7 +297,6 @@ function loadPlayerAnimations() {
           if (failedFrames > 0) {
             showMessage("Some player animation frames are missing. Check assets/player folders.");
           }
-
           render();
         }
       };
@@ -328,7 +311,6 @@ function loadPlayerAnimations() {
           } else {
             showMessage("Some player animation frames are missing. Check assets/player folders.");
           }
-
           render();
         }
       };
@@ -520,21 +502,29 @@ function resetGame() {
   updateHud();
 }
 
+/*
+  NEW: evenly spaced obstacle placement
+
+  Instead of placing each obstacle with completely random gaps,
+  we divide the playable world into evenly spaced slots.
+  Then we add only a small random offset.
+*/
 function buildRandomObstacles() {
   const result = [];
-  let lastX = 520;
 
-  for (let i = 0; i < CONFIG.level.obstacleCount; i++) {
+  const count = CONFIG.level.obstacleCount;
+  const startZone = 700;
+  const endZone = CONFIG.level.finishX - 350;
+  const usableWidth = endZone - startZone;
+  const spacing = usableWidth / count;
+
+  for (let i = 0; i < count; i++) {
     const template = CONFIG.obstacles[Math.floor(Math.random() * CONFIG.obstacles.length)];
-    const gap = CONFIG.level.minObstacleGap + Math.random() * 260;
-    const x = lastX + gap;
-
-    lastX = x;
-
-    if (x > CONFIG.level.finishX - 280) break;
+    const smallOffset = (Math.random() - 0.5) * 70;
+    const x = startZone + i * spacing + smallOffset;
 
     const y = template.type === "air"
-      ? groundY - player.normalHeight + 18
+      ? groundY - player.normalHeight + 8
       : groundY - template.height;
 
     result.push({
@@ -807,7 +797,6 @@ function setPlayerState(newState) {
 
 function updatePlayerAnimation(dt) {
   const animation = PLAYER_ANIMATIONS[player.state];
-
   if (!animation) return;
 
   player.animationTimer += dt;
@@ -941,7 +930,6 @@ function spawnDust(x, y, count) {
 
 function updateCamera() {
   const target = player.x - width * 0.35;
-
   cameraX += (target - cameraX) * 0.16;
   cameraX = clamp(cameraX, 0, Math.max(0, CONFIG.level.worldWidth - width));
 }
@@ -1049,12 +1037,10 @@ function drawParallax() {
   drawClouds();
 
   const mountainOffset = -(cameraX * 0.22) % width;
-
   drawMountains(mountainOffset, groundY - 250, "#211839", 0.72);
   drawMountains(mountainOffset + width, groundY - 250, "#211839", 0.72);
 
   const hillOffset = -(cameraX * 0.45) % width;
-
   drawHills(hillOffset, groundY - 120, "#18332e", 0.96);
   drawHills(hillOffset + width, groundY - 120, "#18332e", 0.96);
 }
@@ -1117,24 +1103,61 @@ function drawHills(offset, y, color, alpha) {
   ctx.restore();
 }
 
+/*
+  NEW FLOOR:
+  Mario-like grassy floor
+  - bright green grass top
+  - darker green grass shadow
+  - brown dirt body
+  - repeating block pattern
+*/
 function drawGround() {
-  ctx.fillStyle = "#102822";
+  const grassTopHeight = 24;
+  const soilY = groundY + grassTopHeight;
+
+  // base dirt
+  ctx.fillStyle = "#8b5a2b";
   ctx.fillRect(0, groundY, width, height - groundY);
 
-  ctx.fillStyle = "#f7d794";
-  ctx.fillRect(0, groundY, width, 6);
+  // darker lower dirt
+  ctx.fillStyle = "#6f4522";
+  ctx.fillRect(0, soilY + 24, width, height - (soilY + 24));
 
-  const stripeOffset = -(cameraX * 0.85) % 66;
+  // bright grass top
+  ctx.fillStyle = "#5ecb49";
+  ctx.fillRect(0, groundY, width, 12);
 
-  ctx.save();
-  ctx.globalAlpha = 0.22;
-  ctx.fillStyle = "#f7d794";
+  // grass highlight
+  ctx.fillStyle = "#8df06a";
+  ctx.fillRect(0, groundY, width, 4);
 
-  for (let x = stripeOffset - 80; x < width + 80; x += 66) {
-    ctx.fillRect(x, groundY + 38, 34, 4);
+  // darker grass underside
+  ctx.fillStyle = "#2f9f32";
+  ctx.fillRect(0, groundY + 12, width, 12);
+
+  // soil stripe layers
+  ctx.strokeStyle = "#c78a49";
+  ctx.lineWidth = 4;
+
+  for (let y = soilY + 12; y < height; y += 22) {
+    ctx.beginPath();
+    for (let x = -30; x <= width + 30; x += 28) {
+      ctx.moveTo(x, y);
+      ctx.quadraticCurveTo(x + 14, y + 8, x + 28, y);
+    }
+    ctx.stroke();
   }
 
-  ctx.restore();
+  // block-like vertical separators for mario dirt feel
+  ctx.strokeStyle = "rgba(90, 54, 22, 0.45)";
+  ctx.lineWidth = 2;
+
+  for (let x = 0; x < width; x += 42) {
+    ctx.beginPath();
+    ctx.moveTo(x, soilY);
+    ctx.lineTo(x, height);
+    ctx.stroke();
+  }
 }
 
 function drawFinishLine() {
@@ -1179,19 +1202,18 @@ function drawPlayer() {
 }
 
 function drawPlayerImage(img, screenX) {
-  const drawY = player.y;
+  // lower Vijay visually so he touches the floor better
+  const drawY = player.y + (CONFIG.player.visualOffsetY || 0);
 
   ctx.save();
 
-  // All animation images should face RIGHT.
-  // When facing LEFT, this flips the image horizontally.
   ctx.translate(screenX + player.width / 2, drawY + player.height / 2);
   ctx.scale(player.facing, 1);
   ctx.translate(-player.width / 2, -player.height / 2);
 
-  ctx.shadowColor = "rgba(0, 0, 0, 0.35)";
-  ctx.shadowBlur = 10;
-  ctx.shadowOffsetY = 6;
+  ctx.shadowColor = "rgba(0, 0, 0, 0.30)";
+  ctx.shadowBlur = 8;
+  ctx.shadowOffsetY = 4;
 
   ctx.drawImage(img, 0, 0, player.width, player.height);
 
@@ -1200,20 +1222,17 @@ function drawPlayerImage(img, screenX) {
 
 function drawCharacterShadow(screenX, y) {
   ctx.save();
-
-  ctx.globalAlpha = 0.24;
+  ctx.globalAlpha = 0.20;
   ctx.fillStyle = "#000";
-
   ctx.beginPath();
-  ctx.ellipse(screenX + player.width / 2, y + 8, 50, 10, 0, 0, Math.PI * 2);
+  ctx.ellipse(screenX + player.width / 2, y + 4, 44, 8, 0, 0, Math.PI * 2);
   ctx.fill();
-
   ctx.restore();
 }
 
 function drawFallbackPlayer(screenX) {
   const x = screenX;
-  const y = player.y;
+  const y = player.y + (CONFIG.player.visualOffsetY || 0);
 
   ctx.save();
 
@@ -1337,30 +1356,24 @@ function drawCollectibles() {
 function drawParticles() {
   for (const p of particles) {
     ctx.save();
-
     ctx.globalAlpha = Math.max(0, p.life);
     ctx.fillStyle = p.color;
-
     ctx.beginPath();
     ctx.arc(p.x - cameraX, p.y, p.size, 0, Math.PI * 2);
     ctx.fill();
-
     ctx.restore();
   }
 
   for (const text of floatingTexts) {
     ctx.save();
-
     ctx.globalAlpha = clamp(text.life, 0, 1);
     ctx.fillStyle = "#fff";
     ctx.strokeStyle = "#111";
     ctx.lineWidth = 4;
     ctx.font = "900 18px Arial";
     ctx.textAlign = "center";
-
     ctx.strokeText(text.text, text.x - cameraX, text.y);
     ctx.fillText(text.text, text.x - cameraX, text.y);
-
     ctx.restore();
   }
 }
@@ -1369,7 +1382,6 @@ function drawHitboxes() {
   const p = getPlayerHitbox();
 
   ctx.save();
-
   ctx.lineWidth = 2;
   ctx.strokeStyle = "lime";
   ctx.strokeRect(p.x - cameraX, p.y, p.width, p.height);
@@ -1446,7 +1458,6 @@ function initGame() {
 
   fastTap(slideBtn, () => {
     keys.down = true;
-
     setTimeout(() => {
       keys.down = false;
     }, 300);
