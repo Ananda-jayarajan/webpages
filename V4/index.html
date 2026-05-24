@@ -21,7 +21,27 @@
       </div>
 
       <div class="hud-right">
-        <button id="musicBtn" class="audio-btn" type="button">🔊 Music</button>
+        <div class="settings-wrap">
+  <button id="settingsBtn" class="settings-btn" type="button" aria-label="Settings">
+    ⚙
+  </button>
+
+  <div id="settingsPanel" class="settings-panel">
+    <div class="settings-title">Audio Settings</div>
+
+    <button id="musicBtn" class="settings-option" type="button">
+      🔊 Music
+    </button>
+
+    <button id="nextSongBtn" class="settings-option" type="button">
+      ⏭ Next Song
+    </button>
+
+    <div id="songNameText" class="song-name">
+      Song: Theme
+    </div>
+  </div>
+</div>
 
         <div class="hud-stats">
           <div class="stat">
