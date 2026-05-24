@@ -469,6 +469,12 @@ const votesText = document.getElementById("votesText");
 const bestText = document.getElementById("bestText");
 const finalText = document.getElementById("finalText");
 
+const gameOverBadge = document.getElementById("gameOverBadge");
+const gameOverTitle = document.getElementById("gameOverTitle");
+const outroMediaBox = document.getElementById("outroMediaBox");
+const outroVideo = document.getElementById("outroVideo");
+const outroImage = document.getElementById("outroImage");
+
 const startScreen = document.getElementById("startScreen");
 const pauseScreen = document.getElementById("pauseScreen");
 const gameOverScreen = document.getElementById("gameOverScreen");
@@ -1176,6 +1182,15 @@ function startGame() {
 }
 
 function restartGame() {
+  if (outroVideo) {
+    outroVideo.pause();
+    outroVideo.currentTime = 0;
+  }
+
+  if (outroImage) {
+    outroImage.style.display = "none";
+  }
+
   startGame();
 }
 
@@ -1245,21 +1260,71 @@ function endGame(finished = false) {
 
   updateHud();
 
-  finalText.innerHTML = `
-    <strong>${finished ? "Finished!" : "Game Over"}</strong><br>
-    <strong>Score:</strong> ${score}<br>
-    <strong>Votes:</strong> ${votes}<br>
-    <strong>Distance:</strong> ${Math.floor(farthestX)}<br>
-    <strong>Best:</strong> ${best}
-  `;
+  if (gameOverBadge) {
+    gameOverBadge.textContent = finished ? "Congratulations" : "Game Over";
+    gameOverBadge.classList.toggle("danger", !finished);
+  }
 
-  gameOverScreen.classList.add("visible");
+  if (gameOverTitle) {
+    gameOverTitle.textContent = finished ? "Congratulations!" : "Run Complete";
+  }
+
+  if (finalText) {
+    finalText.innerHTML = `
+      <strong>${finished ? "You finished Thalapathy Run!" : "Game Over"}</strong><br>
+      <strong>Score:</strong> ${score}<br>
+      <strong>Votes:</strong> ${votes}<br>
+      <strong>Distance:</strong> ${Math.floor(farthestX)}<br>
+      <strong>Best:</strong> ${best}
+    `;
+  }
+
+  setupOutroMedia(finished);
+
+  gameOverScreen?.classList.add("visible");
 }
-
 function updateHud() {
   scoreText.textContent = Math.floor(score);
   votesText.textContent = votes;
   bestText.textContent = best;
+}
+
+function setupOutroMedia(finished) {
+  if (!outroMediaBox || !outroVideo || !outroImage) return;
+
+  if (!finished) {
+    outroMediaBox.classList.add("hidden");
+    outroVideo.pause();
+    outroVideo.currentTime = 0;
+    outroImage.style.display = "none";
+    outroVideo.style.display = "block";
+    return;
+  }
+
+  outroMediaBox.classList.remove("hidden");
+
+  // Start by showing the video.
+  outroImage.style.display = "none";
+  outroVideo.style.display = "block";
+
+  outroVideo.loop = false;
+  outroVideo.currentTime = 0;
+
+  outroVideo.onended = () => {
+    // When video ends, replace it with outro.jpg.
+    outroVideo.style.display = "none";
+    outroImage.style.display = "block";
+  };
+
+  const playPromise = outroVideo.play();
+
+  if (playPromise && typeof playPromise.catch === "function") {
+    playPromise.catch(() => {
+      // If browser blocks autoplay, show the image instead.
+      outroVideo.style.display = "none";
+      outroImage.style.display = "block";
+    });
+  }
 }
 
 /* -------------------- MAIN LOOP -------------------- */
