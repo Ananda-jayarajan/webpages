@@ -906,51 +906,7 @@ function loadObstacleImages() {
 
 /* -------------------- AUDIO -------------------- */
 
-
-  bgMusic.src = CONFIG.audio.src;
-  bgMusic.loop = CONFIG.audio.loop;
-  bgMusic.volume = CONFIG.audio.volume;
-  bgMusic.preload = "auto";
-
-  bgMusic.addEventListener("error", () => {
-    musicLoadFailed = true;
-    updateMusicButton();
-    showMessage("theme.mp3 not found. Put it in assets/audio/theme.mp3");
-  });
-
-  bgMusic.addEventListener("canplaythrough", () => {
-    musicLoadFailed = false;
-    updateMusicButton();
-  });
-
-  updateMusicButton();
-}
-
-
-
-  bgMusic.volume = CONFIG.audio.volume;
-  bgMusic.loop = CONFIG.audio.loop;
-
-  const playPromise = bgMusic.play();
-
-  if (playPromise && typeof playPromise.catch === "function") {
-    playPromise.catch(() => updateMusicButton("Tap Music"));
-  }
-
-  updateMusicButton();
-}
-
-  musicEnabled = !musicEnabled;
-  localStorage.setItem("villupuramRunMusic", musicEnabled ? "on" : "off");
-
-  if (musicEnabled) {
-    startMusic();
-  } else {
-    pauseMusic();
-  }
-
-  updateMusicButton();
-}
+/* -------------------- AUDIO -------------------- */
 
 function getCurrentSong() {
   return audioPlaylist[currentSongIndex];
