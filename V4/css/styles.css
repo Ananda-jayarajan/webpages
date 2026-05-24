@@ -61,3 +61,89 @@
   background: #2fa53a;
   color: white;
 }
+
+.settings-wrap {
+  position: relative;
+  pointer-events: auto;
+}
+
+.settings-btn {
+  width: 48px;
+  height: 48px;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 16px;
+  background: rgba(10, 10, 18, 0.42);
+  color: #fff;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+  font-size: 25px;
+  font-weight: 900;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.45);
+}
+
+.settings-btn:hover {
+  background: rgba(255, 215, 106, 0.18);
+}
+
+.settings-panel {
+  position: absolute;
+  top: 58px;
+  right: 0;
+  width: 210px;
+  display: none;
+  padding: 12px;
+  border-radius: 18px;
+  background: rgba(10, 10, 18, 0.86);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.35);
+}
+
+.settings-panel.visible {
+  display: block;
+}
+
+.settings-title {
+  margin-bottom: 10px;
+  color: #ffd76a;
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.settings-option {
+  width: 100%;
+  margin-bottom: 8px;
+  border: 0;
+  border-radius: 14px;
+  padding: 11px 12px;
+  background: rgba(255, 255, 255, 0.92);
+  color: #111;
+  font-size: 14px;
+  font-weight: 900;
+  cursor: pointer;
+  text-align: left;
+}
+
+.settings-option:hover {
+  background: #ffd76a;
+}
+
+.settings-option.off {
+  opacity: 0.72;
+}
+
+.song-name {
+  margin-top: 8px;
+  padding: 8px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.35;
+}
