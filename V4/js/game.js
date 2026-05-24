@@ -40,7 +40,7 @@ const DEFAULT_CONFIG = {
     finishX: 6900,
 
     // Fewer obstacles + evenly spaced placement = easier gameplay
-    obstacleCount: 15,
+    obstacleCount: 10,
 
     voteCount: 30,
 
@@ -55,12 +55,12 @@ const DEFAULT_CONFIG = {
 
     // Draw Vijay a little lower so his feet touch the floor visually.
     // This only changes drawing, not physics.
-    visualOffsetY: 24,
+    visualOffsetY: 38,
 
     // Smaller/fairer player collision box.
-    hitboxPaddingX: 38,
-    hitboxPaddingTop: 34,
-    hitboxPaddingBottom: 28
+    hitboxPaddingX: 42,
+    hitboxPaddingTop: 38,
+    hitboxPaddingBottom: 32
   },
 
   audio: {
@@ -94,8 +94,8 @@ const DEFAULT_CONFIG = {
       name: `Obstacle ${n}`,
       type: isAir ? "air" : "ground",
       // Smaller obstacle images than before
-      width: isAir ? 132 : 92,
-      height: isAir ? 64 : 92,
+      width: 120,
+      height: isAir ? 82 : 120,
       color: "#e84d5b",
       label: String(n),
       image: `assets/obstacles/${n}.png`
@@ -528,18 +528,21 @@ function buildRandomObstacles() {
   const result = [];
 
   /*
-    EVEN OBSTACLE SPACING
+    EVEN + WIDE OBSTACLE SPACING
 
-    We divide the level into equal slots.
+    The level is divided into equal slots.
     Each slot gets one obstacle.
-    The obstacle type/image is still random, but the x-position is evenly spaced.
-
-    This fixes the problem where many obstacles appear too close together.
+    The obstacle image/type is still random, but spacing is now controlled and fair.
   */
 
   const count = CONFIG.level.obstacleCount;
-  const startX = 900;
-  const endX = CONFIG.level.finishX - 500;
+
+  // Start later so the player has time to move.
+  const startX = 1000;
+
+  // Stop earlier so the finish area is clean.
+  const endX = CONFIG.level.finishX - 700;
+
   const spacing = (endX - startX) / Math.max(1, count - 1);
 
   for (let i = 0; i < count; i++) {
@@ -741,7 +744,13 @@ function updatePlayer(dt) {
   const wantsSlide = keys.down && player.grounded;
 
   if (wantsSlide) {
-    player.height = player.slideHeight;
+    /*
+      Slide visual fix:
+      Do NOT shrink the player image height.
+      The animation state will switch to "slide",
+      so the game displays only images from assets/player/slide/.
+    */
+    player.height = player.normalHeight;
     player.vx *= 0.94;
   } else {
     player.height = player.normalHeight;
@@ -945,14 +954,14 @@ function getPlayerHitbox() {
 
 function getObstacleHitbox(obstacle) {
   /*
-    Smaller obstacle hitbox:
-    The visible obstacle image can be bigger,
-    but the collision area is only the middle/core part.
+    Small/fair obstacle hitbox:
+    The obstacle image can be visually large,
+    but collision happens only near the center/core.
   */
 
-  const padX = obstacle.width * 0.32;
-  const padTop = obstacle.height * 0.28;
-  const padBottom = obstacle.height * 0.34;
+  const padX = obstacle.width * 0.40;
+  const padTop = obstacle.height * 0.34;
+  const padBottom = obstacle.height * 0.38;
 
   return {
     x: obstacle.x + padX,
