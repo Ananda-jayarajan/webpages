@@ -3,7 +3,7 @@ console.log("The Villupuram Run Platformer: animated player game.js loaded");
 /*
   PLAYER ANIMATION FILES
 
-  Put your images here:
+  Place your animation images here:
 
   assets/player/idle/idle1.png
   assets/player/idle/idle2.png
@@ -20,9 +20,8 @@ console.log("The Villupuram Run Platformer: animated player game.js loaded");
   assets/player/slide/slide1.png
   assets/player/slide/slide2.png
 
-  IMPORTANT:
-  Make all images face RIGHT.
-  This code automatically flips the player when moving LEFT.
+  Keep the character facing RIGHT in all images.
+  The code automatically flips the image when the player faces LEFT.
 */
 
 const DEFAULT_CONFIG = {
@@ -39,20 +38,29 @@ const DEFAULT_CONFIG = {
     worldWidth: 7200,
     startX: 140,
     finishX: 6900,
-    obstacleCount: 18,
+
+    // Fewer obstacles + evenly spaced placement = easier gameplay
+    obstacleCount: 15,
+
     voteCount: 30,
-    minObstacleGap: 260
+
+    // Used as a minimum safety distance in level design
+    minObstacleGap: 420
   },
 
   player: {
     width: 120,
     height: 155,
     slideHeight: 92,
-    image: "assets/characters/vijay.png",
-    visualOffsetY: 12,
-    hitboxPaddingX: 28,
-    hitboxPaddingTop: 20,
-    hitboxPaddingBottom: 12
+
+    // Draw Vijay a little lower so his feet touch the floor visually.
+    // This only changes drawing, not physics.
+    visualOffsetY: 24,
+
+    // Smaller/fairer player collision box.
+    hitboxPaddingX: 38,
+    hitboxPaddingTop: 34,
+    hitboxPaddingBottom: 28
   },
 
   audio: {
@@ -85,8 +93,9 @@ const DEFAULT_CONFIG = {
     return {
       name: `Obstacle ${n}`,
       type: isAir ? "air" : "ground",
-      width: isAir ? 170 : 118,
-      height: isAir ? 82 : 118,
+      // Smaller obstacle images than before
+      width: isAir ? 132 : 92,
+      height: isAir ? 64 : 92,
       color: "#e84d5b",
       label: String(n),
       image: `assets/obstacles/${n}.png`
@@ -115,6 +124,15 @@ const CONFIG = {
   debug: { ...DEFAULT_CONFIG.debug, ...(window.GAME_CONFIG?.debug || {}) }
 };
 
+/*
+  Animation setup.
+
+  fps = animation speed.
+  loop = true means the animation repeats.
+  loop = false means it stays on the last frame.
+
+  You can add more frames later by adding paths to each frames array.
+*/
 const PLAYER_ANIMATIONS = {
   idle: {
     fps: 3,
@@ -162,8 +180,6 @@ const PLAYER_ANIMATIONS = {
   }
 };
 
-/* -------------------- DOM ELEMENTS -------------------- */
-
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
@@ -195,8 +211,6 @@ if (!bgMusic) {
   document.body.appendChild(bgMusic);
 }
 
-/* -------------------- ASSETS -------------------- */
-
 const assets = {
   playerAnimations: {},
   fallbackPlayer: new Image()
@@ -204,17 +218,16 @@ const assets = {
 
 const obstacleImages = {};
 
-let fallbackPlayerLoaded = false;
-let musicEnabled = localStorage.getItem("villupuramRunMusic") !== "off";
-let musicLoadFailed = false;
-
-/* -------------------- GAME STATE -------------------- */
-
 const keys = {
   left: false,
   right: false,
   down: false
 };
+
+let playerAnimationReady = false;
+let fallbackPlayerLoaded = false;
+let musicEnabled = localStorage.getItem("villupuramRunMusic") !== "off";
+let musicLoadFailed = false;
 
 let width = 0;
 let height = 0;
@@ -239,23 +252,28 @@ let clouds = [];
 let animationFrameId = null;
 
 const player = {
-  x: CONFIG.level.startX,
+  x: CONFIG.level.startX || CONFIG.player.x || 140,
   y: 0,
+
   vx: 0,
   vy: 0,
+
   width: CONFIG.player.width,
   height: CONFIG.player.height,
   normalHeight: CONFIG.player.height,
   slideHeight: CONFIG.player.slideHeight,
+
   grounded: true,
+
+  // 1 = facing right, -1 = facing left
   facing: 1,
+
+  // animation state machine values
   state: "idle",
   previousState: "idle",
   animationTimer: 0,
   animationFrameIndex: 0
 };
-
-/* -------------------- HELPER MESSAGE -------------------- */
 
 function showMessage(message) {
   if (!errorBanner) return;
@@ -269,8 +287,6 @@ function showMessage(message) {
     errorBanner.classList.remove("visible");
   }, 5000);
 }
-
-/* -------------------- LOAD ASSETS -------------------- */
 
 function loadAssets() {
   loadPlayerAnimations();
@@ -288,15 +304,21 @@ function loadPlayerAnimations() {
 
     for (const src of animation.frames) {
       totalFrames++;
+
       const img = new Image();
 
       img.onload = () => {
         loadedFrames++;
 
+        if (loadedFrames > 0) {
+          playerAnimationReady = true;
+        }
+
         if (loadedFrames + failedFrames === totalFrames) {
           if (failedFrames > 0) {
-            showMessage("Some player animation frames are missing. Check assets/player folders.");
+            showMessage("Some player animation images are missing. Check assets/player folders.");
           }
+
           render();
         }
       };
@@ -307,21 +329,25 @@ function loadPlayerAnimations() {
 
         if (loadedFrames + failedFrames === totalFrames) {
           if (loadedFrames === 0) {
-            showMessage("No animation frames found. Using fallback vijay.png.");
+            showMessage("No player animation frames found. Using fallback player.");
           } else {
-            showMessage("Some player animation frames are missing. Check assets/player folders.");
+            showMessage("Some player animation images are missing. Check assets/player folders.");
           }
+
           render();
         }
       };
 
       img.src = src;
+
       assets.playerAnimations[stateName].push(img);
     }
   }
 }
 
 function loadFallbackPlayer() {
+  const fallbackPath = CONFIG.player.image || "assets/characters/vijay.png";
+
   assets.fallbackPlayer.onload = () => {
     fallbackPlayerLoaded = true;
     render();
@@ -331,7 +357,7 @@ function loadFallbackPlayer() {
     fallbackPlayerLoaded = false;
   };
 
-  assets.fallbackPlayer.src = CONFIG.player.image;
+  assets.fallbackPlayer.src = fallbackPath;
 }
 
 function loadObstacleImages() {
@@ -352,8 +378,6 @@ function loadObstacleImages() {
     obstacleImages[obstacle.image] = img;
   }
 }
-
-/* -------------------- AUDIO -------------------- */
 
 function setupAudio() {
   if (!CONFIG.audio.enabled) {
@@ -450,8 +474,6 @@ function updateMusicButton(customText) {
   }
 }
 
-/* -------------------- SETUP / RESET -------------------- */
-
 function resizeCanvas() {
   dpr = Math.max(1, Math.min(window.devicePixelRatio || 1, 2));
   width = window.innerWidth;
@@ -473,7 +495,7 @@ function resetGame() {
   elapsed = 0;
   score = 0;
   votes = 0;
-  farthestX = CONFIG.level.startX;
+  farthestX = CONFIG.level.startX || CONFIG.player.x || 140;
   levelFinished = false;
   cameraX = 0;
 
@@ -482,7 +504,7 @@ function resetGame() {
   particles = [];
   floatingTexts = [];
 
-  player.x = CONFIG.level.startX;
+  player.x = CONFIG.level.startX || CONFIG.player.x || 140;
   player.y = groundY - player.normalHeight;
   player.vx = 0;
   player.vy = 0;
@@ -502,29 +524,31 @@ function resetGame() {
   updateHud();
 }
 
-/*
-  NEW: evenly spaced obstacle placement
-
-  Instead of placing each obstacle with completely random gaps,
-  we divide the playable world into evenly spaced slots.
-  Then we add only a small random offset.
-*/
 function buildRandomObstacles() {
   const result = [];
 
+  /*
+    EVEN OBSTACLE SPACING
+
+    We divide the level into equal slots.
+    Each slot gets one obstacle.
+    The obstacle type/image is still random, but the x-position is evenly spaced.
+
+    This fixes the problem where many obstacles appear too close together.
+  */
+
   const count = CONFIG.level.obstacleCount;
-  const startZone = 700;
-  const endZone = CONFIG.level.finishX - 350;
-  const usableWidth = endZone - startZone;
-  const spacing = usableWidth / count;
+  const startX = 900;
+  const endX = CONFIG.level.finishX - 500;
+  const spacing = (endX - startX) / Math.max(1, count - 1);
 
   for (let i = 0; i < count; i++) {
     const template = CONFIG.obstacles[Math.floor(Math.random() * CONFIG.obstacles.length)];
-    const smallOffset = (Math.random() - 0.5) * 70;
-    const x = startZone + i * spacing + smallOffset;
+
+    const x = startX + i * spacing;
 
     const y = template.type === "air"
-      ? groundY - player.normalHeight + 8
+      ? groundY - player.normalHeight + 12
       : groundY - template.height;
 
     result.push({
@@ -558,8 +582,6 @@ function buildRandomVotes() {
 
   return result;
 }
-
-/* -------------------- START / PAUSE / END -------------------- */
 
 function startGame() {
   if (animationFrameId) {
@@ -659,8 +681,6 @@ function updateHud() {
   bestText.textContent = best;
 }
 
-/* -------------------- MAIN LOOP -------------------- */
-
 function loop(now) {
   if (state !== "running") return;
 
@@ -692,8 +712,6 @@ function update(dt) {
   updateHud();
   updateMusicButton();
 }
-
-/* -------------------- PLAYER MOVEMENT -------------------- */
 
 function updatePlayer(dt) {
   const movingLeft = keys.left && !keys.right;
@@ -758,8 +776,18 @@ function updatePlayer(dt) {
   }
 }
 
-/* -------------------- PLAYER STATE MACHINE -------------------- */
+/*
+  PLAYER STATE MACHINE
 
+  This decides what state the player should be in.
+
+  Priority order:
+  1. slide/crouch if Down/S is held and player is on ground
+  2. jump if moving upward
+  3. fall if moving downward
+  4. run if moving left/right
+  5. idle if nothing else is happening
+*/
 function choosePlayerState() {
   const speedX = Math.abs(player.vx);
 
@@ -797,6 +825,7 @@ function setPlayerState(newState) {
 
 function updatePlayerAnimation(dt) {
   const animation = PLAYER_ANIMATIONS[player.state];
+
   if (!animation) return;
 
   player.animationTimer += dt;
@@ -855,8 +884,6 @@ function jump() {
   spawnDust(player.x + 12, groundY, 8);
 }
 
-/* -------------------- COLLECTIBLES / PARTICLES -------------------- */
-
 function updateCollectibles(dt) {
   for (const item of collectibles) {
     item.spin += dt * 8;
@@ -895,6 +922,69 @@ function updateParticles(dt) {
   floatingTexts = floatingTexts.filter(text => text.life > 0);
 }
 
+function updateCamera() {
+  const target = player.x - width * 0.35;
+
+  cameraX += (target - cameraX) * 0.16;
+  cameraX = clamp(cameraX, 0, Math.max(0, CONFIG.level.worldWidth - width));
+}
+
+function getPlayerHitbox() {
+  /*
+    Smaller player hitbox:
+    Vijay image can visually overlap an obstacle a tiny bit,
+    but game over happens only when the body actually hits.
+  */
+  return {
+    x: player.x + CONFIG.player.hitboxPaddingX,
+    y: player.y + CONFIG.player.hitboxPaddingTop,
+    width: player.width - CONFIG.player.hitboxPaddingX * 2,
+    height: player.height - CONFIG.player.hitboxPaddingTop - CONFIG.player.hitboxPaddingBottom
+  };
+}
+
+function getObstacleHitbox(obstacle) {
+  /*
+    Smaller obstacle hitbox:
+    The visible obstacle image can be bigger,
+    but the collision area is only the middle/core part.
+  */
+
+  const padX = obstacle.width * 0.32;
+  const padTop = obstacle.height * 0.28;
+  const padBottom = obstacle.height * 0.34;
+
+  return {
+    x: obstacle.x + padX,
+    y: obstacle.y + padTop,
+    width: obstacle.width - padX * 2,
+    height: obstacle.height - padTop - padBottom
+  };
+}
+
+function rectsOverlap(a, b) {
+  return (
+    a.x < b.x + b.width &&
+    a.x + a.width > b.x &&
+    a.y < b.y + b.height &&
+    a.y + a.height > b.y
+  );
+}
+
+function circleRectOverlap(circle, rect) {
+  const radius = circle.size / 2;
+  const closestX = clamp(circle.x, rect.x, rect.x + rect.width);
+  const closestY = clamp(circle.y, rect.y, rect.y + rect.height);
+  const dx = circle.x - closestX;
+  const dy = circle.y - closestY;
+
+  return dx * dx + dy * dy < radius * radius;
+}
+
+function clamp(value, min, max) {
+  return Math.max(min, Math.min(max, value));
+}
+
 function spawnBurst(x, y, color, count) {
   for (let i = 0; i < count; i++) {
     const angle = Math.random() * Math.PI * 2;
@@ -925,59 +1015,6 @@ function spawnDust(x, y, count) {
     });
   }
 }
-
-/* -------------------- CAMERA -------------------- */
-
-function updateCamera() {
-  const target = player.x - width * 0.35;
-  cameraX += (target - cameraX) * 0.16;
-  cameraX = clamp(cameraX, 0, Math.max(0, CONFIG.level.worldWidth - width));
-}
-
-/* -------------------- COLLISION HELPERS -------------------- */
-
-function getPlayerHitbox() {
-  return {
-    x: player.x + CONFIG.player.hitboxPaddingX,
-    y: player.y + CONFIG.player.hitboxPaddingTop,
-    width: player.width - CONFIG.player.hitboxPaddingX * 2,
-    height: player.height - CONFIG.player.hitboxPaddingTop - CONFIG.player.hitboxPaddingBottom
-  };
-}
-
-function getObstacleHitbox(obstacle) {
-  return {
-    x: obstacle.x + 11,
-    y: obstacle.y + 10,
-    width: obstacle.width - 22,
-    height: obstacle.height - 20
-  };
-}
-
-function rectsOverlap(a, b) {
-  return (
-    a.x < b.x + b.width &&
-    a.x + a.width > b.x &&
-    a.y < b.y + b.height &&
-    a.y + a.height > b.y
-  );
-}
-
-function circleRectOverlap(circle, rect) {
-  const radius = circle.size / 2;
-  const closestX = clamp(circle.x, rect.x, rect.x + rect.width);
-  const closestY = clamp(circle.y, rect.y, rect.y + rect.height);
-  const dx = circle.x - closestX;
-  const dy = circle.y - closestY;
-
-  return dx * dx + dy * dy < radius * radius;
-}
-
-function clamp(value, min, max) {
-  return Math.max(min, Math.min(max, value));
-}
-
-/* -------------------- RENDER -------------------- */
 
 function render() {
   ctx.save();
@@ -1037,10 +1074,12 @@ function drawParallax() {
   drawClouds();
 
   const mountainOffset = -(cameraX * 0.22) % width;
+
   drawMountains(mountainOffset, groundY - 250, "#211839", 0.72);
   drawMountains(mountainOffset + width, groundY - 250, "#211839", 0.72);
 
   const hillOffset = -(cameraX * 0.45) % width;
+
   drawHills(hillOffset, groundY - 120, "#18332e", 0.96);
   drawHills(hillOffset + width, groundY - 120, "#18332e", 0.96);
 }
@@ -1103,59 +1142,76 @@ function drawHills(offset, y, color, alpha) {
   ctx.restore();
 }
 
-/*
-  NEW FLOOR:
-  Mario-like grassy floor
-  - bright green grass top
-  - darker green grass shadow
-  - brown dirt body
-  - repeating block pattern
-*/
 function drawGround() {
-  const grassTopHeight = 24;
-  const soilY = groundY + grassTopHeight;
+  /*
+    MARIO-LIKE GRASS FLOOR
 
-  // base dirt
+    Top layer: bright green grass
+    Lower layer: brown dirt blocks
+    The pattern scrolls with the camera so it feels like a real level.
+  */
+
+  const grassTopHeight = 26;
+  const soilY = groundY + grassTopHeight;
+  const scrollX = cameraX % 48;
+
+  // main dirt base
   ctx.fillStyle = "#8b5a2b";
   ctx.fillRect(0, groundY, width, height - groundY);
 
   // darker lower dirt
-  ctx.fillStyle = "#6f4522";
-  ctx.fillRect(0, soilY + 24, width, height - (soilY + 24));
+  ctx.fillStyle = "#6b3f1f";
+  ctx.fillRect(0, soilY + 28, width, height - soilY - 28);
 
-  // bright grass top
-  ctx.fillStyle = "#5ecb49";
-  ctx.fillRect(0, groundY, width, 12);
+  // grass body
+  ctx.fillStyle = "#2fa53a";
+  ctx.fillRect(0, groundY, width, grassTopHeight);
 
-  // grass highlight
-  ctx.fillStyle = "#8df06a";
-  ctx.fillRect(0, groundY, width, 4);
+  // bright top highlight
+  ctx.fillStyle = "#7ee35d";
+  ctx.fillRect(0, groundY, width, 7);
 
-  // darker grass underside
-  ctx.fillStyle = "#2f9f32";
-  ctx.fillRect(0, groundY + 12, width, 12);
-
-  // soil stripe layers
-  ctx.strokeStyle = "#c78a49";
-  ctx.lineWidth = 4;
-
-  for (let y = soilY + 12; y < height; y += 22) {
+  // jagged grass edge
+  ctx.fillStyle = "#1f7d2d";
+  for (let x = -24 - scrollX; x < width + 48; x += 24) {
     ctx.beginPath();
-    for (let x = -30; x <= width + 30; x += 28) {
-      ctx.moveTo(x, y);
-      ctx.quadraticCurveTo(x + 14, y + 8, x + 28, y);
-    }
-    ctx.stroke();
+    ctx.moveTo(x, groundY + 7);
+    ctx.lineTo(x + 12, groundY + 24);
+    ctx.lineTo(x + 24, groundY + 7);
+    ctx.closePath();
+    ctx.fill();
   }
 
-  // block-like vertical separators for mario dirt feel
-  ctx.strokeStyle = "rgba(90, 54, 22, 0.45)";
+  // dirt block separators
+  ctx.strokeStyle = "rgba(72, 39, 17, 0.45)";
   ctx.lineWidth = 2;
 
-  for (let x = 0; x < width; x += 42) {
+  for (let x = -scrollX; x < width + 48; x += 48) {
     ctx.beginPath();
     ctx.moveTo(x, soilY);
     ctx.lineTo(x, height);
+    ctx.stroke();
+  }
+
+  for (let y = soilY + 24; y < height; y += 32) {
+    ctx.beginPath();
+    ctx.moveTo(0, y);
+    ctx.lineTo(width, y);
+    ctx.stroke();
+  }
+
+  // wavy lighter soil lines
+  ctx.strokeStyle = "#c78943";
+  ctx.lineWidth = 3;
+
+  for (let y = soilY + 14; y < height; y += 34) {
+    ctx.beginPath();
+
+    for (let x = -30 - scrollX; x < width + 60; x += 30) {
+      ctx.moveTo(x, y);
+      ctx.quadraticCurveTo(x + 15, y + 8, x + 30, y);
+    }
+
     ctx.stroke();
   }
 }
@@ -1202,18 +1258,24 @@ function drawPlayer() {
 }
 
 function drawPlayerImage(img, screenX) {
-  // lower Vijay visually so he touches the floor better
+  // Lower the image slightly so Vijay's feet touch the floor.
   const drawY = player.y + (CONFIG.player.visualOffsetY || 0);
 
   ctx.save();
 
+  /*
+    This is how left/right direction works.
+
+    All image files should face RIGHT.
+    If player.facing is -1, canvas flips the image horizontally.
+  */
   ctx.translate(screenX + player.width / 2, drawY + player.height / 2);
   ctx.scale(player.facing, 1);
   ctx.translate(-player.width / 2, -player.height / 2);
 
-  ctx.shadowColor = "rgba(0, 0, 0, 0.30)";
-  ctx.shadowBlur = 8;
-  ctx.shadowOffsetY = 4;
+  ctx.shadowColor = "rgba(0, 0, 0, 0.35)";
+  ctx.shadowBlur = 10;
+  ctx.shadowOffsetY = 6;
 
   ctx.drawImage(img, 0, 0, player.width, player.height);
 
@@ -1222,11 +1284,14 @@ function drawPlayerImage(img, screenX) {
 
 function drawCharacterShadow(screenX, y) {
   ctx.save();
-  ctx.globalAlpha = 0.20;
+
+  ctx.globalAlpha = 0.24;
   ctx.fillStyle = "#000";
+
   ctx.beginPath();
-  ctx.ellipse(screenX + player.width / 2, y + 4, 44, 8, 0, 0, Math.PI * 2);
+  ctx.ellipse(screenX + player.width / 2, y + 8, 50, 10, 0, 0, Math.PI * 2);
   ctx.fill();
+
   ctx.restore();
 }
 
@@ -1283,9 +1348,7 @@ function drawObstacles() {
       ctx.shadowColor = "rgba(0, 0, 0, 0.35)";
       ctx.shadowBlur = 12;
       ctx.shadowOffsetY = 6;
-
       ctx.drawImage(img, screenX, obstacle.y, obstacle.width, obstacle.height);
-
       ctx.restore();
       continue;
     }
@@ -1306,11 +1369,7 @@ function drawObstacles() {
     ctx.font = "900 20px Arial";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillText(
-      obstacle.label || "OBS",
-      screenX + obstacle.width / 2,
-      obstacle.y + obstacle.height / 2
-    );
+    ctx.fillText(obstacle.label || "OBS", screenX + obstacle.width / 2, obstacle.y + obstacle.height / 2);
 
     ctx.restore();
   }
@@ -1356,24 +1415,30 @@ function drawCollectibles() {
 function drawParticles() {
   for (const p of particles) {
     ctx.save();
+
     ctx.globalAlpha = Math.max(0, p.life);
     ctx.fillStyle = p.color;
+
     ctx.beginPath();
     ctx.arc(p.x - cameraX, p.y, p.size, 0, Math.PI * 2);
     ctx.fill();
+
     ctx.restore();
   }
 
   for (const text of floatingTexts) {
     ctx.save();
+
     ctx.globalAlpha = clamp(text.life, 0, 1);
     ctx.fillStyle = "#fff";
     ctx.strokeStyle = "#111";
     ctx.lineWidth = 4;
     ctx.font = "900 18px Arial";
     ctx.textAlign = "center";
+
     ctx.strokeText(text.text, text.x - cameraX, text.y);
     ctx.fillText(text.text, text.x - cameraX, text.y);
+
     ctx.restore();
   }
 }
@@ -1382,6 +1447,7 @@ function drawHitboxes() {
   const p = getPlayerHitbox();
 
   ctx.save();
+
   ctx.lineWidth = 2;
   ctx.strokeStyle = "lime";
   ctx.strokeRect(p.x - cameraX, p.y, p.width, p.height);
@@ -1395,8 +1461,6 @@ function drawHitboxes() {
 
   ctx.restore();
 }
-
-/* -------------------- ROUND RECT FALLBACK -------------------- */
 
 if (!CanvasRenderingContext2D.prototype.roundRect) {
   CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, r) {
@@ -1413,8 +1477,6 @@ if (!CanvasRenderingContext2D.prototype.roundRect) {
     return this;
   };
 }
-
-/* -------------------- INPUT -------------------- */
 
 function setButtonHeld(button, keyName) {
   if (!button) return;
@@ -1455,14 +1517,12 @@ function initGame() {
   fastTap(restartBtn, restartGame);
   fastTap(resumeBtn, togglePause);
   fastTap(jumpBtn, jump);
-
   fastTap(slideBtn, () => {
     keys.down = true;
     setTimeout(() => {
       keys.down = false;
     }, 300);
   });
-
   fastTap(musicBtn, toggleMusic);
 
   setButtonHeld(leftBtn, "left");
