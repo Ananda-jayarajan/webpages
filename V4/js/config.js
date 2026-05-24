@@ -32,14 +32,32 @@ window.GAME_CONFIG = {
     hitboxPaddingBottom: 32
   },
 
-  audio: {
-    src: "assets/audio/theme.mp3",
-    enabled: true,
-    volume: 0.45,
-    loop: true,
-    pauseWhenPaused: true,
-    continueAfterGameOver: false
-  },
+audio: {
+  enabled: true,
+  volume: 0.45,
+  loop: true,
+  pauseWhenPaused: true,
+  continueAfterGameOver: false,
+
+  playlist: [
+    {
+      name: "Theme",
+      src: "assets/audio/theme.mp3"
+    },
+    {
+      name: "Song 2",
+      src: "assets/audio/song2.mp3"
+    },
+    {
+      name: "Song 3",
+      src: "assets/audio/song3.mp3"
+    },
+    {
+      name: "Song 4",
+      src: "assets/audio/song4.mp3"
+    }
+  ]
+},
 
   scoring: {
     distanceMultiplier: 0.08,
