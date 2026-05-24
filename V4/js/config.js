@@ -14,9 +14,12 @@ window.GAME_CONFIG = {
     worldWidth: 7200,
     startX: 140,
     finishX: 6900,
-    obstacleCount: 18,
+
+    // Fewer obstacles + even slots = easier and fairer gameplay
+    obstacleCount: 15,
+
     voteCount: 30,
-    minObstacleGap: 260
+    minObstacleGap: 420
   },
 
   player: {
@@ -27,12 +30,14 @@ window.GAME_CONFIG = {
     // fallback image only if animation frames are missing
     image: "assets/characters/vijay.png",
 
-    // visual adjustment so Vijay sits a bit lower on the floor
-    visualOffsetY: 12,
+    // Increase this if Vijay still looks floating.
+    // Try 28 or 32 if needed.
+    visualOffsetY: 24,
 
-    hitboxPaddingX: 28,
-    hitboxPaddingTop: 20,
-    hitboxPaddingBottom: 12
+    // Smaller player hitbox = fairer collision
+    hitboxPaddingX: 38,
+    hitboxPaddingTop: 34,
+    hitboxPaddingBottom: 28
   },
 
   audio: {
@@ -65,8 +70,11 @@ window.GAME_CONFIG = {
     return {
       name: `Obstacle ${n}`,
       type: isAir ? "air" : "ground",
-      width: isAir ? 170 : 118,
-      height: isAir ? 82 : 118,
+
+      // Smaller obstacle image size
+      width: isAir ? 132 : 92,
+      height: isAir ? 64 : 92,
+
       color: "#e84d5b",
       label: String(n),
       image: `assets/obstacles/${n}.png`
