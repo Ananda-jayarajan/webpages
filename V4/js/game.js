@@ -1,6 +1,8 @@
-console.log("The Villupuram Run Platformer: Millionaire Quiz Version loaded");
+console.log("Thalapathy Run: 3-phase story mode loaded");
 
 const DEFAULT_CONFIG = {
+  title: "Thalapathy Run",
+
   physics: {
     gravity: 2250,
     jumpVelocity: -1050,
@@ -11,18 +13,16 @@ const DEFAULT_CONFIG = {
   },
 
   level: {
-    worldWidth: 12000,
+    worldWidth: 15000,
     startX: 140,
-    finishX: 11400,
-    obstacleCount: 14,
-    voteCount: 46,
-    minObstacleGap: 650
+    finishX: 14600,
+    voteCount: 60
   },
 
   player: {
     width: 120,
     height: 155,
-    slideHeight: 92,
+    slideHeight: 82,
     image: "assets/characters/vijay.png",
     visualOffsetY: 38,
     hitboxPaddingX: 42,
@@ -31,12 +31,17 @@ const DEFAULT_CONFIG = {
   },
 
   audio: {
-    src: "assets/audio/theme.mp3",
     enabled: true,
     volume: 0.45,
     loop: true,
     pauseWhenPaused: true,
-    continueAfterGameOver: false
+    continueAfterGameOver: false,
+    playlist: [
+      { name: "Cinema Phase", src: "assets/audio/phase1_song.mp3" },
+      { name: "Political Phase", src: "assets/audio/phase2_song.mp3" },
+      { name: "Government Phase", src: "assets/audio/phase3_song.mp3" },
+      { name: "Theme", src: "assets/audio/theme.mp3" }
+    ]
   },
 
   scoring: {
@@ -46,27 +51,8 @@ const DEFAULT_CONFIG = {
   },
 
   colors: {
-    gold: "#ffd76a",
-    darkGreen: "#102822",
-    suit: "#050505",
-    skin: "#c88755",
-    scarf: "#f4d35e"
+    gold: "#ffd76a"
   },
-
-  obstacles: Array.from({ length: 20 }, (_, i) => {
-    const n = i + 1;
-    const isAir = n % 5 === 0;
-
-    return {
-      name: `Obstacle ${n}`,
-      type: isAir ? "air" : "ground",
-      width: 120,
-      height: isAir ? 82 : 120,
-      color: "#e84d5b",
-      label: String(n),
-      image: `assets/obstacles/${n}.png`
-    };
-  }),
 
   collectible: {
     size: 36
@@ -74,7 +60,9 @@ const DEFAULT_CONFIG = {
 
   debug: {
     showHitboxes: false
-  }
+  },
+
+  phases: []
 };
 
 const CONFIG = {
@@ -87,7 +75,8 @@ const CONFIG = {
   scoring: { ...DEFAULT_CONFIG.scoring, ...(window.GAME_CONFIG?.scoring || {}) },
   colors: { ...DEFAULT_CONFIG.colors, ...(window.GAME_CONFIG?.colors || {}) },
   collectible: { ...DEFAULT_CONFIG.collectible, ...(window.GAME_CONFIG?.collectible || {}) },
-  debug: { ...DEFAULT_CONFIG.debug, ...(window.GAME_CONFIG?.debug || {}) }
+  debug: { ...DEFAULT_CONFIG.debug, ...(window.GAME_CONFIG?.debug || {}) },
+  phases: window.GAME_CONFIG?.phases || []
 };
 
 const PLAYER_ANIMATIONS = {
@@ -114,17 +103,13 @@ const PLAYER_ANIMATIONS = {
   jump: {
     fps: 1,
     loop: false,
-    frames: [
-      "assets/player/jump/jump1.png"
-    ]
+    frames: ["assets/player/jump/jump1.png"]
   },
 
   fall: {
     fps: 1,
     loop: false,
-    frames: [
-      "assets/player/fall/fall1.png"
-    ]
+    frames: ["assets/player/fall/fall1.png"]
   },
 
   slide: {
@@ -139,7 +124,7 @@ const PLAYER_ANIMATIONS = {
 
 const QUIZ_QUESTIONS = [
   {
-    question: "In Tamil Nadu politics, what does 'alliance arithmetic' usually mean?",
+    question: "In Tamil Nadu politics, what does alliance arithmetic usually mean?",
     options: [
       "Counting cinema tickets",
       "Combining vote shares and support bases",
@@ -149,316 +134,97 @@ const QUIZ_QUESTIONS = [
     answer: 1
   },
   {
-    question: "Why did Rajini meet MKS after election result?",
+    question: "In Phase 1, what is Vijay mainly trying to survive?",
     options: [
-      "To offer his condolence",
-      "To broker DMK-ADMK aliance",
-      "To redicule him",
-      "To discuss Jailer 2 script"
+      "Fan wars, reviews, media heat, and cinema politics",
+      "Only traffic signals",
+      "Only cricket commentary",
+      "Only cooking contests"
+    ],
+    answer: 0
+  },
+  {
+    question: "In Phase 2, why do alliance talks become dangerous?",
+    options: [
+      "Because every party wants winnable seats",
+      "Because microphones are heavy",
+      "Because posters have too many colors",
+      "Because nobody likes tea"
+    ],
+    answer: 0
+  },
+  {
+    question: "What does a support letter represent in the politics phase?",
+    options: [
+      "A path toward forming government",
+      "A movie ticket",
+      "A fan club ID card",
+      "A cinema review"
+    ],
+    answer: 0
+  },
+  {
+    question: "In Phase 3, what is the biggest challenge?",
+    options: [
+      "Governance pressure",
+      "Choosing ringtone",
+      "Buying popcorn",
+      "Finding parking"
+    ],
+    answer: 0
+  },
+  {
+    question: "What is the safest answer to a viral political claim?",
+    options: [
+      "Forward instantly",
+      "Verify with credible reporting",
+      "Add dramatic BGM",
+      "Trust every meme"
     ],
     answer: 1
   },
   {
-    question: "what is the name of AMMK MLA who flipped sides?",
+    question: "What does cadre strength usually mean?",
     options: [
-      "EPS",
-      "S. Kamaraj",
-      "T. T. V",
-      "OPS"
-    ],
-    answer: 1
-  },
-  {
-    question: "Is Rajini jealous of Thalapathy Vijay?",
-    options: [
-      "Yes 100%",
-      "Illa light ah",
-      "No but yes",
-      "all the above"
+      "Grassroots party workers",
+      "Gym power",
+      "Movie box office only",
+      "College marks"
     ],
     answer: 0
   },
   {
-    question: "Who is the reason for MKS's loss in Kolathur?",
+    question: "What is a swing voter?",
     options: [
-      "S. Babu",
-      "MKS",
-      "Vijay Tsunami",
-      "anti incumbency"
+      "A voter who may change preference",
+      "A voter on a playground swing",
+      "A drummer",
+      "A camera operator"
     ],
     answer: 0
   },
   {
-    question: "Who said Vijay is Illuminati ?",
+    question: "What does solo contest mean?",
     options: [
-      "Pa Sa",
-      "Kevin Paul",
-      "Mukthar",
-      "Savukku Shankar"
+      "A party contests without alliance partners",
+      "A singer performs alone",
+      "A single-player video game",
+      "A one-person cricket team"
     ],
     answer: 0
   },
   {
-    question: "what are vijay fans called?",
+    question: "Why do cinema fan clubs matter in Tamil Nadu politics?",
     options: [
-      "Anils",
-      "Rs. 200 UPs",
-      "Sangi",
-      "Thambis"
-    ],
-    answer: 0
-  },
-  {
-    question: "Who said Vijay and Seeman as Ba Ja Ka's child?",
-    options: [
-      "Thol. Thirumavalavan",
-      "OPS",
-      "EPS",
-      "MKS Jr."
-    ],
-    answer: 0
-  },
-  {
-    question: "Why did AIADMK people still say 'we are not finished' after 47 seats?",
-    options: [
-      "Because Edappadi still had fortress energy",
-      "Because opposition status also has EMI",
-      "Because third place in Chennai is character development",
-      "Because BJP-ku one seat irukku, so comparison helps"
-    ],
-    answer: 0
-  },
-  {
-    question: "Why did BJP's TN review meeting have Udhagamandalam emotional value?",
-    options: [
-      "Because one seat means every chair in meeting has symbolism",
-      "Because hill station result was the only cool news",
-      "Because alliance arithmetic melted in plains",
-      "Because Lotus needed climate advantage"
-    ],
-    answer: 0
-  },
-  {
-    question: "Why did NTK supporters talk more about vote share than seats?",
-    options: [
-      "Because 4% vote share is the new moral victory certificate",
-      "Because zero seats-la philosophy romba easy",
-      "Because Seeman speech can convert loss into civilization lecture",
-      "Because all of the above"
-    ],
-    answer: 3
-  },
-  {
-    question: "Why did political YouTubers keep saying 'silent wave' after TVK won?",
-    options: [
-      "Because nobody predicted it loudly before counting",
-      "Because exit poll miss-aana dignity save panna phrase venum",
-      "Because fan clubs became booth committees without giving trailer",
-      "Because all of the above"
-    ],
-    answer: 3
-  },
-  {
-    question: "Why did DMK suddenly discover Instagram after losing power?",
-    options: [
-      "Because Stalin said kids and social media influenced voters",
-      "Because Reels became new branch secretary",
-      "Because Kalaignar clips needed algorithm protection",
-      "Because TV debate uncle audience shifted to phone screen"
-    ],
-    answer: 0
-  },
-  {
-    question: "Why did every Thanthi-style debate repeat 'hung assembly' 47 times?",
-    options: [
-      "Because 108 is victory, but 118 is government",
-      "Because anchors love suspense more than voters",
-      "Because support letters became climax paper",
-      "Because Raj Bhavan became box office counter"
-    ],
-    answer: 0
-  },
-  {
-    question: "Why did DMK cadre say 'movement will bounce back' after results?",
-    options: [
-      "Because party letter needed motivational gym quote",
-      "Because 59 seats is not defeat, it is opposition internship",
-      "Because Kalaignar birthday content calendar was ready",
-      "Because all of the above"
-    ],
-    answer: 3
-  },
-  {
-    question: "Why did Chennai result hurt DMK more than regular anti-incumbency?",
-    options: [
-      "Because TVK broke into what used to feel like DMK comfort zone",
-      "Because AIADMK slipped to third in many city seats",
-      "Because urban youth voters voted like comments section",
-      "Because all of the above"
-    ],
-    answer: 3
-  },
-  {
-    question: "Why did Rajini meeting Stalin become bigger than some constituency results?",
-    options: [
-      "Because Poes Garden visit means YouTube thumbnails for 3 days",
-      "Because friendship was interpreted as alliance screenplay",
-      "Because Stalin losing Kolathur gave the meeting emotional weight",
-      "Because all of the above"
-    ],
-    answer: 3
-  },
-  {
-    question: "Why did Vijay visiting leaders after victory confuse everyone?",
-    options: [
-      "Because TN politics expects either alliance or insult, not courtesy",
-      "Because every handshake became government-formation theory",
-      "Because YouTube needs 'secret message decoded' content",
-      "Because all of the above"
-    ],
-    answer: 3
-  },
-  {
-    question: "Why did ADMK-DMK alliance rumour trend for 15 minutes?",
-    options: [
-      "Because stopping Vijay sounded more believable than both admitting defeat",
-      "Because Dravidian rivalry briefly became Avengers crossover",
-      "Because 108 seats created panic math",
-      "Because all of the above"
-    ],
-    answer: 3
-  },
-  {
-    question: "Why did Congress joining Vijay cabinet feel extra spicy?",
-    options: [
-      "Because they contested with DMK and then helped TVK rule",
-      "Because 5 MLAs got coalition premium pricing",
-      "Because TN Congress finally found relevance after result day",
-      "Because all of the above"
-    ],
-    answer: 3
-  },
-  {
-    question: "Why did VCK, CPI, CPM and IUML become YouTube panel keywords after results?",
-    options: [
-      "Because outside support became more powerful than manifesto pages",
-      "Because every 2-seat party became breaking news",
-      "Because majority math needed side characters",
-      "Because all of the above"
-    ],
-    answer: 3
-  },
-  {
-    question: "Why did 'TVK did not win in 8 districts' become opposition comfort food?",
-    options: [
-      "Because 108 seats sounded too dangerous without a footnote",
-      "Because losing parties need district-wise painkiller",
-      "Because tsunami debate needed geography",
-      "Because all of the above"
-    ],
-    answer: 3
-  },
-  {
-    question: "Why did DMK blame incomplete civic works in Trichy after the defeat?",
-    options: [
-      "Because underground drainage became overground election issue",
-      "Because streetlights failed both literally and politically",
-      "Because councillors needed local reason for state-level shock",
-      "Because all of the above"
-    ],
-    answer: 3
-  },
-  {
-    question: "Why did KN Nehru retaining his seat become a separate mini-headline?",
-    options: [
-      "Because in Trichy, survival itself became victory speech material",
-      "Because DMK needed at least one 'strongman still strong' example",
-      "Because local body blame game needed one exception",
-      "Because all of the above"
-    ],
-    answer: 3
-  },
-  {
-    question: "Why did AIADMK losing official opposition status sting extra?",
-    options: [
-      "Because DMK lost power but still got opposition chair",
-      "Because 47 seats made EPS strong locally but weak structurally",
-      "Because TVK took ruling side and DMK took opposition side",
-      "Because all of the above"
-    ],
-    answer: 3
-  },
-  {
-    question: "Why did exit poll people suddenly say 'last-minute swing'?",
-    options: [
-      "Because 'we missed the election' sounds less professional",
-      "Because polling-day voters became mysterious cinema twist",
-      "Because TVK wave was easier to explain after counting",
-      "Because all of the above"
-    ],
-    answer: 3
-  },
-  {
-    question: "Why did 'digital campaign' become the post-result magic word?",
-    options: [
-      "Because nobody wanted to say fan clubs did booth work better",
-      "Because Instagram became unofficial booth agent",
-      "Because WhatsApp family groups became mini campaign offices",
-      "Because all of the above"
-    ],
-    answer: 3
-  },
-  {
-    question: "Why did old Dravidian duopoly discourse return after TVK's win?",
-    options: [
-      "Because for the first time in decades, DMK-AIADMK rotation broke",
-      "Because Vijay turned 'third front' from joke into government file",
-      "Because MGR comparisons were waiting in every studio",
-      "Because all of the above"
-    ],
-    answer: 3
-  },
-  {
-    question: "Why did ADMK cadres suddenly respect vote-share graphics?",
-    options: [
-      "Because seat count was giving emotional damage",
-      "Because alliance vote share looked better than Chennai result map",
-      "Because bar chart is cheaper than introspection",
-      "Because all of the above"
-    ],
-    answer: 3
-  },
-  {
-    question: "Why did every Tamil political channel put 'secret support letter' in thumbnail?",
-    options: [
-      "Because 108 seats needed 10 more episodes",
-      "Because Governor scenes gave thriller angle",
-      "Because coalition math is better content than manifesto analysis",
-      "Because all of the above"
-    ],
-    answer: 3
-  },
-  {
-    question: "Why did Vijay's win get compared to MGR instead of normal actor-politician hype?",
-    options: [
-      "Because debut party becoming single largest is not regular fan service",
-      "Because TN politics loves cinema-to-CM parallels",
-      "Because Dravidian two-party rhythm got interrupted",
-      "Because all of the above"
-    ],
-    answer: 3
-  },
-  {
-    question: "What is the most common reason parties debate seat-sharing?",
-    options: [
-      "Each party wants winnable constituencies",
-      "They are choosing movie seats",
-      "They are buying bus tickets",
-      "They are designing shoes"
+      "They can become ground-level mobilization networks",
+      "They only sell popcorn",
+      "They control weather",
+      "They print exam marksheets"
     ],
     answer: 0
   }
 ];
+
 /* -------------------- DOM -------------------- */
 
 const canvas = document.getElementById("gameCanvas");
@@ -468,12 +234,6 @@ const scoreText = document.getElementById("scoreText");
 const votesText = document.getElementById("votesText");
 const bestText = document.getElementById("bestText");
 const finalText = document.getElementById("finalText");
-
-const gameOverBadge = document.getElementById("gameOverBadge");
-const gameOverTitle = document.getElementById("gameOverTitle");
-const outroMediaBox = document.getElementById("outroMediaBox");
-const outroVideo = document.getElementById("outroVideo");
-const outroImage = document.getElementById("outroImage");
 
 const startScreen = document.getElementById("startScreen");
 const pauseScreen = document.getElementById("pauseScreen");
@@ -487,12 +247,27 @@ const jumpBtn = document.getElementById("jumpBtn");
 const slideBtn = document.getElementById("slideBtn");
 const leftBtn = document.getElementById("leftBtn");
 const rightBtn = document.getElementById("rightBtn");
-const musicBtn = document.getElementById("musicBtn");
 
 const settingsBtn = document.getElementById("settingsBtn");
 const settingsPanel = document.getElementById("settingsPanel");
+const musicBtn = document.getElementById("musicBtn");
 const nextSongBtn = document.getElementById("nextSongBtn");
 const songNameText = document.getElementById("songNameText");
+
+const phaseHudText = document.getElementById("phaseHudText");
+const phaseBanner = document.getElementById("phaseBanner");
+const phaseBannerLabel = document.getElementById("phaseBannerLabel");
+const phaseBannerTitle = document.getElementById("phaseBannerTitle");
+const phaseBannerSubtitle = document.getElementById("phaseBannerSubtitle");
+
+const gameOverBadge = document.getElementById("gameOverBadge");
+const gameOverTitle = document.getElementById("gameOverTitle");
+const outroMediaBox = document.getElementById("outroMediaBox");
+const outroVideo = document.getElementById("outroVideo");
+const outroImage = document.getElementById("outroImage");
+
+const introVideo = document.getElementById("introVideo");
+const introSoundBtn = document.getElementById("introSoundBtn");
 
 let bgMusic = document.getElementById("bgMusic");
 
@@ -503,227 +278,32 @@ if (!bgMusic) {
   document.body.appendChild(bgMusic);
 }
 
-/* -------------------- MILLIONAIRE QUIZ UI -------------------- */
+/* -------------------- QUIZ UI -------------------- */
 
-let quizOverlay = document.getElementById("quizOverlay");
+const quizOverlay = document.createElement("section");
+quizOverlay.id = "quizOverlay";
+quizOverlay.className = "millionaire-overlay";
 
-if (!quizOverlay) {
-  quizOverlay = document.createElement("section");
-  quizOverlay.id = "quizOverlay";
-  quizOverlay.className = "millionaire-overlay";
-
-  quizOverlay.innerHTML = `
-    <div class="millionaire-stage">
-      <div class="millionaire-top">
-        <div class="lifeline">50:50</div>
-        <div class="lifeline">ASK</div>
-        <div class="lifeline">POLL</div>
-      </div>
-
-      <div class="millionaire-title">Obstacle Escape Question</div>
-
-      <div class="millionaire-question-wrap">
-        <div id="quizQuestionText" class="millionaire-question">
-          Question appears here
-        </div>
-      </div>
-
-      <div id="quizOptions" class="millionaire-options"></div>
-
-      <div id="quizFeedback" class="millionaire-feedback"></div>
+quizOverlay.innerHTML = `
+  <div class="millionaire-stage">
+    <div class="millionaire-top">
+      <div class="lifeline">50:50</div>
+      <div class="lifeline">ASK</div>
+      <div class="lifeline">POLL</div>
     </div>
-  `;
 
-  document.getElementById("app").appendChild(quizOverlay);
-}
+    <div class="millionaire-title">Obstacle Escape Question</div>
 
-const quizStyle = document.createElement("style");
+    <div class="millionaire-question-wrap">
+      <div id="quizQuestionText" class="millionaire-question">Question appears here</div>
+    </div>
 
-quizStyle.textContent = `
-  .millionaire-overlay {
-    position: absolute;
-    inset: 0;
-    z-index: 9999;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    background:
-      radial-gradient(circle at center, rgba(30, 45, 140, 0.52), transparent 38%),
-      linear-gradient(180deg, rgba(0, 0, 0, 0.82), rgba(0, 0, 0, 0.92));
-    backdrop-filter: blur(7px);
-  }
-
-  .millionaire-overlay.visible {
-    display: flex;
-  }
-
-  .millionaire-stage {
-    width: min(980px, 96vw);
-    color: white;
-    font-family: Arial, Helvetica, sans-serif;
-    text-align: center;
-  }
-
-  .millionaire-top {
-    display: flex;
-    justify-content: center;
-    gap: 18px;
-    margin-bottom: 26px;
-  }
-
-  .lifeline {
-    width: 82px;
-    height: 42px;
-    border-radius: 999px;
-    display: grid;
-    place-items: center;
-    background: radial-gradient(circle at center, #1737a8, #06144f);
-    border: 2px solid #d8b35c;
-    color: #f8d77a;
-    font-size: 13px;
-    font-weight: 900;
-    box-shadow: 0 0 18px rgba(80, 120, 255, 0.45);
-  }
-
-  .millionaire-title {
-    display: inline-block;
-    margin-bottom: 22px;
-    padding: 8px 20px;
-    border-radius: 999px;
-    background: #050b2e;
-    border: 2px solid #d8b35c;
-    color: #f8d77a;
-    font-size: 14px;
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-  }
-
-  .millionaire-question-wrap {
-    position: relative;
-    margin: 0 auto 18px;
-    max-width: 900px;
-  }
-
-  .millionaire-question {
-    position: relative;
-    padding: 20px 34px;
-    min-height: 76px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(180deg, #112e91, #061455);
-    border: 3px solid #b7c7ff;
-    border-radius: 18px;
-    box-shadow:
-      inset 0 0 18px rgba(255, 255, 255, 0.16),
-      0 0 22px rgba(30, 70, 255, 0.45);
-    font-size: clamp(17px, 2.2vw, 25px);
-    font-weight: 800;
-    line-height: 1.35;
-    color: #ffffff;
-  }
-
-  .millionaire-question::before,
-  .millionaire-question::after {
-    content: "";
-    position: absolute;
-    top: 50%;
-    width: 140px;
-    height: 3px;
-    background: #b7c7ff;
-  }
-
-  .millionaire-question::before {
-    right: 100%;
-  }
-
-  .millionaire-question::after {
-    left: 100%;
-  }
-
-  .millionaire-options {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px 22px;
-    margin-top: 18px;
-  }
-
-  .millionaire-option {
-    position: relative;
-    min-height: 58px;
-    padding: 12px 18px 12px 58px;
-    border-radius: 999px;
-    border: 2px solid #7f9dff;
-    background: linear-gradient(180deg, #12349f, #06124c);
-    color: white;
-    text-align: left;
-    font-size: clamp(15px, 1.8vw, 20px);
-    font-weight: 800;
-    cursor: pointer;
-    box-shadow:
-      inset 0 0 14px rgba(255, 255, 255, 0.12),
-      0 0 14px rgba(30, 70, 255, 0.35);
-  }
-
-  .millionaire-option:hover {
-    background: linear-gradient(180deg, #2046c9, #071a68);
-  }
-
-  .millionaire-option:disabled {
-    cursor: not-allowed;
-    opacity: 0.88;
-  }
-
-  .millionaire-letter {
-    position: absolute;
-    left: 21px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #f8c24e;
-    font-weight: 900;
-  }
-
-  .millionaire-option.correct {
-    background: linear-gradient(180deg, #13a538, #08641f);
-    border-color: #b9ffcc;
-  }
-
-  .millionaire-option.wrong {
-    background: linear-gradient(180deg, #b21d2a, #6a0b13);
-    border-color: #ffb3b3;
-  }
-
-  .millionaire-feedback {
-    min-height: 32px;
-    margin-top: 18px;
-    font-size: 18px;
-    font-weight: 900;
-    color: #f8d77a;
-    text-shadow: 0 2px 6px rgba(0,0,0,0.8);
-  }
-
-  @media (max-width: 700px) {
-    .millionaire-options {
-      grid-template-columns: 1fr;
-      gap: 10px;
-    }
-
-    .millionaire-question::before,
-    .millionaire-question::after {
-      display: none;
-    }
-
-    .lifeline {
-      width: 66px;
-      height: 36px;
-      font-size: 11px;
-    }
-  }
+    <div id="quizOptions" class="millionaire-options"></div>
+    <div id="quizFeedback" class="millionaire-feedback"></div>
+  </div>
 `;
 
-document.head.appendChild(quizStyle);
+document.getElementById("app").appendChild(quizOverlay);
 
 /* -------------------- ASSETS -------------------- */
 
@@ -733,22 +313,17 @@ const assets = {
 };
 
 const obstacleImages = {};
-
 let fallbackPlayerLoaded = false;
-let musicEnabled = localStorage.getItem("villupuramRunMusic") !== "off";
+
+let musicEnabled = localStorage.getItem("thalapathyRunMusic") !== "off";
 let musicLoadFailed = false;
 
 const audioPlaylist =
   Array.isArray(CONFIG.audio.playlist) && CONFIG.audio.playlist.length > 0
     ? CONFIG.audio.playlist
-    : [
-        {
-          name: "Theme",
-          src: CONFIG.audio.src || "assets/audio/theme.mp3"
-        }
-      ];
+    : [{ name: "Theme", src: "assets/audio/theme.mp3" }];
 
-let currentSongIndex = Number(localStorage.getItem("villupuramRunSongIndex") || 0);
+let currentSongIndex = Number(localStorage.getItem("thalapathyRunSongIndex") || 0);
 
 if (currentSongIndex < 0 || currentSongIndex >= audioPlaylist.length) {
   currentSongIndex = 0;
@@ -772,8 +347,8 @@ let state = "start";
 let lastTime = 0;
 let elapsed = 0;
 let score = 0;
-let votes = 0;
-let best = Number(localStorage.getItem("villupuramRunBestPlatformer") || 0);
+let tokens = 0;
+let best = Number(localStorage.getItem("thalapathyRunBest") || 0);
 let farthestX = 0;
 let levelFinished = false;
 
@@ -786,6 +361,10 @@ let collectibles = [];
 let particles = [];
 let floatingTexts = [];
 let clouds = [];
+
+let currentPhaseIndex = 0;
+let lastShownPhaseId = null;
+let phaseBannerTimer = 0;
 let animationFrameId = null;
 
 const player = {
@@ -822,6 +401,104 @@ function showMessage(message) {
 
 function clamp(value, min, max) {
   return Math.max(min, Math.min(max, value));
+}
+
+function getCurrentPhase() {
+  return CONFIG.phases[currentPhaseIndex] || CONFIG.phases[0];
+}
+
+function getPhaseByX(x) {
+  for (let i = 0; i < CONFIG.phases.length; i++) {
+    const phase = CONFIG.phases[i];
+
+    if (x >= phase.startX && x < phase.endX) {
+      return { phase, index: i };
+    }
+  }
+
+  return {
+    phase: CONFIG.phases[CONFIG.phases.length - 1],
+    index: CONFIG.phases.length - 1
+  };
+}
+
+/* -------------------- INTRO / OUTRO -------------------- */
+
+function setupIntroVideo() {
+  if (!introVideo || !introSoundBtn) return;
+
+  introSoundBtn.addEventListener("click", async () => {
+    try {
+      introVideo.muted = false;
+      introVideo.volume = 1.0;
+      await introVideo.play();
+
+      introSoundBtn.textContent = "🔊 Intro Sound Playing";
+      introSoundBtn.classList.add("playing");
+    } catch (error) {
+      introSoundBtn.textContent = "Tap video to enable sound";
+      console.warn("Intro video sound could not start:", error);
+    }
+  });
+
+  introVideo.addEventListener("click", async () => {
+    try {
+      introVideo.muted = !introVideo.muted;
+
+      if (!introVideo.muted) {
+        introVideo.volume = 1.0;
+        await introVideo.play();
+        introSoundBtn.textContent = "🔊 Intro Sound Playing";
+        introSoundBtn.classList.add("playing");
+      } else {
+        introSoundBtn.textContent = "🔊 Play Intro Sound";
+        introSoundBtn.classList.remove("playing");
+      }
+    } catch (error) {
+      console.warn("Video click sound toggle failed:", error);
+    }
+  });
+}
+
+function stopIntroVideo() {
+  if (!introVideo) return;
+
+  introVideo.pause();
+  introVideo.muted = true;
+}
+
+function setupOutroMedia(finished) {
+  if (!outroMediaBox || !outroVideo || !outroImage) return;
+
+  if (!finished) {
+    outroMediaBox.classList.add("hidden");
+    outroVideo.pause();
+    outroVideo.currentTime = 0;
+    outroImage.style.display = "none";
+    outroVideo.style.display = "block";
+    return;
+  }
+
+  outroMediaBox.classList.remove("hidden");
+  outroImage.style.display = "none";
+  outroVideo.style.display = "block";
+
+  outroVideo.loop = false;
+  outroVideo.currentTime = 0;
+
+  outroVideo.onended = () => {
+    outroVideo.style.display = "none";
+    outroImage.style.display = "block";
+  };
+
+  const playPromise = outroVideo.play();
+
+  if (playPromise && typeof playPromise.catch === "function") {
+    playPromise.catch(() => {
+      outroVideo.style.display = "none";
+      outroImage.style.display = "block";
+    });
+  }
 }
 
 /* -------------------- LOAD ASSETS -------------------- */
@@ -892,25 +569,23 @@ function loadFallbackPlayer() {
 }
 
 function loadObstacleImages() {
-  for (const obstacle of CONFIG.obstacles) {
-    if (!obstacle.image || obstacleImages[obstacle.image]) continue;
+  for (const phase of CONFIG.phases) {
+    for (const obstacle of phase.obstacles) {
+      if (!obstacle.image || obstacleImages[obstacle.image]) continue;
 
-    const img = new Image();
+      const img = new Image();
 
-    img.onload = () => {
-      render();
-    };
+      img.onload = () => render();
 
-    img.onerror = () => {
-      console.warn("Missing obstacle image:", obstacle.image);
-    };
+      img.onerror = () => {
+        console.warn("Missing obstacle image:", obstacle.image);
+      };
 
-    img.src = obstacle.image;
-    obstacleImages[obstacle.image] = img;
+      img.src = obstacle.image;
+      obstacleImages[obstacle.image] = img;
+    }
   }
 }
-
-/* -------------------- AUDIO -------------------- */
 
 /* -------------------- AUDIO -------------------- */
 
@@ -955,12 +630,6 @@ function setupAudio() {
     updateMusicButton();
   });
 
-  bgMusic.addEventListener("ended", () => {
-    if (!CONFIG.audio.loop) {
-      nextSong();
-    }
-  });
-
   loadCurrentSong();
   updateMusicButton();
 }
@@ -997,7 +666,7 @@ function toggleMusic() {
   }
 
   musicEnabled = !musicEnabled;
-  localStorage.setItem("villupuramRunMusic", musicEnabled ? "on" : "off");
+  localStorage.setItem("thalapathyRunMusic", musicEnabled ? "on" : "off");
 
   if (musicEnabled) {
     startMusic();
@@ -1010,7 +679,7 @@ function toggleMusic() {
 
 function nextSong() {
   currentSongIndex = (currentSongIndex + 1) % audioPlaylist.length;
-  localStorage.setItem("villupuramRunSongIndex", String(currentSongIndex));
+  localStorage.setItem("thalapathyRunSongIndex", String(currentSongIndex));
 
   const shouldPlay = musicEnabled && state !== "start" && state !== "over";
 
@@ -1021,6 +690,23 @@ function nextSong() {
   }
 
   showMessage(`Now playing: ${getCurrentSong().name}`);
+}
+
+function setPhaseMusic(phase) {
+  if (typeof phase.musicIndex !== "number") return;
+  if (phase.musicIndex < 0 || phase.musicIndex >= audioPlaylist.length) return;
+  if (currentSongIndex === phase.musicIndex) return;
+
+  currentSongIndex = phase.musicIndex;
+  localStorage.setItem("thalapathyRunSongIndex", String(currentSongIndex));
+
+  const shouldPlay = musicEnabled && state === "running";
+
+  loadCurrentSong();
+
+  if (shouldPlay) {
+    startMusic();
+  }
 }
 
 function updateMusicButton(customText) {
@@ -1077,7 +763,7 @@ function resizeCanvas() {
 function resetGame() {
   elapsed = 0;
   score = 0;
-  votes = 0;
+  tokens = 0;
   farthestX = CONFIG.level.startX;
   levelFinished = false;
 
@@ -1086,9 +772,12 @@ function resetGame() {
   quizOverlay.classList.remove("visible");
 
   cameraX = 0;
+  currentPhaseIndex = 0;
+  lastShownPhaseId = null;
+  phaseBannerTimer = 0;
 
-  obstacles = buildRandomObstacles();
-  collectibles = buildRandomVotes();
+  obstacles = buildPhaseObstacles();
+  collectibles = buildCollectibles();
   particles = [];
   floatingTexts = [];
 
@@ -1102,60 +791,74 @@ function resetGame() {
 
   setPlayerState("idle");
 
-  clouds = Array.from({ length: 8 }, () => ({
+  clouds = Array.from({ length: 11 }, () => ({
     x: Math.random() * CONFIG.level.worldWidth,
     y: 70 + Math.random() * height * 0.25,
     scale: 0.65 + Math.random() * 0.95,
     alpha: 0.16 + Math.random() * 0.18
   }));
 
+  showPhaseBanner(getCurrentPhase());
   updateHud();
 }
 
-function buildRandomObstacles() {
+function buildPhaseObstacles() {
   const result = [];
 
-  const count = CONFIG.level.obstacleCount;
-  const startX = 1200;
-  const endX = CONFIG.level.finishX - 900;
-  const spacing = (endX - startX) / Math.max(1, count - 1);
+  for (const phase of CONFIG.phases) {
+    const count = phase.obstacleCount || phase.obstacles.length;
+    const startX = phase.startX + 700;
+    const endX = phase.endX - 350;
+    const spacing = (endX - startX) / Math.max(1, count - 1);
 
-  for (let i = 0; i < count; i++) {
-    const template = CONFIG.obstacles[Math.floor(Math.random() * CONFIG.obstacles.length)];
-    const x = startX + i * spacing;
+    for (let i = 0; i < count; i++) {
+      const template = phase.obstacles[Math.floor(Math.random() * phase.obstacles.length)];
+      const x = startX + i * spacing;
 
-    const y = template.type === "air"
-      ? groundY - player.normalHeight - 24
-      : groundY - template.height;
+      const baseY = template.type === "air"
+        ? groundY - player.normalHeight - 88
+        : groundY - template.height;
 
-    result.push({
-      ...template,
-      x,
-      y,
-      cleared: false,
-      disabled: false
-    });
+      result.push({
+        ...template,
+        phaseId: phase.id,
+        phaseName: phase.name,
+        x,
+        baseY,
+        y: baseY,
+        seed: Math.random() * Math.PI * 2,
+        disabled: false,
+        cleared: false
+      });
+    }
   }
 
   return result;
 }
 
-function buildRandomVotes() {
+function buildCollectibles() {
   const result = [];
 
-  for (let i = 0; i < CONFIG.level.voteCount; i++) {
-    const x = 450 + Math.random() * (CONFIG.level.finishX - 700);
-    const y = Math.random() > 0.5
-      ? groundY - 190 - Math.random() * 90
-      : groundY - 120 - Math.random() * 50;
+  for (const phase of CONFIG.phases) {
+    const count = Math.floor(CONFIG.level.voteCount / CONFIG.phases.length);
+    const startX = phase.startX + 450;
+    const endX = phase.endX - 450;
 
-    result.push({
-      x,
-      y,
-      size: CONFIG.collectible.size,
-      collected: false,
-      spin: Math.random() * Math.PI * 2
-    });
+    for (let i = 0; i < count; i++) {
+      const x = startX + Math.random() * (endX - startX);
+      const y = Math.random() > 0.5
+        ? groundY - 190 - Math.random() * 90
+        : groundY - 120 - Math.random() * 50;
+
+      result.push({
+        x,
+        y,
+        phaseId: phase.id,
+        size: CONFIG.collectible.size,
+        collected: false,
+        spin: Math.random() * Math.PI * 2
+      });
+    }
   }
 
   return result;
@@ -1168,9 +871,11 @@ function startGame() {
     cancelAnimationFrame(animationFrameId);
   }
 
+  stopIntroVideo();
   resetGame();
 
   state = "running";
+
   startScreen.classList.remove("visible");
   pauseScreen.classList.remove("visible");
   gameOverScreen.classList.remove("visible");
@@ -1255,7 +960,7 @@ function endGame(finished = false) {
 
   if (score > best) {
     best = score;
-    localStorage.setItem("villupuramRunBestPlatformer", String(best));
+    localStorage.setItem("thalapathyRunBest", String(best));
   }
 
   updateHud();
@@ -1271,59 +976,27 @@ function endGame(finished = false) {
 
   if (finalText) {
     finalText.innerHTML = `
-      <strong>${finished ? "You finished Thalapathy Run!" : "Game Over"}</strong><br>
+      <strong>${finished ? "You completed Thalapathy Run!" : "Game Over"}</strong><br>
       <strong>Score:</strong> ${score}<br>
-      <strong>Votes:</strong> ${votes}<br>
+      <strong>Tokens:</strong> ${tokens}<br>
       <strong>Distance:</strong> ${Math.floor(farthestX)}<br>
       <strong>Best:</strong> ${best}
     `;
   }
 
   setupOutroMedia(finished);
-
-  gameOverScreen?.classList.add("visible");
+  gameOverScreen.classList.add("visible");
 }
+
 function updateHud() {
   scoreText.textContent = Math.floor(score);
-  votesText.textContent = votes;
+  votesText.textContent = tokens;
   bestText.textContent = best;
-}
 
-function setupOutroMedia(finished) {
-  if (!outroMediaBox || !outroVideo || !outroImage) return;
+  const phase = getCurrentPhase();
 
-  if (!finished) {
-    outroMediaBox.classList.add("hidden");
-    outroVideo.pause();
-    outroVideo.currentTime = 0;
-    outroImage.style.display = "none";
-    outroVideo.style.display = "block";
-    return;
-  }
-
-  outroMediaBox.classList.remove("hidden");
-
-  // Start by showing the video.
-  outroImage.style.display = "none";
-  outroVideo.style.display = "block";
-
-  outroVideo.loop = false;
-  outroVideo.currentTime = 0;
-
-  outroVideo.onended = () => {
-    // When video ends, replace it with outro.jpg.
-    outroVideo.style.display = "none";
-    outroImage.style.display = "block";
-  };
-
-  const playPromise = outroVideo.play();
-
-  if (playPromise && typeof playPromise.catch === "function") {
-    playPromise.catch(() => {
-      // If browser blocks autoplay, show the image instead.
-      outroVideo.style.display = "none";
-      outroImage.style.display = "block";
-    });
+  if (phaseHudText && phase) {
+    phaseHudText.textContent = `Phase ${phase.id} • ${phase.name}`;
   }
 }
 
@@ -1352,6 +1025,9 @@ function loop(now) {
 function update(dt) {
   elapsed += dt;
 
+  updatePhase();
+  updatePhaseBanner(dt);
+  updateObstacles(dt);
   updatePlayer(dt);
   updatePlayerAnimation(dt);
   updateCollectibles(dt);
@@ -1359,7 +1035,7 @@ function update(dt) {
   updateCamera();
 
   farthestX = Math.max(farthestX, player.x);
-  score = Math.floor(farthestX * CONFIG.scoring.distanceMultiplier) + votes * CONFIG.scoring.voteValue;
+  score = Math.floor(farthestX * CONFIG.scoring.distanceMultiplier) + tokens * CONFIG.scoring.voteValue;
 
   if (player.x >= CONFIG.level.finishX) {
     finishLevel();
@@ -1367,6 +1043,39 @@ function update(dt) {
 
   updateHud();
   updateMusicButton();
+}
+
+function updatePhase() {
+  const result = getPhaseByX(player.x);
+
+  if (result.index !== currentPhaseIndex) {
+    currentPhaseIndex = result.index;
+    showPhaseBanner(result.phase);
+    setPhaseMusic(result.phase);
+  }
+}
+
+function showPhaseBanner(phase) {
+  if (!phase || phase.id === lastShownPhaseId) return;
+
+  lastShownPhaseId = phase.id;
+  phaseBannerTimer = 2.2;
+
+  phaseBannerLabel.textContent = `Phase ${phase.id}`;
+  phaseBannerTitle.textContent = phase.name;
+  phaseBannerSubtitle.textContent = phase.subtitle;
+
+  phaseBanner.classList.add("visible");
+}
+
+function updatePhaseBanner(dt) {
+  if (phaseBannerTimer <= 0) return;
+
+  phaseBannerTimer -= dt;
+
+  if (phaseBannerTimer <= 0) {
+    phaseBanner.classList.remove("visible");
+  }
 }
 
 /* -------------------- PLAYER -------------------- */
@@ -1532,10 +1241,71 @@ function jump() {
   spawnDust(player.x + 12, groundY, 8);
 }
 
+/* -------------------- OBSTACLES -------------------- */
+
+function updateObstacles(dt) {
+  for (const obstacle of obstacles) {
+    obstacle.y = getObstacleY(obstacle);
+    obstacle.dynamicScale = getObstacleScale(obstacle);
+    obstacle.rotation = getObstacleRotation(obstacle);
+  }
+}
+
+function getObstacleY(obstacle) {
+  const t = elapsed + obstacle.seed;
+
+  if (obstacle.behavior === "float") {
+    return obstacle.baseY + Math.sin(t * 2.2) * 28;
+  }
+
+  if (obstacle.behavior === "wave") {
+    return obstacle.baseY + Math.sin(t * 3.0) * 22;
+  }
+
+  if (obstacle.behavior === "bounce") {
+    return obstacle.baseY + Math.abs(Math.sin(t * 4.0)) * -12;
+  }
+
+  if (obstacle.behavior === "drop") {
+    return obstacle.baseY + Math.max(0, Math.sin(t * 2.5)) * 52;
+  }
+
+  return obstacle.baseY;
+}
+
+function getObstacleScale(obstacle) {
+  const t = elapsed + obstacle.seed;
+
+  if (obstacle.behavior === "pulse") {
+    return 1 + Math.sin(t * 4.5) * 0.06;
+  }
+
+  if (obstacle.behavior === "stretch") {
+    return 1 + Math.sin(t * 3.0) * 0.08;
+  }
+
+  return 1;
+}
+
+function getObstacleRotation(obstacle) {
+  const t = elapsed + obstacle.seed;
+
+  if (obstacle.behavior === "roll") {
+    return t * 2.5;
+  }
+
+  return 0;
+}
+
 /* -------------------- QUIZ SYSTEM -------------------- */
 
+function forceQuizForTesting() {
+  if (state === "start") startGame();
+  triggerQuiz(null);
+}
+
 function triggerQuiz(obstacle) {
-  if (quizActive || state !== "running") return;
+  if (quizActive) return;
 
   quizActive = true;
   activeQuizObstacle = obstacle;
@@ -1557,7 +1327,7 @@ function triggerQuiz(obstacle) {
     18
   );
 
-  showQuizQuestion();
+  showQuizQuestion(obstacle);
 }
 
 function getRandomQuizQuestion() {
@@ -1576,14 +1346,16 @@ function getRandomQuizQuestion() {
   return QUIZ_QUESTIONS[index];
 }
 
-function showQuizQuestion() {
+function showQuizQuestion(obstacle) {
   const question = getRandomQuizQuestion();
 
   const questionText = document.getElementById("quizQuestionText");
   const optionsBox = document.getElementById("quizOptions");
   const feedback = document.getElementById("quizFeedback");
 
-  questionText.textContent = question.question;
+  const obstacleText = obstacle ? `Obstacle: ${obstacle.name}. ` : "";
+
+  questionText.textContent = obstacleText + question.question;
   optionsBox.innerHTML = "";
   feedback.textContent = "";
 
@@ -1673,6 +1445,7 @@ function continueAfterQuiz() {
   }
 
   lastTime = performance.now();
+  animationFrameId = requestAnimationFrame(loop);
 }
 
 /* -------------------- COLLECTIBLES / PARTICLES -------------------- */
@@ -1683,12 +1456,14 @@ function updateCollectibles(dt) {
 
     if (!item.collected && circleRectOverlap(item, getPlayerHitbox())) {
       item.collected = true;
-      votes += 1;
+      tokens += 1;
 
       spawnBurst(item.x, item.y, CONFIG.colors.gold, 20);
 
+      const phase = CONFIG.phases.find(p => p.id === item.phaseId);
+
       floatingTexts.push({
-        text: "+1 Vote",
+        text: `+1 ${phase?.tokenName || "Token"}`,
         x: item.x,
         y: item.y - 18,
         vy: -50,
@@ -1757,7 +1532,22 @@ function updateCamera() {
 
 /* -------------------- COLLISION -------------------- */
 
+function isSliding() {
+  return keys.down && player.grounded;
+}
+
 function getPlayerHitbox() {
+  if (isSliding()) {
+    const slideHeight = CONFIG.player.slideHeight;
+
+    return {
+      x: player.x + CONFIG.player.hitboxPaddingX,
+      y: player.y + player.normalHeight - slideHeight,
+      width: player.width - CONFIG.player.hitboxPaddingX * 2,
+      height: slideHeight - 18
+    };
+  }
+
   return {
     x: player.x + CONFIG.player.hitboxPaddingX,
     y: player.y + CONFIG.player.hitboxPaddingTop,
@@ -1767,15 +1557,19 @@ function getPlayerHitbox() {
 }
 
 function getObstacleHitbox(obstacle) {
-  const padX = obstacle.width * 0.40;
-  const padTop = obstacle.height * 0.34;
-  const padBottom = obstacle.height * 0.38;
+  const scale = obstacle.dynamicScale || 1;
+  const width = obstacle.width * scale;
+  const height = obstacle.height * scale;
+
+  const padX = width * 0.34;
+  const padTop = height * 0.30;
+  const padBottom = height * 0.32;
 
   return {
-    x: obstacle.x + padX,
-    y: obstacle.y + padTop,
-    width: obstacle.width - padX * 2,
-    height: obstacle.height - padTop - padBottom
+    x: obstacle.x + (obstacle.width - width) / 2 + padX,
+    y: obstacle.y + (obstacle.height - height) / 2 + padTop,
+    width: width - padX * 2,
+    height: height - padTop - padBottom
   };
 }
 
@@ -1806,6 +1600,7 @@ function render() {
   drawSky();
   drawParallax();
   drawGround();
+  drawPhaseMarkers();
   drawFinishLine();
   drawCollectibles();
   drawObstacles();
@@ -1820,12 +1615,25 @@ function render() {
 }
 
 function drawSky() {
+  const phase = getCurrentPhase();
   const gradient = ctx.createLinearGradient(0, 0, 0, height);
 
-  gradient.addColorStop(0, "#171030");
-  gradient.addColorStop(0.38, "#32205a");
-  gradient.addColorStop(0.7, "#c76d61");
-  gradient.addColorStop(1, "#f7d794");
+  if (phase.theme === "cinema") {
+    gradient.addColorStop(0, "#160c2e");
+    gradient.addColorStop(0.38, "#3b1768");
+    gradient.addColorStop(0.7, "#9a3b5f");
+    gradient.addColorStop(1, "#f7b267");
+  } else if (phase.theme === "campaign") {
+    gradient.addColorStop(0, "#0c1338");
+    gradient.addColorStop(0.42, "#1d3c62");
+    gradient.addColorStop(0.72, "#bf563f");
+    gradient.addColorStop(1, "#ffd166");
+  } else {
+    gradient.addColorStop(0, "#143d59");
+    gradient.addColorStop(0.42, "#2e6f95");
+    gradient.addColorStop(0.72, "#7bbf7a");
+    gradient.addColorStop(1, "#ffe08a");
+  }
 
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, width, height);
@@ -1844,7 +1652,7 @@ function drawSky() {
   ctx.globalAlpha = 0.34;
   ctx.fillStyle = "#fff";
 
-  for (let i = 0; i < 70; i++) {
+  for (let i = 0; i < 75; i++) {
     const x = (i * 137 + 45 - cameraX * 0.08) % width;
     const y = (i * 71 + 28) % Math.max(190, height * 0.42);
 
@@ -1855,15 +1663,17 @@ function drawSky() {
 }
 
 function drawParallax() {
+  const phase = getCurrentPhase();
+
   drawClouds();
 
-  const mountainOffset = -(cameraX * 0.22) % width;
-  drawMountains(mountainOffset, groundY - 250, "#211839", 0.72);
-  drawMountains(mountainOffset + width, groundY - 250, "#211839", 0.72);
-
-  const hillOffset = -(cameraX * 0.45) % width;
-  drawHills(hillOffset, groundY - 120, "#18332e", 0.96);
-  drawHills(hillOffset + width, groundY - 120, "#18332e", 0.96);
+  if (phase.theme === "cinema") {
+    drawCinemaBackground();
+  } else if (phase.theme === "campaign") {
+    drawCampaignBackground();
+  } else {
+    drawGovernmentBackground();
+  }
 }
 
 function drawClouds() {
@@ -1891,35 +1701,99 @@ function roundedCloud() {
   ctx.fill();
 }
 
-function drawMountains(offset, baseY, color, alpha) {
-  ctx.save();
-  ctx.globalAlpha = alpha;
-  ctx.fillStyle = color;
+function drawCinemaBackground() {
+  const offset = -(cameraX * 0.35) % 420;
 
-  ctx.beginPath();
-  ctx.moveTo(offset, groundY);
-  ctx.lineTo(offset + width * 0.14, baseY + 75);
-  ctx.lineTo(offset + width * 0.25, groundY);
-  ctx.lineTo(offset + width * 0.42, baseY + 20);
-  ctx.lineTo(offset + width * 0.58, groundY);
-  ctx.lineTo(offset + width * 0.76, baseY + 65);
-  ctx.lineTo(offset + width, groundY);
-  ctx.closePath();
-  ctx.fill();
+  ctx.save();
+  ctx.globalAlpha = 0.32;
+
+  for (let x = offset - 420; x < width + 420; x += 420) {
+    ctx.fillStyle = "#221033";
+    ctx.fillRect(x + 60, groundY - 230, 160, 210);
+
+    ctx.fillStyle = "#ffd76a";
+    ctx.fillRect(x + 82, groundY - 210, 116, 72);
+
+    ctx.fillStyle = "#4f1b75";
+    ctx.fillRect(x + 92, groundY - 200, 96, 52);
+
+    ctx.fillStyle = "#111";
+    ctx.font = "900 17px Arial";
+    ctx.textAlign = "center";
+    ctx.fillText("CINEMA", x + 140, groundY - 168);
+
+    ctx.fillStyle = "#ffffff";
+    ctx.beginPath();
+    ctx.moveTo(x + 300, groundY - 250);
+    ctx.lineTo(x + 355, groundY - 20);
+    ctx.lineTo(x + 245, groundY - 20);
+    ctx.closePath();
+    ctx.fill();
+  }
 
   ctx.restore();
 }
 
-function drawHills(offset, y, color, alpha) {
-  ctx.save();
-  ctx.globalAlpha = alpha;
-  ctx.fillStyle = color;
+function drawCampaignBackground() {
+  const offset = -(cameraX * 0.38) % 360;
 
-  ctx.beginPath();
-  ctx.ellipse(offset + width * 0.28, y + 120, width * 0.45, 155, 0, 0, Math.PI * 2);
-  ctx.ellipse(offset + width * 0.78, y + 145, width * 0.52, 175, 0, 0, Math.PI * 2);
-  ctx.rect(offset, y + 120, width, 260);
-  ctx.fill();
+  ctx.save();
+  ctx.globalAlpha = 0.38;
+
+  for (let x = offset - 360; x < width + 360; x += 360) {
+    ctx.fillStyle = "#102822";
+    ctx.fillRect(x + 80, groundY - 210, 170, 180);
+
+    ctx.fillStyle = "#ffd76a";
+    ctx.fillRect(x + 95, groundY - 190, 140, 34);
+
+    ctx.fillStyle = "#fff";
+    ctx.font = "900 14px Arial";
+    ctx.textAlign = "center";
+    ctx.fillText("CAMPAIGN", x + 165, groundY - 168);
+
+    ctx.strokeStyle = "#ffffff";
+    ctx.lineWidth = 5;
+    ctx.beginPath();
+    ctx.moveTo(x + 300, groundY - 220);
+    ctx.lineTo(x + 300, groundY - 40);
+    ctx.stroke();
+
+    ctx.fillStyle = "#ff4d6d";
+    ctx.beginPath();
+    ctx.moveTo(x + 300, groundY - 220);
+    ctx.lineTo(x + 380, groundY - 190);
+    ctx.lineTo(x + 300, groundY - 160);
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  ctx.restore();
+}
+
+function drawGovernmentBackground() {
+  const offset = -(cameraX * 0.28) % 520;
+
+  ctx.save();
+  ctx.globalAlpha = 0.38;
+
+  for (let x = offset - 520; x < width + 520; x += 520) {
+    ctx.fillStyle = "#f4f1de";
+    ctx.fillRect(x + 110, groundY - 230, 250, 210);
+
+    ctx.fillStyle = "#d9c5a0";
+    ctx.fillRect(x + 100, groundY - 245, 270, 20);
+
+    ctx.fillStyle = "#1c2f3f";
+    ctx.font = "900 18px Arial";
+    ctx.textAlign = "center";
+    ctx.fillText("SECRETARIAT", x + 235, groundY - 190);
+
+    ctx.fillStyle = "#1c2f3f";
+    for (let i = 0; i < 5; i++) {
+      ctx.fillRect(x + 130 + i * 42, groundY - 155, 24, 85);
+    }
+  }
 
   ctx.restore();
 }
@@ -1983,29 +1857,65 @@ function drawGround() {
   }
 }
 
+function drawPhaseMarkers() {
+  for (const phase of CONFIG.phases) {
+    if (phase.startX === 0) continue;
+
+    const x = phase.startX - cameraX;
+
+    if (x < -120 || x > width + 120) continue;
+
+    ctx.save();
+
+    ctx.fillStyle = "#ffd76a";
+    ctx.fillRect(x, groundY - 210, 8, 210);
+
+    ctx.fillStyle = "rgba(7, 12, 32, 0.88)";
+    ctx.strokeStyle = "#ffd76a";
+    ctx.lineWidth = 3;
+
+    ctx.beginPath();
+    ctx.roundRect(x - 75, groundY - 250, 160, 58, 15);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = "#fff";
+    ctx.font = "900 14px Arial";
+    ctx.textAlign = "center";
+    ctx.fillText(`PHASE ${phase.id}`, x + 5, groundY - 228);
+
+    ctx.fillStyle = "#ffd76a";
+    ctx.font = "900 13px Arial";
+    ctx.fillText(phase.shortName, x + 5, groundY - 208);
+
+    ctx.restore();
+  }
+}
+
 function drawFinishLine() {
   const x = CONFIG.level.finishX - cameraX;
 
-  if (x < -80 || x > width + 80) return;
+  if (x < -120 || x > width + 120) return;
 
   ctx.save();
 
   ctx.fillStyle = "#ffd76a";
-  ctx.fillRect(x, groundY - 220, 10, 220);
+  ctx.fillRect(x, groundY - 240, 12, 240);
 
   ctx.fillStyle = "#fff";
   ctx.strokeStyle = "#111";
   ctx.lineWidth = 3;
 
   ctx.beginPath();
-  ctx.roundRect(x + 10, groundY - 220, 115, 58, 10);
+  ctx.roundRect(x + 10, groundY - 240, 150, 70, 14);
   ctx.fill();
   ctx.stroke();
 
   ctx.fillStyle = "#111";
   ctx.font = "900 18px Arial";
   ctx.textAlign = "center";
-  ctx.fillText("FINISH", x + 67, groundY - 184);
+  ctx.fillText("CM CHAIR", x + 84, groundY - 210);
+  ctx.fillText("FINISH", x + 84, groundY - 187);
 
   ctx.restore();
 }
@@ -2058,7 +1968,7 @@ function drawFallbackPlayer(screenX) {
 
   ctx.save();
 
-  ctx.fillStyle = CONFIG.colors.suit;
+  ctx.fillStyle = "#050505";
   ctx.strokeStyle = "#111";
   ctx.lineWidth = 3;
 
@@ -2067,7 +1977,7 @@ function drawFallbackPlayer(screenX) {
   ctx.fill();
   ctx.stroke();
 
-  ctx.fillStyle = CONFIG.colors.skin;
+  ctx.fillStyle = "#c88755";
   ctx.beginPath();
   ctx.roundRect(x + 32, y + 5, 46, 48, 18);
   ctx.fill();
@@ -2097,45 +2007,67 @@ function drawObstacles() {
 
     const screenX = obstacle.x - cameraX;
 
-    if (screenX < -220 || screenX > width + 220) continue;
+    if (screenX < -260 || screenX > width + 260) continue;
+
+    const scale = obstacle.dynamicScale || 1;
+    const drawWidth = obstacle.width * scale;
+    const drawHeight = obstacle.height * scale;
+    const drawX = screenX + (obstacle.width - drawWidth) / 2;
+    const drawY = obstacle.y + (obstacle.height - drawHeight) / 2;
 
     const img = obstacle.image ? obstacleImages[obstacle.image] : null;
 
     ctx.save();
 
+    ctx.translate(drawX + drawWidth / 2, drawY + drawHeight / 2);
+    ctx.rotate((obstacle.rotation || 0) * 0.06);
+    ctx.translate(-drawWidth / 2, -drawHeight / 2);
+
     if (img && img.complete && img.naturalWidth > 0) {
       ctx.shadowColor = "rgba(0, 0, 0, 0.35)";
       ctx.shadowBlur = 12;
       ctx.shadowOffsetY = 6;
-      ctx.drawImage(img, screenX, obstacle.y, obstacle.width, obstacle.height);
+      ctx.drawImage(img, 0, 0, drawWidth, drawHeight);
       ctx.restore();
       continue;
     }
 
-    ctx.fillStyle = obstacle.color || "#e84d5b";
-    ctx.strokeStyle = "rgba(255,255,255,0.88)";
-    ctx.lineWidth = 3;
-    ctx.shadowColor = obstacle.color || "#e84d5b";
-    ctx.shadowBlur = 18;
-
-    ctx.beginPath();
-    ctx.roundRect(screenX, obstacle.y, obstacle.width, obstacle.height, 20);
-    ctx.fill();
-    ctx.stroke();
-
-    ctx.shadowBlur = 0;
-    ctx.fillStyle = "#111";
-    ctx.font = "900 20px Arial";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillText(
-      obstacle.label || "OBS",
-      screenX + obstacle.width / 2,
-      obstacle.y + obstacle.height / 2
-    );
+    drawFallbackObstacle(obstacle, drawWidth, drawHeight);
 
     ctx.restore();
   }
+}
+
+function drawFallbackObstacle(obstacle, drawWidth, drawHeight) {
+  const phase = CONFIG.phases.find(p => p.id === obstacle.phaseId);
+
+  let color = "#e84d5b";
+
+  if (phase?.theme === "cinema") color = "#b84cff";
+  if (phase?.theme === "campaign") color = "#ff6b35";
+  if (phase?.theme === "government") color = "#2a9d8f";
+
+  ctx.fillStyle = color;
+  ctx.strokeStyle = "rgba(255,255,255,0.88)";
+  ctx.lineWidth = 3;
+  ctx.shadowColor = color;
+  ctx.shadowBlur = obstacle.behavior === "flash" ? 30 : 18;
+
+  ctx.beginPath();
+  ctx.roundRect(0, 0, drawWidth, drawHeight, 20);
+  ctx.fill();
+  ctx.stroke();
+
+  ctx.shadowBlur = 0;
+
+  ctx.fillStyle = "rgba(255,255,255,0.14)";
+  ctx.fillRect(10, 10, drawWidth - 20, 12);
+
+  ctx.fillStyle = "#111";
+  ctx.font = "900 16px Arial";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText(obstacle.label || "OBS", drawWidth / 2, drawHeight / 2);
 }
 
 function drawCollectibles() {
@@ -2146,6 +2078,7 @@ function drawCollectibles() {
 
     if (screenX < -100 || screenX > width + 100) continue;
 
+    const phase = CONFIG.phases.find(p => p.id === item.phaseId);
     const radius = item.size / 2;
     const squash = 0.72 + Math.abs(Math.sin(item.spin)) * 0.28;
 
@@ -2166,10 +2099,12 @@ function drawCollectibles() {
 
     ctx.shadowBlur = 0;
     ctx.fillStyle = "#111";
-    ctx.font = "900 14px Arial";
+    ctx.font = "900 12px Arial";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillText("+1", 0, 1);
+
+    const text = phase?.id === 1 ? "FAN" : phase?.id === 2 ? "LET" : "WEL";
+    ctx.fillText(text, 0, 1);
 
     ctx.restore();
   }
@@ -2274,17 +2209,24 @@ function fastTap(button, action) {
 
 function toggleSettingsPanel() {
   if (!settingsPanel) return;
-
   settingsPanel.classList.toggle("visible");
 }
 
 function closeSettingsPanel() {
   if (!settingsPanel) return;
-
   settingsPanel.classList.remove("visible");
 }
 
 function initGame() {
+  document.title = CONFIG.title;
+
+  const brandTitle = document.querySelector(".brand h1");
+  if (brandTitle) brandTitle.textContent = CONFIG.title;
+
+  const startTitle = document.querySelector("#startScreen h2");
+  if (startTitle) startTitle.textContent = CONFIG.title;
+
+  setupIntroVideo();
   loadAssets();
   resizeCanvas();
   setupAudio();
@@ -2307,21 +2249,20 @@ function initGame() {
   });
 
   fastTap(musicBtn, toggleMusic);
+  fastTap(settingsBtn, toggleSettingsPanel);
+  fastTap(nextSongBtn, nextSong);
 
-fastTap(settingsBtn, toggleSettingsPanel);
-fastTap(nextSongBtn, nextSong);
+  document.addEventListener("pointerdown", event => {
+    if (!settingsPanel || !settingsBtn) return;
 
-document.addEventListener("pointerdown", event => {
-  if (!settingsPanel || !settingsBtn) return;
+    const clickedInsidePanel = settingsPanel.contains(event.target);
+    const clickedSettingsButton = settingsBtn.contains(event.target);
 
-  const clickedInsidePanel = settingsPanel.contains(event.target);
-  const clickedSettingsButton = settingsBtn.contains(event.target);
+    if (!clickedInsidePanel && !clickedSettingsButton) {
+      closeSettingsPanel();
+    }
+  });
 
-  if (!clickedInsidePanel && !clickedSettingsButton) {
-    closeSettingsPanel();
-  }
-});
-  
   setButtonHeld(leftBtn, "left");
   setButtonHeld(rightBtn, "right");
 
@@ -2331,6 +2272,12 @@ document.addEventListener("pointerdown", event => {
   });
 
   document.addEventListener("keydown", event => {
+    if (event.code === "KeyQ") {
+      event.preventDefault();
+      forceQuizForTesting();
+      return;
+    }
+
     if (quizActive) return;
 
     if (event.code === "ArrowLeft" || event.code === "KeyA") {
@@ -2381,7 +2328,7 @@ document.addEventListener("pointerdown", event => {
     }
   });
 
-  console.log("The Villupuram Run Platformer: Millionaire quiz version ready");
+  console.log("Thalapathy Run ready. Press Q to test quiz popup.");
 }
 
 initGame();
