@@ -22,3 +22,42 @@
 #startScreen .controls-grid {
   display: none;
 }
+
+.intro-video-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 620px;
+  margin: 18px auto 26px;
+  border-radius: 22px;
+  overflow: hidden;
+  background: #000;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.28);
+}
+
+.intro-video {
+  width: 100%;
+  display: block;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  background: #000;
+  cursor: pointer;
+}
+
+.intro-sound-btn {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  border: 0;
+  border-radius: 999px;
+  padding: 10px 15px;
+  background: rgba(255, 215, 106, 0.92);
+  color: #111;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+}
+
+.intro-sound-btn.playing {
+  background: #2fa53a;
+  color: white;
+}
