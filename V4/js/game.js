@@ -1,4 +1,6 @@
-console.log("Thalapathy Run: 3-phase story mode loaded");
+
+/* -------------------- comment -------------------- */
+console.log("Thalapathy Run: fixed 3-phase story mode loaded");
 
 const DEFAULT_CONFIG = {
   title: "Thalapathy Run",
@@ -37,9 +39,6 @@ const DEFAULT_CONFIG = {
     pauseWhenPaused: true,
     continueAfterGameOver: false,
     playlist: [
-      { name: "Cinema Phase", src: "assets/audio/phase1_song.mp3" },
-      { name: "Political Phase", src: "assets/audio/phase2_song.mp3" },
-      { name: "Government Phase", src: "assets/audio/phase3_song.mp3" },
       { name: "Theme", src: "assets/audio/theme.mp3" }
     ]
   },
@@ -62,7 +61,62 @@ const DEFAULT_CONFIG = {
     showHitboxes: false
   },
 
-  phases: []
+  phases: [
+    {
+      id: 1,
+      name: "Cinema Career",
+      shortName: "Cinema",
+      subtitle: "Survive fame, fan wars, media heat, and cinema politics.",
+      startX: 0,
+      endX: 5000,
+      tokenName: "Fans",
+      theme: "cinema",
+      musicIndex: 0,
+      obstacleCount: 9,
+      obstacles: [
+        { name: "Ajith Fan Storm", label: "AK", type: "ground", width: 145, height: 125, behavior: "bounce" },
+        { name: "Rajini Spotlight", label: "SPOT", type: "air", width: 160, height: 92, behavior: "float" },
+        { name: "Box Office Bomb", label: "BO", type: "ground", width: 120, height: 120, behavior: "pulse" },
+        { name: "Troll Review Cloud", label: "TROLL", type: "air", width: 170, height: 90, behavior: "wave" }
+      ]
+    },
+    {
+      id: 2,
+      name: "Political Rise",
+      shortName: "Politics",
+      subtitle: "Handle alliances, vote splits, debates, and support letters.",
+      startX: 5000,
+      endX: 10000,
+      tokenName: "Support Letters",
+      theme: "campaign",
+      musicIndex: 0,
+      obstacleCount: 10,
+      obstacles: [
+        { name: "Alliance Table", label: "TALK", type: "ground", width: 175, height: 110, behavior: "stretch" },
+        { name: "Seat Sharing Scale", label: "SEATS", type: "ground", width: 155, height: 125, behavior: "bounce" },
+        { name: "Debate Anchor Trap", label: "LIVE", type: "ground", width: 150, height: 115, behavior: "flash" },
+        { name: "Meme Tornado", label: "MEME", type: "air", width: 140, height: 130, behavior: "wave" }
+      ]
+    },
+    {
+      id: 3,
+      name: "Government Era",
+      shortName: "Govt",
+      subtitle: "Deliver welfare, manage pressure, and survive governance.",
+      startX: 10000,
+      endX: 14600,
+      tokenName: "Welfare Tokens",
+      theme: "government",
+      musicIndex: 0,
+      obstacleCount: 9,
+      obstacles: [
+        { name: "Budget File Mountain", label: "BUDGET", type: "ground", width: 155, height: 145, behavior: "static" },
+        { name: "Bureaucracy Maze", label: "FILES", type: "ground", width: 170, height: 120, behavior: "stretch" },
+        { name: "Protest Wave", label: "PROTEST", type: "ground", width: 180, height: 118, behavior: "wave" },
+        { name: "Media Heat", label: "MEDIA", type: "air", width: 165, height: 92, behavior: "flash" }
+      ]
+    }
+  ]
 };
 
 const CONFIG = {
@@ -76,7 +130,9 @@ const CONFIG = {
   colors: { ...DEFAULT_CONFIG.colors, ...(window.GAME_CONFIG?.colors || {}) },
   collectible: { ...DEFAULT_CONFIG.collectible, ...(window.GAME_CONFIG?.collectible || {}) },
   debug: { ...DEFAULT_CONFIG.debug, ...(window.GAME_CONFIG?.debug || {}) },
-  phases: window.GAME_CONFIG?.phases || []
+  phases: Array.isArray(window.GAME_CONFIG?.phases) && window.GAME_CONFIG.phases.length > 0
+    ? window.GAME_CONFIG.phases
+    : DEFAULT_CONFIG.phases
 };
 
 const PLAYER_ANIMATIONS = {
@@ -280,30 +336,34 @@ if (!bgMusic) {
 
 /* -------------------- QUIZ UI -------------------- */
 
-const quizOverlay = document.createElement("section");
-quizOverlay.id = "quizOverlay";
-quizOverlay.className = "millionaire-overlay";
+let quizOverlay = document.getElementById("quizOverlay");
 
-quizOverlay.innerHTML = `
-  <div class="millionaire-stage">
-    <div class="millionaire-top">
-      <div class="lifeline">50:50</div>
-      <div class="lifeline">ASK</div>
-      <div class="lifeline">POLL</div>
+if (!quizOverlay) {
+  quizOverlay = document.createElement("section");
+  quizOverlay.id = "quizOverlay";
+  quizOverlay.className = "millionaire-overlay";
+
+  quizOverlay.innerHTML = `
+    <div class="millionaire-stage">
+      <div class="millionaire-top">
+        <div class="lifeline">50:50</div>
+        <div class="lifeline">ASK</div>
+        <div class="lifeline">POLL</div>
+      </div>
+
+      <div class="millionaire-title">Obstacle Escape Question</div>
+
+      <div class="millionaire-question-wrap">
+        <div id="quizQuestionText" class="millionaire-question">Question appears here</div>
+      </div>
+
+      <div id="quizOptions" class="millionaire-options"></div>
+      <div id="quizFeedback" class="millionaire-feedback"></div>
     </div>
+  `;
 
-    <div class="millionaire-title">Obstacle Escape Question</div>
-
-    <div class="millionaire-question-wrap">
-      <div id="quizQuestionText" class="millionaire-question">Question appears here</div>
-    </div>
-
-    <div id="quizOptions" class="millionaire-options"></div>
-    <div id="quizFeedback" class="millionaire-feedback"></div>
-  </div>
-`;
-
-document.getElementById("app").appendChild(quizOverlay);
+  document.getElementById("app").appendChild(quizOverlay);
+}
 
 /* -------------------- ASSETS -------------------- */
 
@@ -404,7 +464,7 @@ function clamp(value, min, max) {
 }
 
 function getCurrentPhase() {
-  return CONFIG.phases[currentPhaseIndex] || CONFIG.phases[0];
+  return CONFIG.phases[currentPhaseIndex] || CONFIG.phases[0] || DEFAULT_CONFIG.phases[0];
 }
 
 function getPhaseByX(x) {
@@ -417,8 +477,8 @@ function getPhaseByX(x) {
   }
 
   return {
-    phase: CONFIG.phases[CONFIG.phases.length - 1],
-    index: CONFIG.phases.length - 1
+    phase: CONFIG.phases[CONFIG.phases.length - 1] || DEFAULT_CONFIG.phases[0],
+    index: Math.max(0, CONFIG.phases.length - 1)
   };
 }
 
@@ -721,12 +781,14 @@ function updateMusicButton(customText) {
   if (musicLoadFailed) {
     musicBtn.textContent = "⚠️ Missing Song";
     musicBtn.classList.add("off");
+    updateSongName();
     return;
   }
 
   if (customText) {
     musicBtn.textContent = `🔊 ${customText}`;
     musicBtn.classList.remove("off");
+    updateSongName();
     return;
   }
 
@@ -828,7 +890,9 @@ function buildPhaseObstacles() {
         y: baseY,
         seed: Math.random() * Math.PI * 2,
         disabled: false,
-        cleared: false
+        cleared: false,
+        dynamicScale: 1,
+        rotation: 0
       });
     }
   }
@@ -886,17 +950,26 @@ function startGame() {
   animationFrameId = requestAnimationFrame(loop);
 }
 
-function restartGame() {
-  if (outroVideo) {
-    outroVideo.pause();
-    outroVideo.currentTime = 0;
+function startGame() {
+  console.log("Start Game clicked");
+
+  if (animationFrameId) {
+    cancelAnimationFrame(animationFrameId);
   }
 
-  if (outroImage) {
-    outroImage.style.display = "none";
-  }
+  stopIntroVideo();
+  resetGame();
 
-  startGame();
+  state = "running";
+
+  if (startScreen) startScreen.classList.remove("visible");
+  if (pauseScreen) pauseScreen.classList.remove("visible");
+  if (gameOverScreen) gameOverScreen.classList.remove("visible");
+
+  startMusic();
+
+  lastTime = performance.now();
+  animationFrameId = requestAnimationFrame(loop);
 }
 
 function togglePause() {
@@ -1027,7 +1100,7 @@ function update(dt) {
 
   updatePhase();
   updatePhaseBanner(dt);
-  updateObstacles(dt);
+  updateObstacles();
   updatePlayer(dt);
   updatePlayerAnimation(dt);
   updateCollectibles(dt);
@@ -1061,11 +1134,11 @@ function showPhaseBanner(phase) {
   lastShownPhaseId = phase.id;
   phaseBannerTimer = 2.2;
 
-  phaseBannerLabel.textContent = `Phase ${phase.id}`;
-  phaseBannerTitle.textContent = phase.name;
-  phaseBannerSubtitle.textContent = phase.subtitle;
+  if (phaseBannerLabel) phaseBannerLabel.textContent = `Phase ${phase.id}`;
+  if (phaseBannerTitle) phaseBannerTitle.textContent = phase.name;
+  if (phaseBannerSubtitle) phaseBannerSubtitle.textContent = phase.subtitle;
 
-  phaseBanner.classList.add("visible");
+  if (phaseBanner) phaseBanner.classList.add("visible");
 }
 
 function updatePhaseBanner(dt) {
@@ -1073,7 +1146,7 @@ function updatePhaseBanner(dt) {
 
   phaseBannerTimer -= dt;
 
-  if (phaseBannerTimer <= 0) {
+  if (phaseBannerTimer <= 0 && phaseBanner) {
     phaseBanner.classList.remove("visible");
   }
 }
@@ -1105,9 +1178,7 @@ function updatePlayer(dt) {
 
   player.vx = clamp(player.vx, -CONFIG.physics.maxMoveSpeed, CONFIG.physics.maxMoveSpeed);
 
-  const wantsSlide = keys.down && player.grounded;
-
-  if (wantsSlide) {
+  if (keys.down && player.grounded) {
     player.height = player.normalHeight;
     player.vx *= 0.94;
   } else {
@@ -1243,7 +1314,7 @@ function jump() {
 
 /* -------------------- OBSTACLES -------------------- */
 
-function updateObstacles(dt) {
+function updateObstacles() {
   for (const obstacle of obstacles) {
     obstacle.y = getObstacleY(obstacle);
     obstacle.dynamicScale = getObstacleScale(obstacle);
@@ -1263,7 +1334,7 @@ function getObstacleY(obstacle) {
   }
 
   if (obstacle.behavior === "bounce") {
-    return obstacle.baseY + Math.abs(Math.sin(t * 4.0)) * -12;
+    return obstacle.baseY - Math.abs(Math.sin(t * 4.0)) * 12;
   }
 
   if (obstacle.behavior === "drop") {
@@ -1282,6 +1353,10 @@ function getObstacleScale(obstacle) {
 
   if (obstacle.behavior === "stretch") {
     return 1 + Math.sin(t * 3.0) * 0.08;
+  }
+
+  if (obstacle.behavior === "flash") {
+    return 1 + Math.max(0, Math.sin(t * 8.0)) * 0.04;
   }
 
   return 1;
@@ -1558,18 +1633,18 @@ function getPlayerHitbox() {
 
 function getObstacleHitbox(obstacle) {
   const scale = obstacle.dynamicScale || 1;
-  const width = obstacle.width * scale;
-  const height = obstacle.height * scale;
+  const obstacleWidth = obstacle.width * scale;
+  const obstacleHeight = obstacle.height * scale;
 
-  const padX = width * 0.34;
-  const padTop = height * 0.30;
-  const padBottom = height * 0.32;
+  const padX = obstacleWidth * 0.34;
+  const padTop = obstacleHeight * 0.30;
+  const padBottom = obstacleHeight * 0.32;
 
   return {
-    x: obstacle.x + (obstacle.width - width) / 2 + padX,
-    y: obstacle.y + (obstacle.height - height) / 2 + padTop,
-    width: width - padX * 2,
-    height: height - padTop - padBottom
+    x: obstacle.x + (obstacle.width - obstacleWidth) / 2 + padX,
+    y: obstacle.y + (obstacle.height - obstacleHeight) / 2 + padTop,
+    width: obstacleWidth - padX * 2,
+    height: obstacleHeight - padTop - padBottom
   };
 }
 
@@ -2198,13 +2273,35 @@ function setButtonHeld(button, keyName) {
   button.addEventListener("pointerleave", release);
 }
 
-function fastTap(button, action) {
-  if (!button) return;
 
-  button.addEventListener("pointerdown", event => {
-    event.preventDefault();
+function fastTap(button, action) {
+  if (!button) {
+    console.warn("Missing button for action:", action?.name || "anonymous");
+    return;
+  }
+
+  let lastRun = 0;
+
+  const runAction = event => {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+
+    const now = performance.now();
+
+    // Prevent double-trigger when pointerdown and click both fire.
+    if (now - lastRun < 140) return;
+
+    lastRun = now;
     action();
-  });
+  };
+
+  // Some browsers/devices behave better with click, some with pointerdown.
+  // Use both so the Start Game button always responds.
+  button.addEventListener("pointerdown", runAction);
+  button.addEventListener("click", runAction);
+  button.addEventListener("touchstart", runAction, { passive: false });
 }
 
 function toggleSettingsPanel() {
