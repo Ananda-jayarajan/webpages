@@ -2254,23 +2254,59 @@ if (!CanvasRenderingContext2D.prototype.roundRect) {
 function setButtonHeld(button, keyName) {
   if (!button) return;
 
-  const hold = event => {
-    event.preventDefault();
+  let tapTimer = null;
 
-    if (!quizActive && state === "running") {
-      keys[keyName] = true;
+  const hold = event => {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
     }
+
+    if (quizActive || state !== "running") return;
+
+    keys[keyName] = true;
   };
 
   const release = event => {
-    event.preventDefault();
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+
     keys[keyName] = false;
+  };
+
+  const tapMove = event => {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+
+    if (quizActive || state !== "running") return;
+
+    keys[keyName] = true;
+
+    clearTimeout(tapTimer);
+    tapTimer = setTimeout(() => {
+      keys[keyName] = false;
+    }, 220);
   };
 
   button.addEventListener("pointerdown", hold);
   button.addEventListener("pointerup", release);
   button.addEventListener("pointercancel", release);
   button.addEventListener("pointerleave", release);
+
+  // Backup support for browsers/devices where pointer events behave badly
+  button.addEventListener("mousedown", hold);
+  document.addEventListener("mouseup", release);
+
+  button.addEventListener("touchstart", hold, { passive: false });
+  button.addEventListener("touchend", release, { passive: false });
+  button.addEventListener("touchcancel", release, { passive: false });
+
+  // Makes quick taps also move the hero slightly
+  button.addEventListener("click", tapMove);
 }
 
 
