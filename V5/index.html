@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>Thalapathy Run</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+
+<body>
+  <main id="app">
+    <canvas id="gameCanvas" aria-label="Thalapathy Run game canvas"></canvas>
+
+    <section id="hud" class="hud">
+      <div class="brand">
+        <span class="brand-mark">★</span>
+        <div>
+          <h1>Thalapathy Run</h1>
+          <p>Auto Run • Jump • Slide • Quiz Save</p>
+        </div>
+      </div>
+
+      <div class="hud-right">
+        <div class="settings-wrap">
+  <button id="settingsBtn" class="settings-btn" type="button" aria-label="Settings">
+    ⚙
+  </button>
+
+  <div id="settingsPanel" class="settings-panel">
+    <div class="settings-title">Audio Settings</div>
+
+    <button id="musicBtn" class="settings-option" type="button">
+      🔊 Music
+    </button>
+
+    <button id="nextSongBtn" class="settings-option" type="button">
+      ⏭ Next Song
+    </button>
+
+    <div id="songNameText" class="song-name">
+      Song: Theme
+    </div>
+  </div>
+</div>
+
+        <div class="hud-stats">
+          <div class="stat">
+            <span class="label">Score</span>
+            <span id="scoreText">0</span>
+          </div>
+          <div class="stat">
+            <span class="label">Votes</span>
+            <span id="votesText">0</span>
+          </div>
+          <div class="stat">
+            <span class="label">Best</span>
+            <span id="bestText">0</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="startScreen" class="screen visible">
+      <div class="panel">
+        <div class="badge">Auto-Runner v2</div>
+
+        <h2>Thalapathy Run</h2>
+
+        <div class="intro-video-wrap">
+          <video
+            id="introVideo"
+            class="intro-video"
+            autoplay
+            muted
+            loop
+            playsinline
+            preload="auto"
+          >
+            <source src="assets/intro.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        
+          <button id="introSoundBtn" class="intro-sound-btn" type="button">
+            🔊 Play Intro Sound
+          </button>
+        </div>
+
+        <button id="startBtn" class="primary-btn" type="button">Start Game</button>
+      </div>
+    </section>
+
+    <section id="pauseScreen" class="screen">
+      <div class="panel small">
+        <h2>Paused</h2>
+        <p>Press <strong>P</strong> or tap resume to continue.</p>
+        <button id="resumeBtn" class="primary-btn" type="button">Resume</button>
+      </div>
+    </section>
+
+<section id="gameOverScreen" class="screen">
+  <div class="panel finish-panel">
+    <div id="gameOverBadge" class="badge danger">Game Over</div>
+
+    <h2 id="gameOverTitle">Run Complete</h2>
+
+    <div id="outroMediaBox" class="outro-media-box">
+      <video
+        id="outroVideo"
+        class="outro-video"
+        preload="auto"
+        playsinline
+      >
+        <source src="assets/outro.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+
+      <img
+        id="outroImage"
+        class="outro-image"
+        src="assets/outro.jpg"
+        alt="Outro image"
+      />
+    </div>
+
+    <p id="finalText">Score: 0</p>
+
+    <button id="restartBtn" class="primary-btn" type="button">Restart</button>
+  </div>
+</section>
+
+    <div id="errorBanner" class="error-banner"></div>
+
+    <div class="touch-controls auto-run-controls" aria-label="Mobile controls">
+      <button id="slideBtn" type="button">Slide</button>
+      <button id="jumpBtn" type="button">Jump</button>
+    </div>
+
+    <div class="hint">
+      Auto-run is ON &nbsp; • &nbsp; Space/W/↑ = Jump &nbsp; • &nbsp; S/↓ = Slide &nbsp; • &nbsp; P = Pause &nbsp; • &nbsp; Q = Test Quiz
+    </div>
+
+    <audio id="bgMusic" preload="auto" loop></audio>
+  </main>
+
+  <script src="js/config.js"></script>
+  <script src="js/game.js"></script>
+<script>
+  const introVideo = document.getElementById("introVideo");
+  const introSoundBtn = document.getElementById("introSoundBtn");
+  const startBtnForIntro = document.getElementById("startBtn");
+
+  introSoundBtn.addEventListener("click", async () => {
+    try {
+      introVideo.muted = false;
+      introVideo.volume = 1.0;
+      await introVideo.play();
+
+      introSoundBtn.textContent = "🔊 Intro Sound Playing";
+      introSoundBtn.classList.add("playing");
+    } catch (error) {
+      introSoundBtn.textContent = "Tap video to enable sound";
+      console.warn("Intro video sound could not start:", error);
+    }
+  });
+
+  introVideo.addEventListener("click", async () => {
+    try {
+      introVideo.muted = !introVideo.muted;
+
+      if (!introVideo.muted) {
+        introVideo.volume = 1.0;
+        await introVideo.play();
+        introSoundBtn.textContent = "🔊 Intro Sound Playing";
+        introSoundBtn.classList.add("playing");
+      } else {
+        introSoundBtn.textContent = "🔊 Play Intro Sound";
+        introSoundBtn.classList.remove("playing");
+      }
+    } catch (error) {
+      console.warn("Video click sound toggle failed:", error);
+    }
+  });
+
+  startBtnForIntro.addEventListener("pointerdown", () => {
+    introVideo.pause();
+    introVideo.muted = true;
+  });
+</script>
+  
+</body>
+</html>
