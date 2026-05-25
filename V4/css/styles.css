@@ -43,6 +43,8 @@ button {
   display: block;
 }
 
+/* HUD */
+
 .hud {
   position: absolute;
   top: 18px;
@@ -127,7 +129,7 @@ button {
   font-weight: 900;
 }
 
-/* Settings button */
+/* Settings */
 
 .settings-wrap {
   position: relative;
