@@ -2309,7 +2309,6 @@ function setButtonHeld(button, keyName) {
   button.addEventListener("click", tapMove);
 }
 
-
 function fastTap(button, action) {
   if (!button) {
     console.warn("Missing button for action:", action?.name || "anonymous");
