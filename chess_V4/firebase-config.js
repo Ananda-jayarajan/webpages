@@ -2,7 +2,7 @@
 // GitHub Pages is static, so it needs a live database for online play.
 // This project uses Firebase Realtime Database WITHOUT Firebase Authentication.
 
-export const ENABLE_MULTIPLAYER = false;
+export const ENABLE_MULTIPLAYER = true;
 
 export const firebaseConfig = {
   apiKey: "PASTE_YOUR_API_KEY",
