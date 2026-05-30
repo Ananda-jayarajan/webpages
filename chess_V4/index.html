@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simple Multiplayer Chess</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="app">
+    <aside class="moves-panel">
+      <h2>Moves</h2>
+      <div id="moveHint" class="muted">Join a room to start.</div>
+      <ol id="moveList" class="move-list"></ol>
+    </aside>
+
+    <section class="board-panel">
+      <div class="player-strip top-player">
+        <div class="avatar dark">B</div>
+        <div>
+          <div id="blackName" class="player-name">Black</div>
+          <div id="blackStatus" class="player-subtitle">Waiting</div>
+        </div>
+      </div>
+
+      <div class="board-wrap">
+        <div id="board" class="board" aria-label="Chess board"></div>
+        <div id="promotionBox" class="promotion hidden">
+          <div class="promotion-title">Promote pawn</div>
+          <div id="promotionChoices" class="promotion-choices"></div>
+        </div>
+      </div>
+
+      <div class="player-strip bottom-player">
+        <div class="avatar light">W</div>
+        <div>
+          <div id="whiteName" class="player-name">White</div>
+          <div id="whiteStatus" class="player-subtitle">Waiting</div>
+        </div>
+      </div>
+    </section>
+
+    <aside class="room-panel">
+      <h1>Multiplayer Chess</h1>
+      <p class="tagline">Enter a room code and username. First player becomes White, second player becomes Black.</p>
+
+      <div id="statusBox" class="status warn">Multiplayer is off until Firebase config is added.</div>
+
+      <label class="field-label" for="usernameInput">Username</label>
+      <input id="usernameInput" maxlength="18" placeholder="Example: Anand" autocomplete="off" />
+
+      <label class="field-label" for="roomCodeInput">Room code</label>
+      <input id="roomCodeInput" maxlength="6" placeholder="ABC123" autocomplete="off" />
+      <div class="small-note">Format: 3 capital letters + 3 numbers, like <strong>ABC123</strong>.</div>
+
+      <button id="joinBtn" class="main-button">Create / Join Room</button>
+
+      <div class="room-info">
+        <div class="label">Current room</div>
+        <div id="currentRoom" class="room-code">—</div>
+      </div>
+
+      <div class="room-info">
+        <div class="label">You are</div>
+        <div id="yourSeat" class="seat-name">Not joined</div>
+      </div>
+
+      <div class="room-info">
+        <div class="label">Game status</div>
+        <div id="gameStatus" class="game-status">Waiting to join</div>
+      </div>
+
+      <div class="piece-help">
+        <div class="label">Piece PNG folder</div>
+        <code>assets/pieces/wk.png</code>
+        <code>assets/pieces/bq.png</code>
+      </div>
+    </aside>
+  </main>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
