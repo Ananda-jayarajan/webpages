@@ -10,7 +10,7 @@
 // 4. Set ENABLE_MULTIPLAYER to true.
 // 5. In Realtime Database rules, use the rules from firebase-rules.json.
 
-export const ENABLE_MULTIPLAYER = false;
+export const ENABLE_MULTIPLAYER = true;
 
 export const firebaseConfig = {
   apiKey: "PASTE_YOUR_API_KEY",
