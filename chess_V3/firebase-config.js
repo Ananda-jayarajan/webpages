@@ -3,7 +3,7 @@
 // GitHub Pages cannot store live chess moves by itself, so Firebase Realtime Database is used as shared room storage.
 // This version does NOT use Firebase Authentication.
 
-export const ENABLE_MULTIPLAYER = false;
+export const ENABLE_MULTIPLAYER = true;
 
 export const firebaseConfig = {
   apiKey: "PASTE_YOUR_API_KEY",
