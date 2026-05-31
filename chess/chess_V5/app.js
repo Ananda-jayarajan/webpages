@@ -147,6 +147,15 @@ function initialRoom(username) {
   };
 }
 
+function withTimeout(promise, ms, message) {
+  return Promise.race([
+    promise,
+    new Promise((_, reject) => {
+      setTimeout(() => reject(new Error(message)), ms);
+    })
+  ]);
+}
+
 async function createOrJoinRoom() {
   const username = cleanUsername();
   const code = sanitizeRoomCode(roomInputEl.value);
@@ -172,7 +181,7 @@ async function createOrJoinRoom() {
 
   if (!multiplayerReady) {
     setStatus(
-      `Current room is ${code}, but online room creation is disabled. Open firebase-config.js and set ENABLE_MULTIPLAYER = true.`,
+      `Current room is ${code}, but Firebase multiplayer is OFF. Set ENABLE_MULTIPLAYER = true in firebase-config.js.`,
       "bad"
     );
     return;
@@ -182,46 +191,91 @@ async function createOrJoinRoom() {
   joinRoomBtn.textContent = "Joining...";
 
   try {
-    await dbApi.runTransaction(roomRef(code), room => {
-      if (!room) return initialRoom(username);
+    const ref = roomRef(code);
 
-      room.players = room.players || { white: "", black: "" };
-      room.names = room.names || {};
-      room.names[clientId] = username;
+    const snapshot = await withTimeout(
+      dbApi.get(ref),
+      8000,
+      "Firebase did not respond. Check databaseURL and Realtime Database rules."
+    );
 
-      const white = room.players.white || "";
-      const black = room.players.black || "";
+    const existingRoom = snapshot.val();
 
-      if (white === clientId || black === clientId) {
-        room.updatedAt = Date.now();
-        return room;
-      }
+    if (!existingRoom) {
+      const newRoom = initialRoom(username);
 
-      if (!white) {
-        room.players.white = clientId;
-        room.updatedAt = Date.now();
-        return room;
-      }
+      await withTimeout(
+        dbApi.set(ref, newRoom),
+        8000,
+        "Could not create room. Check Firebase Realtime Database rules."
+      );
 
-      if (!black) {
-        room.players.black = clientId;
-        room.updatedAt = Date.now();
-        return room;
-      }
+      listenToRoom(code);
+      setStatus(`Room ${code} created. You are White. Tell your friend to enter ${code}.`, "good");
+      return;
+    }
 
-      room.updatedAt = Date.now();
-      return room;
-    });
+    const room = existingRoom;
+    room.players = room.players || { white: "", black: "" };
+    room.names = room.names || {};
+    room.names[clientId] = username;
+
+    const white = room.players.white || "";
+    const black = room.players.black || "";
+
+    if (white === clientId || black === clientId) {
+      await withTimeout(
+        dbApi.update(ref, {
+          names: room.names,
+          updatedAt: Date.now()
+        }),
+        8000,
+        "Could not reconnect to room."
+      );
+
+      listenToRoom(code);
+      return;
+    }
+
+    if (!white) {
+      room.players.white = clientId;
+    } else if (!black) {
+      room.players.black = clientId;
+    } else {
+      await withTimeout(
+        dbApi.update(ref, {
+          names: room.names,
+          updatedAt: Date.now()
+        }),
+        8000,
+        "Could not join as spectator."
+      );
+
+      listenToRoom(code);
+      setStatus(`Room ${code} is full. You are spectating.`, "warn");
+      return;
+    }
+
+    await withTimeout(
+      dbApi.update(ref, {
+        players: room.players,
+        names: room.names,
+        updatedAt: Date.now()
+      }),
+      8000,
+      "Could not join room. Check Firebase Realtime Database rules."
+    );
 
     listenToRoom(code);
+
   } catch (error) {
     let message = error.message || String(error);
 
     if (message.toLowerCase().includes("permission")) {
-      message = "Firebase permission denied. In Realtime Database rules, paste the rules from firebase-rules.json.";
+      message = "Firebase permission denied. Paste the public rules from firebase-rules.json into Realtime Database rules.";
     }
 
-    setStatus(`Could not create/join room ${code}: ${message}`, "bad");
+    setStatus(`Room ${code} failed: ${message}`, "bad");
   } finally {
     joinRoomBtn.disabled = false;
     joinRoomBtn.textContent = "Create / Join Room";
