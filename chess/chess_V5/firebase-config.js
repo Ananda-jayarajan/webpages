@@ -13,11 +13,11 @@
 export const ENABLE_MULTIPLAYER = true;
 
 export const firebaseConfig = {
-  apiKey: "PASTE_YOUR_API_KEY",
-  authDomain: "PASTE_YOUR_PROJECT.firebaseapp.com",
-  databaseURL: "https://PASTE_YOUR_PROJECT-default-rtdb.firebaseio.com",
-  projectId: "PASTE_YOUR_PROJECT",
-  storageBucket: "PASTE_YOUR_PROJECT.appspot.com",
-  messagingSenderId: "PASTE_YOUR_SENDER_ID",
-  appId: "PASTE_YOUR_APP_ID"
+  apiKey: "YOUR_REAL_API_KEY",
+  authDomain: "YOUR_REAL_PROJECT.firebaseapp.com",
+  databaseURL: "https://YOUR_REAL_PROJECT-default-rtdb.firebaseio.com",
+  projectId: "YOUR_REAL_PROJECT",
+  storageBucket: "YOUR_REAL_PROJECT.appspot.com",
+  messagingSenderId: "YOUR_REAL_SENDER_ID",
+  appId: "YOUR_REAL_APP_ID"
 };
