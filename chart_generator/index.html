@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Radar Studio is a modern, responsive radar chart generator for creating, customizing, previewing, and exporting radar charts directly in your browser." />
+  <title>Radar Studio | Modern Radar Chart Generator</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="page-shell">
+    <header class="hero">
+      <nav class="nav" aria-label="Main navigation">
+        <a class="brand" href="#top" aria-label="Radar Studio home">
+          <span class="brand-mark">RS</span>
+          <span>Radar Studio</span>
+        </a>
+        <div class="nav-actions">
+          <a href="#editor" class="nav-link">Editor</a>
+          <a href="#how-it-works" class="nav-link">How it works</a>
+          <a href="https://github.com/" class="nav-button" target="_blank" rel="noreferrer">Host on GitHub</a>
+        </div>
+      </nav>
+
+      <section class="hero-grid" id="top">
+        <div class="hero-copy">
+          <p class="eyebrow">Free browser-based chart maker</p>
+          <h1>Create polished radar charts in minutes.</h1>
+          <p class="hero-text">
+            Enter your categories, adjust values, customize colors, preview instantly,
+            and export a clean PNG for reports, presentations, dashboards, or social posts.
+          </p>
+          <div class="hero-actions">
+            <a href="#editor" class="primary-link">Start building</a>
+            <button class="ghost-button" type="button" id="heroSampleButton">Load sample chart</button>
+          </div>
+          <div class="stats-row" aria-label="Highlights">
+            <div>
+              <strong>100%</strong>
+              <span>frontend only</span>
+            </div>
+            <div>
+              <strong>Live</strong>
+              <span>preview</span>
+            </div>
+            <div>
+              <strong>PNG</strong>
+              <span>export</span>
+            </div>
+          </div>
+        </div>
+
+        <aside class="hero-card" aria-label="Radar chart example summary">
+          <div class="hero-card-header">
+            <span class="status-dot"></span>
+            <span>Sample profile</span>
+          </div>
+          <div class="mini-radar" aria-hidden="true">
+            <span style="--i:0"></span>
+            <span style="--i:1"></span>
+            <span style="--i:2"></span>
+            <span style="--i:3"></span>
+            <span style="--i:4"></span>
+            <div class="mini-radar-fill"></div>
+          </div>
+          <div class="hero-card-list">
+            <p><span>Design</span><strong>92</strong></p>
+            <p><span>Speed</span><strong>84</strong></p>
+            <p><span>Usability</span><strong>96</strong></p>
+          </div>
+        </aside>
+      </section>
+    </header>
+
+    <main>
+      <section class="section-heading" id="editor">
+        <p class="eyebrow">Interactive editor</p>
+        <h2>Build and customize your radar chart</h2>
+        <p>
+          Edit the data table, change colors, then generate or export your chart.
+          The preview updates automatically as you type.
+        </p>
+      </section>
+
+      <section class="app-grid" aria-label="Radar chart generator app">
+        <section class="panel editor-panel" aria-labelledby="editorTitle">
+          <div class="panel-header">
+            <div>
+              <p class="panel-kicker">Step 1</p>
+              <h3 id="editorTitle">Chart details</h3>
+            </div>
+            <span class="pill">Live preview</span>
+          </div>
+
+          <div class="form-grid two-columns">
+            <label class="field">
+              <span>Chart title</span>
+              <input type="text" id="chartTitle" value="Product Skill Comparison" placeholder="Example: Product Skill Comparison" />
+            </label>
+            <label class="field">
+              <span>Dataset name</span>
+              <input type="text" id="datasetName" value="Team A" placeholder="Example: Team A" />
+            </label>
+          </div>
+
+          <div class="settings-card">
+            <div class="settings-heading">
+              <div>
+                <p class="panel-kicker">Step 2</p>
+                <h3>Labels and values</h3>
+              </div>
+              <button class="small-button" type="button" id="addRowButton">+ Add point</button>
+            </div>
+
+            <div class="data-table" role="table" aria-label="Radar chart data table">
+              <div class="data-row data-head" role="row">
+                <span role="columnheader">Label</span>
+                <span role="columnheader">Value</span>
+                <span role="columnheader">Action</span>
+              </div>
+              <div id="dataRows" class="data-rows"></div>
+            </div>
+
+            <p class="helper-text">
+              Tip: Use 4 to 12 points for the cleanest radar chart. Values work best from 0 to 100.
+            </p>
+          </div>
+
+          <div class="settings-card">
+            <div class="settings-heading compact">
+              <div>
+                <p class="panel-kicker">Step 3</p>
+                <h3>Appearance</h3>
+              </div>
+            </div>
+
+            <div class="form-grid color-grid">
+              <label class="field color-field">
+                <span>Line color</span>
+                <input type="color" id="lineColor" value="#4f46e5" />
+              </label>
+              <label class="field color-field">
+                <span>Fill color</span>
+                <input type="color" id="fillColor" value="#6366f1" />
+              </label>
+              <label class="field color-field">
+                <span>Grid color</span>
+                <input type="color" id="gridColor" value="#d7dce8" />
+              </label>
+              <label class="field color-field">
+                <span>Background</span>
+                <input type="color" id="backgroundColor" value="#ffffff" />
+              </label>
+            </div>
+
+            <div class="form-grid two-columns">
+              <label class="field">
+                <span>Maximum scale</span>
+                <input type="number" id="scaleMax" min="1" step="1" value="100" placeholder="100" />
+              </label>
+              <label class="field">
+                <span>Fill opacity</span>
+                <input type="range" id="fillOpacity" min="0.05" max="0.6" step="0.05" value="0.22" />
+              </label>
+            </div>
+          </div>
+
+          <div class="button-row">
+            <button class="primary-button" type="button" id="generateButton">Generate Chart</button>
+            <button class="secondary-button" type="button" id="sampleButton">Sample Data</button>
+            <button class="secondary-button" type="button" id="resetButton">Reset</button>
+          </div>
+        </section>
+
+        <aside class="panel preview-panel" aria-labelledby="previewTitle">
+          <div class="panel-header preview-header">
+            <div>
+              <p class="panel-kicker">Preview</p>
+              <h3 id="previewTitle">Your radar chart</h3>
+            </div>
+            <button class="export-button" type="button" id="exportButton">Export Image</button>
+          </div>
+
+          <div class="chart-card" id="chartCard">
+            <canvas id="radarChart" aria-label="Radar chart preview" role="img"></canvas>
+          </div>
+
+          <div class="chart-summary" aria-label="Chart summary">
+            <div>
+              <span>Total points</span>
+              <strong id="pointCount">0</strong>
+            </div>
+            <div>
+              <span>Average value</span>
+              <strong id="averageValue">0</strong>
+            </div>
+            <div>
+              <span>Highest value</span>
+              <strong id="highestValue">0</strong>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <section class="how-section" id="how-it-works">
+        <div class="section-heading narrow">
+          <p class="eyebrow">Simple workflow</p>
+          <h2>How it works</h2>
+        </div>
+        <div class="feature-grid">
+          <article class="feature-card">
+            <span>01</span>
+            <h3>Enter labels</h3>
+            <p>Add skills, features, survey categories, product attributes, or any dimensions you want to compare.</p>
+          </article>
+          <article class="feature-card">
+            <span>02</span>
+            <h3>Adjust values</h3>
+            <p>Type numeric values and set a scale maximum. The chart updates automatically while you edit.</p>
+          </article>
+          <article class="feature-card">
+            <span>03</span>
+            <h3>Export image</h3>
+            <p>Download the radar chart as a PNG and use it in presentations, reports, websites, or assignments.</p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>Radar Studio — static radar chart generator for GitHub Pages.</p>
+      <p>No backend. No account. Just edit, preview, and export.</p>
+    </footer>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
