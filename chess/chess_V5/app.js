@@ -73,9 +73,26 @@ async function initialize() {
 async function setupFirebase() {
   if (!ENABLE_MULTIPLAYER) {
     setStatus(
-      "Multiplayer is OFF. Set ENABLE_MULTIPLAYER = true in firebase-config.js. The room code display still updates, but online rooms cannot be created yet.",
+      "Multiplayer is OFF. Set ENABLE_MULTIPLAYER = true in firebase-config.js.",
       "warn"
     );
+    return;
+  }
+
+  const configText = JSON.stringify(firebaseConfig);
+
+  if (
+    configText.includes("PASTE_") ||
+    configText.includes("YOUR_REAL") ||
+    !firebaseConfig.apiKey ||
+    !firebaseConfig.databaseURL ||
+    firebaseConfig.databaseURL.includes("PASTE_YOUR_PROJECT")
+  ) {
+    setStatus(
+      "Firebase config is not filled in. Replace the placeholder values in firebase-config.js with your real Firebase web app config.",
+      "bad"
+    );
+    multiplayerReady = false;
     return;
   }
 
@@ -86,10 +103,17 @@ async function setupFirebase() {
     const app = initializeApp(firebaseConfig);
     db = dbApi.getDatabase(app);
 
+    await withTimeout(
+      dbApi.get(dbApi.ref(db, ".info/connected")),
+      8000,
+      "Firebase did not respond. Check databaseURL and Realtime Database setup."
+    );
+
     multiplayerReady = true;
     setStatus("Multiplayer ready. Enter username + room code, then click Create / Join Room.", "good");
   } catch (error) {
     setStatus(`Firebase setup failed: ${error.message}`, "bad");
+    multiplayerReady = false;
   }
 }
 
