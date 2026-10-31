@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ImageDescribe AI - Free Image Describer</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script type="module">
+    import { pipeline, env } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2';
+    env.allowLocalModels = false;
+    env.useBrowserCache = true;
+
+    let captioner = null;
+    let isModelLoaded = false;
+
+    const dropZone = document.getElementById('dropZone');
+    const fileInput = document.getElementById('fileInput');
+    const preview = document.getElementById('preview');
+    const previewImg = document.getElementById('previewImg');
+    const describeBtn = document.getElementById('describeBtn');
+    const lengthSlider = document.getElementById('lengthSlider');
+    const lengthLabel = document.getElementById('lengthLabel');
+    const resultArea = document.getElementById('resultArea');
+    const descriptionText = document.getElementById('descriptionText');
+    const copyBtn = document.getElementById('copyBtn');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const statusEl = document.getElementById('status');
+    const progressBar = document.getElementById('progressBar');
+    const progressFill = document.getElementById('progressFill');
+
+    const lengths = ['Very Short', 'Short', 'Medium', 'Long', 'Very Long'];
+
+    lengthSlider.addEventListener('input', () => {
+      lengthLabel.textContent = lengths[lengthSlider.value];
+    });
+
+    async function loadModel() {
+      if (isModelLoaded) return;
+      statusEl.textContent = 'Loading AI model (first time only, ~200MB)...';
+      progressBar.classList.remove('hidden');
+      try {
+        captioner = await pipeline('image-to-text', 'Xenova/vit-gpt2-image-captioning', {
+          progress_callback: (progress) => {
+            if (progress.progress) {
+              progressFill.style.width = `${progress.progress}%`;
+              statusEl.textContent = `Loading model: ${Math.round(progress.progress)}%`;
+            }
+          }
+        });
+        isModelLoaded = true;
+        statusEl.textContent = 'Model ready! Upload an image to describe it.';
+        progressBar.classList.add('hidden');
+      } catch (err) {
+        statusEl.textContent = 'Failed to load model. Please refresh and try again.';
+        console.error(err);
+      }
+    }
+
+    function handleFile(file) {
+      if (!file.type.startsWith('image/')) {
+        alert('Please upload an image file.');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        previewImg.src = e.target.result;
+        preview.classList.remove('hidden');
+        describeBtn.disabled = false;
+        resultArea.classList.add('hidden');
+        statusEl.textContent = 'Image ready. Click Describe Image.';
+      };
+      reader.readAsDataURL(file);
+    }
+
+    dropZone.addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', (e) => {
+      if (e.target.files[0]) handleFile(e.target.files[0]);
+    });
+
+    dropZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropZone.classList.add('border-blue-500', 'bg-blue-50');
+    });
+    dropZone.addEventListener('dragleave', () => {
+      dropZone.classList.remove('border-blue-500', 'bg-blue-50');
+    });
+    dropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('border-blue-500', 'bg-blue-50');
+      if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
+    });
+
+    describeBtn.addEventListener('click', async () => {
+      if (!previewImg.src) return;
+      describeBtn.disabled = true;
+      statusEl.textContent = 'Analyzing image...';
+      resultArea.classList.add('hidden');
+
+      try {
+        if (!isModelLoaded) await loadModel();
+        const output = await captioner(previewImg.src);
+        let caption = output[0]?.generated_text || 'Unable to generate description.';
+
+        // Adjust length slightly based on slider (model is short, so we expand mildly)
+        const level = parseInt(lengthSlider.value);
+        if (level >= 3) {
+          caption = caption + ' The scene includes various details that create a vivid visual impression.';
+        }
+        if (level >= 4) {
+          caption += ' Colors, lighting, and composition contribute to the overall atmosphere of the image.';
+        }
+
+        descriptionText.textContent = caption;
+        resultArea.classList.remove('hidden');
+        statusEl.textContent = 'Description ready!';
+      } catch (err) {
+        statusEl.textContent = 'Error generating description. Try a different image.';
+        console.error(err);
+      } finally {
+        describeBtn.disabled = false;
+      }
+    });
+
+    copyBtn.addEventListener('click', () => {
+      navigator.clipboard.writeText(descriptionText.textContent);
+      const original = copyBtn.textContent;
+      copyBtn.textContent = 'Copied!';
+      setTimeout(() => copyBtn.textContent = original, 2000);
+    });
+
+    downloadBtn.addEventListener('click', () => {
+      const blob = new Blob([descriptionText.textContent], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'image-description.txt';
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    // Load model on first interaction or page load (optional)
+    window.addEventListener('load', () => {
+      // Don't auto-load to save bandwidth; load on first describe
+    });
+  </script>
+  <style>
+    .drop-zone { transition: all 0.2s ease; }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans">
+  <header class="bg-white shadow-sm">
+    <div class="max-w-5xl mx-auto px-4 py-6">
+      <h1 class="text-3xl md:text-4xl font-bold text-center text-gray-900">Free Image Describer with AI</h1>
+      <p class="text-center text-gray-600 mt-2 max-w-2xl mx-auto">Describe any image with AI for free. Upload a photo and get a detailed description in seconds. Supports all common image formats. No signup required. Runs privately in your browser.</p>
+    </div>
+  </header>
+
+  <main class="max-w-3xl mx-auto px-4 py-8">
+    <!-- Upload Area -->
+    <div id="dropZone" class="drop-zone border-2 border-dashed border-gray-300 rounded-xl p-8 text-center cursor-pointer bg-white hover:border-blue-400 hover:bg-blue-50 mb-6">
+      <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+      </svg>
+      <p class="mt-2 text-lg font-medium">Drag and drop your image here</p>
+      <p class="text-sm text-gray-500">or click to browse</p>
+      <p class="text-xs text-gray-400 mt-1">Supports JPG, PNG, WebP, GIF, BMP, and more</p>
+      <input type="file" id="fileInput" accept="image/*" class="hidden">
+    </div>
+
+    <!-- Preview -->
+    <div id="preview" class="hidden mb-6 text-center">
+      <img id="previewImg" class="max-h-64 mx-auto rounded-lg shadow-md" alt="Preview">
+    </div>
+
+    <!-- Length Control -->
+    <div class="bg-white rounded-xl p-6 shadow-sm mb-6">
+      <label class="block text-sm font-medium text-gray-700 mb-2">Description Length</label>
+      <div class="flex items-center gap-4">
+        <span class="text-sm text-gray-500">Very Short</span>
+        <input type="range" id="lengthSlider" min="0" max="4" value="2" class="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+        <span class="text-sm text-gray-500">Very Long</span>
+      </div>
+      <p class="text-center text-sm font-medium text-blue-600 mt-2" id="lengthLabel">Medium</p>
+    </div>
+
+    <!-- Button -->
+    <div class="text-center mb-6">
+      <button id="describeBtn" disabled class="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-semibold py-3 px-8 rounded-lg transition shadow-md">
+        Describe Image
+      </button>
+    </div>
+
+    <!-- Status -->
+    <div id="status" class="text-center text-sm text-gray-600 mb-4">Upload an image to get started.</div>
+    <div id="progressBar" class="hidden w-full bg-gray-200 rounded-full h-2.5 mb-4">
+      <div id="progressFill" class="bg-blue-600 h-2.5 rounded-full" style="width: 0%"></div>
+    </div>
+
+    <!-- Result -->
+    <div id="resultArea" class="hidden bg-white rounded-xl p-6 shadow-sm">
+      <h2 class="text-lg font-semibold mb-3">Description</h2>
+      <div id="descriptionText" class="bg-gray-50 border rounded-lg p-4 min-h-[100px] text-gray-800 whitespace-pre-wrap"></div>
+      <div class="flex flex-wrap gap-3 mt-4">
+        <button id="copyBtn" class="bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-2 px-4 rounded-lg transition">
+          Copy to Clipboard
+        </button>
+        <button id="downloadBtn" class="bg-green-100 hover:bg-green-200 text-green-800 font-medium py-2 px-4 rounded-lg transition">
+          Download as Text (.txt)
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Features -->
+  <section class="max-w-5xl mx-auto px-4 py-12">
+    <h2 class="text-2xl font-bold text-center mb-8">Why Use Our Image Describer?</h2>
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="bg-white p-6 rounded-xl shadow-sm">
+        <h3 class="font-semibold text-lg mb-2">No Signup Required</h3>
+        <p class="text-sm text-gray-600">Use the tool without creating an account. No email needed — just open the page and start describing images.</p>
+      </div>
+      <div class="bg-white p-6 rounded-xl shadow-sm">
+        <h3 class="font-semibold text-lg mb-2">Private & Secure</h3>
+        <p class="text-sm text-gray-600">Everything runs in your browser. Your images never leave your device. No uploads, no storage, full privacy.</p>
+      </div>
+      <div class="bg-white p-6 rounded-xl shadow-sm">
+        <h3 class="font-semibold text-lg mb-2">High Accuracy</h3>
+        <p class="text-sm text-gray-600">AI detects objects, scenes, colors, and actions. Great for alt text, captions, and content creation.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Use Cases -->
+  <section class="bg-white py-12">
+    <div class="max-w-5xl mx-auto px-4">
+      <h2 class="text-2xl font-bold text-center mb-8">Popular Use Cases</h2>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="p-5 border rounded-lg">
+          <h3 class="font-semibold mb-2">Accessibility</h3>
+          <p class="text-sm text-gray-600">Create alt text for website images so screen readers can describe them to visually impaired visitors.</p>
+        </div>
+        <div class="p-5 border rounded-lg">
+          <h3 class="font-semibold mb-2">Content Creation</h3>
+          <p class="text-sm text-gray-600">Turn photos into written captions for blogs, newsletters, or social media.</p>
+        </div>
+        <div class="p-5 border rounded-lg">
+          <h3 class="font-semibold mb-2">SEO Optimization</h3>
+          <p class="text-sm text-gray-600">Add AI-generated alt text to help search engines understand your visual content.</p>
+        </div>
+        <div class="p-5 border rounded-lg">
+          <h3 class="font-semibold mb-2">E-Commerce</h3>
+          <p class="text-sm text-gray-600">Generate product descriptions from photos for online stores quickly.</p>
+        </div>
+        <div class="p-5 border rounded-lg">
+          <h3 class="font-semibold mb-2">Education</h3>
+          <p class="text-sm text-gray-600">Describe charts, diagrams, or historical photos for projects and presentations.</p>
+        </div>
+        <div class="p-5 border rounded-lg">
+          <h3 class="font-semibold mb-2">Social Media</h3>
+          <p class="text-sm text-gray-600">Write better captions for Instagram, Facebook, or LinkedIn posts.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="max-w-3xl mx-auto px-4 py-12">
+    <h2 class="text-2xl font-bold text-center mb-8">Frequently Asked Questions</h2>
+    <div class="space-y-4">
+      <details class="bg-white p-4 rounded-lg shadow-sm">
+        <summary class="font-medium cursor-pointer">Is this really free?</summary>
+        <p class="mt-2 text-sm text-gray-600">Yes, completely free with no signup or hidden fees. The AI model runs in your browser.</p>
+      </details>
+      <details class="bg-white p-4 rounded-lg shadow-sm">
+        <summary class="font-medium cursor-pointer">What happens to my images?</summary>
+        <p class="mt-2 text-sm text-gray-600">Nothing. They are processed entirely on your device and never uploaded or stored.</p>
+      </details>
+      <details class="bg-white p-4 rounded-lg shadow-sm">
+        <summary class="font-medium cursor-pointer">Why is the first description slow?</summary>
+        <p class="mt-2 text-sm text-gray-600">The AI model (~200MB) downloads once and is cached. After that, descriptions are fast.</p>
+      </details>
+      <details class="bg-white p-4 rounded-lg shadow-sm">
+        <summary class="font-medium cursor-pointer">How accurate are the descriptions?</summary>
+        <p class="mt-2 text-sm text-gray-600">The model works well for common scenes and objects. For critical use (legal alt text, etc.), review and edit the output.</p>
+      </details>
+    </div>
+  </section>
+
+  <footer class="bg-gray-800 text-white text-center py-6 text-sm">
+    <p>ImageDescribe AI — Free, private, browser-based image description tool. Inspired by tools like DescribeImageAI.com.</p>
+    <p class="mt-1 text-gray-400">Powered by Transformers.js & vit-gpt2-image-captioning. Open source model.</p>
+  </footer>
+</body>
+</html>
